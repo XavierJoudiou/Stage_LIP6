@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title>XavierJoudiou/Stage_LIP6 @ GitHub</title>
+	
+	<style type="text/css">
+		body {
+  		margin-top: 1.0em;
+  		background-color: #585ee9;
+		  font-family: "Helvetica,Arial,FreeSans";
+  		color: #000000;
+    }
+    #container {
+      margin: 0 auto;
+      width: 700px;
+    }
+		h1 { font-size: 3.8em; color: #a7a116; margin-bottom: 3px; }
+		h1 .small { font-size: 0.4em; }
+		h1 a { text-decoration: none }
+		h2 { font-size: 1.5em; color: #a7a116; }
+    h3 { text-align: center; color: #a7a116; }
+    a { color: #a7a116; }
+    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+    .download { float: right; }
+		pre { background: #000; color: #fff; padding: 15px;}
+    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
+    .footer { text-align:center; padding-top:30px; font-style: italic; }
+	</style>
+	
+</head>
+
+<body>
+  <a href="http://github.com/XavierJoudiou/Stage_LIP6"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+
+  <div id="container">
+
+    <div class="download">
+      <a href="http://github.com/XavierJoudiou/Stage_LIP6/zipball/master">
+        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
+      <a href="http://github.com/XavierJoudiou/Stage_LIP6/tarball/master">
+        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+    </div>
+
+    <h1><a href="http://github.com/XavierJoudiou/Stage_LIP6">Stage_LIP6</a>
+      <span class="small">by <a href="http://github.com/XavierJoudiou">XavierJoudiou</a></span></h1>
+
+    <div class="description">
+      Amélioration de la réactivité des réseaux pair à pair pour MMOGs, encadré par Sergey Legtchenko & Sébastien Monnet
+    </div>
+
+    <p>Introduction
+
+Ces dernières années ont vu l’émergence d’une nouvelle classe d’applications distribuées extrêmement populaires. Il s’agit de jeux en ligne massivement multijoueurs (ou MMOGs pour Massively Multiplayer Online Games). Ces applications possèdent un fort besoin de passage à l’échelle car elles doivent pouvoir accueillir et faire communiquer des milliers de joueurs à travers le monde, le tout avec une faible latence [1].
+
+Une architecture pair à pair pour les MMOGs est idéale pour satisfaire le besoin de passage à l’échelle, mais peut difficilement assurer une faible latence. Le but du stage est de proposer une technique efficace de prédiction du comportement des joueurs de MMOG afin de pouvoir anticiper leurs mouvements. Il est alors possible d’adapter le réseau en conséquence et ainsi diminuer la latence due au routage.
+Contexte
+
+Les MMOGs actuels peinent à satisfaire ces besoins de passage à l’échelle, car ils se basent sur une architecture client-serveur, chaque serveur ne pouvant supporter qu’un nombre limité de joueurs. L’univers du MMOG est alors séparé en plusieurs parties totalement indépendantes, chacune étant gérée par un serveur [8,7]. Cette organisation nuit à l’unité de l’univers et implique un coût de maintenance financièrement élevé [5].
+
+Pour remédier à cela, une solution consiste à remplacer le modèle client-serveur par un réseau logique pair à pair (overlay). Malheureusement, les protocoles pair à pair existants sont trop peu réactifs pour assurer la faible latence nécessaire à ce genre d’applications. En effet, pour une expérience de jeu satisfaisante, l’information entre deux pairs en interaction dans le MMOG doit être transmise avec une latence d’au plus quelques centaines de millisecondes. Ceci est problématique, même avec un routage efficace.
+
+Néanmoins, quelques travaux ont déjà été menés pour adresser ce problème. L’idée est d’adapter le voisinage de chaque pair afin que toute l’information dont il aura besoin dans un avenir proche se trouve à un seul hop de lui dans le réseau [2,4]. Il est alors nécessaire de correctement évaluer les futurs besoins de chaque pair, et de faire évoluer son voisinage à temps.
+Travail à réaliser
+
+Un overlay pair à pair pour MMOG a été implémenté dans le simulateur Peersim [3]. Cet overlay anticipe les mouvements du joueur dans le MMOG et adapte le voisinage de son pair en conséquence. Cependant, les algorithmes d’anticipation sont naïfs et peu précis [6].
+
+Il s’agit donc de concevoir des mécanismes efficaces d’anticipation de la trajectoire des joueurs afin de mieux adapter l’overlay à leurs déplacements et diminuer la latence.</p><h2>Authors</h2>
+<p>Xavier Joudiou</p>
+<h2>Contact</h2>
+<p> (xavierjoudiou@gmail.com)<br/>      </p>
+
+
+    <h2>Download</h2>
+    <p>
+      You can download this project in either
+      <a href="http://github.com/XavierJoudiou/Stage_LIP6/zipball/master">zip</a> or
+      <a href="http://github.com/XavierJoudiou/Stage_LIP6/tarball/master">tar</a> formats.
+    </p>
+    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
+      by running:
+      <pre>$ git clone git://github.com/XavierJoudiou/Stage_LIP6</pre>
+    </p>
+
+    <div class="footer">
+      get the source code on GitHub : <a href="http://github.com/XavierJoudiou/Stage_LIP6">XavierJoudiou/Stage_LIP6</a>
+    </div>
+
+  </div>
+
+  
+</body>
+</html>
