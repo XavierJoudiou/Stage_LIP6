@@ -13,10 +13,17 @@
 
 ## Notes sur le papier :
 
+→ MMOGs tres souvent en client serveur donc chere a maintenir et pas tres scalable 
 
+→ Utilisation du architecture pair à pair, anticipation des mouvement des avatars, deux etats 
+  possible pour l'avatar soir T(travelling) ou E(Exploring) car observations avec traces des 
+  joueurs ( entre les hotspots et dans les hotspots )
 
+→ Si en etat T, on utilise BlueBanana et si en etat E non.  
 
+→ Solipsis, overlay design, chaque noeud est responsable d'un avatar, collaboration des noeuds .
 
+→
 
 
 ## Fin de la fiche de lecture
