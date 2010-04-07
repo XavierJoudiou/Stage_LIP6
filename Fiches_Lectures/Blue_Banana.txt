@@ -1,0 +1,22 @@
+## Xavier Joudiou 
+## Stage au lip6 : Amélioration de la réactivité des réseaux pair à pair pour les MMOGs
+
+	Fiche de lecture
+
+## Informations sur le papier :
+
+	Titre : Blue Banana: resilience to avatar mobility in distributed MMOGs
+	Auteur(s) : Sergey Legtchenko, Sébastien Monnet , Gaël Thomas
+	Année : Décembre 2009
+	Lieu : Rapport de recherche N°7149, INRIA
+	Mots Clés : Resilience, Mobility, Adaptability, Massively Multiplayer Online Games, Overlay
+
+## Notes sur le papier :
+
+
+
+
+
+
+
+## Fin de la fiche de lecture

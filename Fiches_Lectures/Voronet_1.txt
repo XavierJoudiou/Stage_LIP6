@@ -1,0 +1,23 @@
+## Xavier Joudiou 
+## Stage au lip6 : Amélioration de la réactivité des réseaux pair à pair pour les MMOGs
+
+	Fiche de lecture
+
+## Informations sur le papier :
+
+	Titre : VoroNet: A scalable object network based on Voronoi tessellations 
+	Auteur(s) : Olivier Beaumont , Anne-Marie Kermarrec , Loris Marchal , Étienne Riviere
+	Année : Février 2006
+	Lieu : Research Report No RR2006-11
+	Mots Clés : Overlay network, peer-to-peer, scalability, small-world networks, Voronoi 
+	            tessellations, Computational geometry. 	
+
+## Notes sur le papier :
+
+
+
+
+
+
+
+## Fin de la fiche de lecture
