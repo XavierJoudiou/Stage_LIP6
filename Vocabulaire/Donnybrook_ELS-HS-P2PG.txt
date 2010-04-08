@@ -11,6 +11,9 @@
 
 ## Vocabulaire du papier :
 
+Doppelgängers :	bot controlé par la machine qui doit agir de maniere realiste.
+
+
 
 
 
