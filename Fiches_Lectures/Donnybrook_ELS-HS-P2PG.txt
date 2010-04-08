@@ -1,0 +1,27 @@
+## Xavier Joudiou 
+## Stage au lip6 : Amélioration de la réactivité des réseaux pair à pair pour les MMOGs
+
+	Fiche de lecture
+
+## Informations sur le papier :
+
+	Titre : Donnbrook: Enabling Large-Scale, High-Speed, Peer-to-Peer Games
+	Auteur(s) : A. R. Bharambe, J. R. Douceur, J. R. Lorch, T. Moscibroda, J. Pang, S. Seshan, X. Zhuang
+	Année : 2008
+	Lieu : SIGCOMM pages 389-400
+	Mots Clés : computer games, doppelgängers, interest sets
+
+## Notes sur le papier :
+
+→
+
+→
+
+→
+
+→
+
+→
+
+
+## Fin de la fiche de lecture
