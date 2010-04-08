@@ -17,7 +17,8 @@
   elevee ( pas de lag FPS), 
 
 → filtre de zone d'interet (AOI), notion of a player s interest set, un joueur ne peut se concentrer que sur 
-  un certain nombre d'objet donc on va privilegier ceux la. Message Subscribe et Unscribre entre les entites.
+  un certain nombre d'objet donc on va privilegier ceux la ( 5 autres joueurs ~) .
+  Message Subscribe et Unscribre entre les entites.
 
 → interet estime : proximite, but proche, interactino recente avec un objet, 
 
