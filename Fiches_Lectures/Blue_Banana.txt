@@ -19,9 +19,11 @@
   possible pour l'avatar soir T(travelling) ou E(Exploring) car observations avec traces des 
   joueurs ( entre les hotspots et dans les hotspots )
 
-→ Si en etat T, on utilise BlueBanana et si en etat E non.  
+→ Si en etat T, on utilise BlueBanana et si en etat E non. Algo au dessus de Solipsis. 
 
 → Solipsis, overlay design, chaque noeud est responsable d'un avatar, collaboration des noeuds .
+
+→ Essayer d'anticiper mieux les mouvements relatifs antre deux avatars, indépendament de leur position.
 
 →
 
