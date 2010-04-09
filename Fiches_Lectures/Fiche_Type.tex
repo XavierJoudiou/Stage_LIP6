@@ -1,22 +1,28 @@
 \documentclass[11pt,a4paper]{article}
-\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
-\usepackage[francais]{babel}
-\usepackage{ucs}
-\usepackage[utf8x]{inputenc}
-\usepackage{url}
-\usepackage{graphicx}
-\usepackage{amsmath}
-\usepackage{textcomp}
-\urlstyle{sf}
+
+\usepackage{Fiche_Lecture_Type} %% cibler doc/modules/
+
+\usepackage{fancyhdr}
+\fancypagestyle{basdepage}{
+\fancyfoot{} % clear all footer fields
+\fancyfoot[C]{Stage Lip6 : Amélioration de la réactivité des réseaux p2p pour les MMOGs [\thepage]}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}}
+\pagestyle{basdepage}
+
+\title{Fiche de Lecture Type}
+\author{Xavier Joudiou}
+\date{09/04/10}
 
 \begin{document}
-
-\begin{Informations}
-Titre :
-Auteur :
-Date :
-Lieu :
-Mots Clés :
-\end{informations}
+  %\thispagestyle{basdepage}
+  \fairetitre{Fiche de Lecture Type}{Xavier Joudiou}{09/04/10}
+  \infoFicheLecture{Titre}{Auteur}{Année}{Lieu}{MotsClés}
+	
+  \begin{itemize}
+  \renewcommand{\labelitemi}{$\Rightarrow$}
+	\item notes
+	\item ...
+  \end{itemize}
 
 \end{document}  
