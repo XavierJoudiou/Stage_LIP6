@@ -4,4 +4,7 @@
 new_paper [arg] : prends le nom de fichier que l'on veut creer pour l'article correspondant
 		  Crée une fiche de lecture et une fiche pour le vocabulaire vierge.
 
+copyGittoSvn : met a jour le dossier pour le Svn avec les fichiers Git
 
+Possibilité de voir le contenu du depot Git à l'adresse :
+	http://github.com/XavierJoudiou/Stage_LIP6
