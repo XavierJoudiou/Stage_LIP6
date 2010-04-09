@@ -6,7 +6,7 @@ then
 
 	for file in `ls ./Vocabulaire`
 	do
-	    if [ $file = $1.txt ] 
+	    if [ $file = $1.tex ] 
 	    then
 		echo Le fichier existe deja.
 		exit 1
@@ -15,7 +15,7 @@ then
 
 	for file in `ls ./Fiches_Lectures`
 	do
-	    if [ $file = $1.txt ] 
+	    if [ $file = $1.tex ] 
 	    then
 		echo Le fichier existe deja.
 		exit 1
@@ -23,8 +23,8 @@ then
 	done
 
 	echo On va creer les fichiers pour le vocabulaire et pour la fiche de lecture correspondant a $1
-	cp ./Vocabulaire/Type_Vocabulaire.txt ./Vocabulaire/$1.txt
-	cp ./Fiches_Lectures/Fiche_Type.txt ./Fiches_Lectures/$1.txt
+	cp ./Vocabulaire/Type_Vocabulaire.tex ./Vocabulaire/$1.tex
+	cp ./Fiches_Lectures/Fiche_Type.tex ./Fiches_Lectures/$1.tex
 else 
 	echo Donner le nom d\'un article 
 	exit 1
