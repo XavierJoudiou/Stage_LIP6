@@ -1,0 +1,32 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{Fiche_Lecture_Type} %% cibler doc/modules/
+
+\usepackage{fancyhdr}
+\fancypagestyle{basdepage}{
+\fancyfoot{} % clear all footer fields
+\fancyfoot[C]{Stage Lip6 : Amélioration de la réactivité des réseaux p2p pour les MMOGs [\thepage]}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}}
+\pagestyle{basdepage}
+
+\title{Fiche de Lecture Type}
+\author{Xavier Joudiou}
+\date{09/04/10}
+
+\begin{document}
+  %\thispagestyle{basdepage}
+  \fairetitre{Fiche de Lecture T-A OC and SS}{Xavier Joudiou}{12/04/10}
+  \infoFicheLecture{Topologically-Aware Overlay Construction and Server Selection}{Sylvia Ratnasamy, Mark Handley, Richard Karp, Scott Shenker}{2002}{Présentaion de Dekar Lyes}{Overlay networks, serveur}
+	
+  \begin{itemize}
+  \renewcommand{\labelitemi}{$\Rightarrow$}
+	\item routage se fait au niveau applicatif, et peut etre contradictoire avec le routage niveau IP, ignore le reseau physique, grosses latences et traffic inutile
+	\item faire un routage en phase avec le niveau physique serait mieux, amélioration du tps de réponse en choisissant le serveur le plus proche du client
+	\item Grande connaissance de la topologie pour des grands réseau, DIFFICILE !!!
+	\item Avoir une connaissance même approximative de la topologie
+	\item suite pas interessante ??
+	\item ...
+  \end{itemize}
+
+\end{document}  
