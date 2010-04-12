@@ -5,3 +5,4 @@ cp -R ./src ~/LIP6_SVN_Stage/VirtualMobility/AMAM/xjoudiou
 cp copyGittoSvn.sh ~/LIP6_SVN_Stage/VirtualMobility/AMAM/xjoudiou
 cp new_paper.sh ~/LIP6_SVN_Stage/VirtualMobility/AMAM/xjoudiou
 cp README ~/LIP6_SVN_Stage/VirtualMobility/AMAM/xjoudiou
+cp Biblio.tex ~/LIP6_SVN_Stage/VirtualMobility/AMAM/xjoudiou
