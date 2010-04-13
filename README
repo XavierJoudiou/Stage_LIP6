@@ -1,10 +1,51 @@
 ## Xavier Joudiou
 ## Stage au LIP6 : Amélioration de la réactivité des réseaux pair à pair pour les MMOGs
 
-new_paper [arg] : prends le nom de fichier que l'on veut creer pour l'article correspondant
+##Possibilité de voir le contenu du depot Git à l'adresse :
+##	http://github.com/XavierJoudiou/Stage_LIP6
+
+
+/Repertoire : ./Fiches_Lectures
+
+	*.tex : Fiche de lecture pour l'article correspondant 
+
+	Makefile : makefile pour passer en pdf, nettoyer le dossier et afficher le pdf
+
+
+/Repertoire : ./Vocabulaire
+
+	*.tex : Fiche de vocabulaire pour l'article correspondant 
+
+	Makefile : makefile pour passer en pdf, nettoyer le dossier et afficher le pdf
+
+
+/Repertoire : ./Ressources/Scripts
+	new_paper [arg] : prends le nom de fichier que l'on veut creer pour l'article correspondant
 		  Crée une fiche de lecture et une fiche pour le vocabulaire vierge.
 
-copyGittoSvn : met a jour le dossier pour le Svn avec les fichiers Git
+	copyGittoSvn : met a jour le dossier pour le Svn avec les fichiers Git
 
-Possibilité de voir le contenu du depot Git à l'adresse :
-	http://github.com/XavierJoudiou/Stage_LIP6
+
+/Repertoire : ./Ressources/LaTex
+
+	Bilio.tex : Fichier pour la bibliographie en BibTex
+
+	Fiche_Lecture_Type.sty : Fichier de style pour la fiche de lecture type
+	
+	Fiche_Type.tex : Fiche de lecture type
+ 
+	Type_Vocabulaire.sty : Fichier de style pour la fiche de vocabulaire
+
+	Type_Vocabulaire.tex : Fiche de vocabulaire type
+
+
+/Repertoire : ./Old
+
+	* : Anciens fichiers types ou autres
+
+
+/Repertoire : ./docs ( seulement sus le depot GIT)
+
+	* : documentation nécessaire, articles, thèses, ...
+	
+
