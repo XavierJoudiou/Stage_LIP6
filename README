@@ -19,7 +19,13 @@
 	Makefile : makefile pour passer en pdf, nettoyer le dossier et afficher le pdf
 
 
+/Repertoire : ./Ressources/Images
+
+	*.png : Images nécessaires au rapport type ou autres
+
+
 /Repertoire : ./Ressources/Scripts
+
 	new_paper [arg] : prends le nom de fichier que l'on veut creer pour l'article correspondant
 		  Crée une fiche de lecture et une fiche pour le vocabulaire vierge.
 
