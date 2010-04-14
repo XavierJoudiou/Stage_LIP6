@@ -1,0 +1,31 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{../Ressources/LaTex/Fiche_Lecture_Type} %% cibler doc/modules/
+
+\usepackage{fancyhdr}
+\fancypagestyle{basdepage}{
+\fancyfoot{} % clear all footer fields
+\fancyfoot[C]{Stage Lip6 : Amélioration de la réactivité des réseaux p2p pour les MMOGs [\thepage]}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}}
+\pagestyle{basdepage}
+
+\title{Fiche de Lecture Type}
+\author{Xavier Joudiou}
+\date{09/04/10}
+
+\begin{document}
+  %\thispagestyle{basdepage}
+  \fairetitre{Fiche de Lecture Avatar Mobility in U-C NVW }{Xavier Joudiou}{14/04/10}
+  \infoFicheLecture{Avatar mobility in user-created networked virtual worlds: measurements, analysis, and implications}{Huiguang Liang, Ransi Nilaksha De Silva, Wei Tsang Ooi, Mehul Motani}{21 mai 2009}{SPringer Science + Business Medi, LLC 2009}{Networked virtual environment(NVE), Mobility traces user behavior, Peer-to-Peer,Caching,Prefetching,Second Life}
+	
+  \begin{itemize}
+  \renewcommand{\labelitemi}{$\Rightarrow$}
+	\item beuacoup de partie identique à leur autre papier
+	\item user-created networked virtual worlds /= MMOGs, diference entre FPS et MMOGs, monde tres dynamique dans Second Life,pas de visibilité des avatars des autres régions.
+	\item sticky cells ?? => pause plus longue et predictible => super noeud potentiel ??
+	\item amélioration de la scalabilité => cluster server, les zones populaires ne varient pas beaucoup au cours du temps => utilisation historique, deux etats des avatars (lent ou rapide), Second Life prefetche les données dans un cercle autour de l'avatar mais que 18\% du temps efficace, amélioration possible de la gestion du cache de Second Life.
+	\item ...
+  \end{itemize}
+
+\end{document}  
