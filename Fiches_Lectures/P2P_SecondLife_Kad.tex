@@ -12,7 +12,7 @@
 
 \title{Fiche de Lecture Type}
 \author{Xavier Joudiou}
-\date{09/04/10}
+\date{14/04/10}
 
 \begin{document}
   %\thispagestyle{basdepage}
@@ -21,10 +21,12 @@
 	
   \begin{itemize}
   \renewcommand{\labelitemi}{$\Rightarrow$}
-	\item Beaucoup d'utilisateurs donc deployement qui doit tenir de fortes charges,
+	\item Beaucoup d'utilisateurs donc deployement qui doit tenir de fortes charges,avoir une vue constitente du monde pour tous les joueurs, ne pas avoir de perte d'objet. Aujourd'hui SVWs sont en client/serveur.
+	\item Découpage du monde de SL en région qui sont chacunes assosciées à un serveur dédié. Limitation du nombre d'avatar par région.
 	\item P2P permet de depenser moins pour jouer à plus !!!
 	\item Utilisation de Kad (eMule), monde dynamique, AOI, s'abonner a des coordinateurs pour connaitre modification faite sur un objet dans son AOI, pour ajouter un objet création d'une clé en fonction des coordonnées et on informe le coordinateur de la cellule de l'objet.
-	\item A finir   
+	\item Nombre d'objet dans une cellule, si >= à Dmax on divise en deux la cellule, de meme on peut faire des merge si < à Dmin. Un objet "pointer" est introduit pour informer les utilisateurs si merge ou split. Pour déplacement contacter le coordinateur à chaque fois.
+	\item Inconsistence de la vue du monde quand avatar arrive, quand il bouge à travers la cellule. Le prmeier point peut être réglé facilement ( mettre en cache à travers les différentes sessions    
 	\item ...
   \end{itemize}
 
