@@ -1,6 +1,6 @@
 \documentclass[11pt,a4paper]{article}
 
-\usepackage{/home/xavier/Stage_LIP6/Ressources/LaTex/Rapport_Type} %% cibler doc/modules/
+\usepackage{Rapport_Type} %% cibler doc/modules/
 
 \usepackage{fancyhdr}
 \fancypagestyle{basdepage}{
@@ -17,8 +17,9 @@
 \tableofcontents
 
 \newpage
-\section{Introduction}
-	Introduction du rapport type\\
+
+\input{intro}
+
 \newpage
 \section{Premier point}
 	\subsection{Petit A}
@@ -30,7 +31,8 @@
 \section{Deuxieme point}
 	\subsection{Petit A}
         Petit A \\
-	\cite{1613041}
+	Comme il est très bien dit dans \cite{1613041}\\
+	\par suite Petit A
 	\newpage
 	\subsection{Petit B}
         Petit B \\
