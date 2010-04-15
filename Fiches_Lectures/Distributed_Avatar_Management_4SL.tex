@@ -1,0 +1,32 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{../Ressources/LaTex/Fiche_Lecture_Type} %% cibler doc/modules/
+
+\usepackage{fancyhdr}
+\fancypagestyle{basdepage}{
+\fancyfoot{} % clear all footer fields
+\fancyfoot[C]{Stage Lip6 : Amélioration de la réactivité des réseaux p2p pour les MMOGs [\thepage]}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}}
+\pagestyle{basdepage}
+
+\title{Fiche de Lecture Type}
+\author{Xavier Joudiou}
+\date{09/04/10}
+
+\begin{document}
+  %\thispagestyle{basdepage}
+  \fairetitre{Fiche de Lecture Distributed Avatar Management for Second Life}{Xavier Joudiou}{15/04/10}
+  \infoFicheLecture{Distributed Avatar Management for Second Life}{Matteo Varvello, Stefano Ferrari, Ernst Biersack, Christophe Diot}{23 novembre 2009}{NetGames 2009}{Second Life, Distributed Avatar Management, P2P, Delaunay Network}
+	
+  \begin{itemize}
+  \renewcommand{\labelitemi}{$\Rightarrow$}
+	\item Second Life: bcp de joueurs, monde divisé en région, une région par serveur, client/serveur.
+	\item Client/serveur $\Rightarrow$ pas scalable, maximum 100 pers/serveur, ralentissements fréquent.
+	\item P2P regle la scalabilte ?
+	\item Utilisation de la triangularisation de Delaunay
+	\item reste de la présentation pas très expliqué.
+	\item ...
+  \end{itemize}
+
+\end{document}  
