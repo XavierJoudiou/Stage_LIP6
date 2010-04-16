@@ -1,0 +1,37 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{../Ressources/LaTex/Fiche_Lecture_Type} %% cibler doc/modules/
+
+\usepackage{fancyhdr}
+\fancypagestyle{basdepage}{
+\fancyfoot{} % clear all footer fields
+\fancyfoot[C]{Stage Lip6 : Amélioration de la réactivité des réseaux p2p pour les MMOGs [\thepage]}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}}
+\pagestyle{basdepage}
+
+\title{Fiche de Lecture Type}
+\author{Xavier Joudiou}
+\date{09/04/10}
+
+\begin{document}
+  %\thispagestyle{basdepage}
+  \fairetitre{Fiche de Lecture Challenges in Peer-to-Peer Gaming}{Xavier Joudiou}{16/04/10}
+  \infoFicheLecture{Challenges in Peer-to-Peer Gaming}{Christoph Neumann, Nicolas Prigent, Matteo Varvello, Kyoungwon Suh}{Janiver 2007}{ACM SIGCOMM Computer Communication Preview, Volume 37, Number1, January 2007}{Peer-to-Peer, Overlay Online-gaming, Security}
+	
+  \begin{itemize}
+  \renewcommand{\labelitemi}{$\Rightarrow$}
+	\item Beaucoup de monde joue au jeux payant en ligne et nombre en augmentation. Beaucoup de jeux en client/server ou cluster de serveur.
+		$\rightarrow$ pas scalable, maintenir les serveurs, serveur point de faiblesse du système, ...
+	\item Utilisation du P2P, pas de probème de scalabilité. Découpage en région du monde, et traitement de chaque comme un jeu separé. Mise en place d'un overlay par région ou élection d'un noeud responsable.
+	\item Eviter la "Triche" un des gros chalenge, trois catégories de tricherie:
+		\begin{itemize}
+			\item Confidentialité: Obtention d'informations non authorisées sur d'autres avatars
+			\item Intégrité: si modification monde, lois physiques, lois du jeu ...
+			\item Availability: ralentissements ou arrêts de partie du jeu ...
+		\end{itemize}
+	\item Architecute P2P un peu plus vulnérables aux attaques (2.4 p3), mises en place de systèmes pour éviter ce problème et pour détecter les tricheurs.
+	\item ...
+  \end{itemize}
+
+\end{document}  
