@@ -21,8 +21,18 @@
 	
   \begin{itemize}
   \renewcommand{\labelitemi}{$\Rightarrow$}
-	\item Jeux en réseau souvent une approche client/serveur, joueur envoi info au serveur qui revoit aux autres joueurs. Problème de scalabilité et de robustesse.
-	\item Observation de popular "waypoint"  
+	\item Il y a une rapide évolution dans les jeux, avant ils se jouaient à 8 au plus. Les jeux en réseau ont souvent une approche client/serveur, le joueur envoie des informations au serveur qui renvoie aux autres joueurs. Mais cela pose un problème de scalabilité et de robustesse. De plus, cette approche fait que le jeu a souvent une durée de vie assez courte si on ne remet pas des moyens fréquemment.
+	\item Comment distribuer le jeu, le partionnement est un challenge surtout pour des jeux qui sont en temps-réel.
+	\item Les deux avantages des jeux vidéos nous permettant de réaliser la distribution sont:
+	\begin{itemize}
+		\item Les jeux tolèrent une consistence faible pour l'état de l'aplication
+		\item Les écritures et les lectures sont très prédictibles à cause/grâce aux règles qui gouvernent le jeu.
+	\end{itemize}
+	\item N'importe quel noeud peut créer une copie en lecture seule de tout objet du jeu. Il y a une DHT qui est mise en place pour trouver les objets qui sont nécessaires, mais les DHTs sont trop lentes, pour cacher ce problème il y a la mise en place un mécanisme de pre-fetch des objets. 
+	\item Pour améliorer la scalabilté, il y a souvent la mise en place de l'AOI et dd delta-encoding. mais problèmes avec l'AOI quand le nombre de joueurs devient trop grand. Observation de la présence de "popular waypoint".
+	\item Utilisation de cluster pour améliorer la scalabilité, mais coût élever donc pas possible pour tous les jeux.
+	\item Colyseus $\rightarrow$ game object manager, deux types d'objets ( mutables (avatars, doors, items, computer controlled characters) ou imminutables (map geometry, code,graphics  )). Colyseus gère les objets mutables dans the "global object store". Un objet a une copie Primaire qui réside sur un noeud exactement, quand mis à jour on transmet au propiétaire de l'objet. Hypothèse: les objets sont placés proches des joueurs qui les contrôlent. Colyseus utilise des DHTs comme object locator. Modification légère de l'application pour l'introduction de l'AOI et pour la localisation des objets.
+	\item Mise en place d'un "Replica Management" qui gère la synchronisation des réplicats.
 	\item ...
   \end{itemize}
 
