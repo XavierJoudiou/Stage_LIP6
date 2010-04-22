@@ -32,7 +32,11 @@
 	\item Pour améliorer la scalabilté, il y a souvent la mise en place de l'AOI et dd delta-encoding. mais problèmes avec l'AOI quand le nombre de joueurs devient trop grand. Observation de la présence de "popular waypoint".
 	\item Utilisation de cluster pour améliorer la scalabilité, mais coût élever donc pas possible pour tous les jeux.
 	\item Colyseus $\rightarrow$ game object manager, deux types d'objets ( mutables (avatars, doors, items, computer controlled characters) ou imminutables (map geometry, code,graphics  )). Colyseus gère les objets mutables dans the "global object store". Un objet a une copie Primaire qui réside sur un noeud exactement, quand mis à jour on transmet au propiétaire de l'objet. Hypothèse: les objets sont placés proches des joueurs qui les contrôlent. Colyseus utilise des DHTs comme object locator. Modification légère de l'application pour l'introduction de l'AOI et pour la localisation des objets.
-	\item Mise en place d'un "Replica Management" qui gère la synchronisation des réplicats.
+	\item Mise en place d'un "Replica Management" qui gère la synchronisation des réplicats. Decoupling Location and Synchronisation $\rightarrow$ Quand un noeud découvre un réplicat intéressant, il synchronise directement le réplicat avec le primaire.
+	Proactive Replication $\rightarrow$ les objets qui ont une vie courte vont être créer proche du créateur de l'objet( missile), donc mettre ces objets sur un noeud proche. L'overhead introduit est négligeable et moins de pertes de missile.
+	Replica Consistency $\rightarrow$ Attente pour écrire sur l'objet primaire. TACT model. 
+	\item Colyseus a mis en place un service de localisation distribuée à partir d'une DHT (range-queriable DHT). Il y a une prédiction des mouvements, cela va engendrer de l'overhead, il faut trouver la bonne période de "rafraichissement" ( 1 seconde ici). Utilisation d'un cache local pour les subscriptions qui est combiné à un "aggregation filter qui prend plusieurs subscriptions et fait des merges, cela permet de réduire l'overhaed des subscriptions. 
+	\item Colyseus introduit quelques problèmes si il y des tricheurs, car possibilités de modifier les objets locaux, peuvent s'incrire pour des zones qu'ils ne devraient pas voir, etc. 
 	\item ...
   \end{itemize}
 
