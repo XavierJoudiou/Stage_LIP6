@@ -22,7 +22,16 @@
   \begin{itemize}
   \renewcommand{\labelitemi}{$\Rightarrow$}
 	\item Limites des architestures client/serveur, il y a de plus en plus d'utilisateurs et donc le passage à l'échelle devient un facteur clé. Donc on veut utiliser des systèmes pair à pair. 
-	\item Il faut assurer: Consitency, Responsiveness, Scalabilty, Persistency, Reliability, Security. Mise en place de système de AOI.
+	\item Il faut assurer: Consitency, Responsiveness, Scalabilty, Persistency, Reliability, Security. Mise en place de système de AOI ( dynamic AOI).
+	\item P2P-Based NVE: le problème de la recherche de contenu est simplifié, facilité de localisation et d'identification. 
+	\item VON introduit trois procédures principales:
+	\begin{itemize}
+		\item Join Procedure: textit{joining node} contacte le server pour avoir un ID unique. Puis envoie une requête avec ses coordonnées à tous les noeuds existants. Création de la liste des voisins, mis à jour chez les voisins, etc.
+		\item Move Procedure: quand un noeud bouge ses coordonnées sont mises à jour chez ses voisins ( gestion si noeud à la limite de la région, si il y a des nouveux voisins, etc).
+		\item Leave Procedure: le noeud se déconnecte( qu'importe sa raison et la façon) et les voisins vont se mettre à jour. 
+	\end{itemize}
+	\item Von est similaire à DT-Overlay si seulement tous les noeuds sont juste connectés avec leurs voisins et ne bougent pas.
+	\item Von permet de gérer un grand nombre d'utilisateurs et de garder un topologie constistente. Mais beaucoup de messages introduit par AOI et si les utilisateurs se déplacent trop vite, on  a des problème pour notifier les nouveaux voisins.
 	\item ...
   \end{itemize}
 
