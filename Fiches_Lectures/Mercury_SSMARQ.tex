@@ -22,8 +22,12 @@
   \begin{itemize}
   \renewcommand{\labelitemi}{$\Rightarrow$}
 	\item multi-attribute range queries by creating a routing hub fot each attibute in the application schema. Mercury oganizes each routing hub into a circular overlay of nodes and places data continuously on this ring, each node is responsible for a rang of values for the particular attribute. Les données ne sont pas placées aléatoirement. 
-	\item Dans Mercury, les données sont représentées comme une liste de paire attibut-valeur (type, attribute, value). conjunction $\rightarrow$ (type, attribute, operator, value)
-	\item a finir le we du 24/04 
+	\item Mercury routing protocol est inspiré de Chord, Symphony, etc. Dans Mercury, les données sont représentées comme une liste de paire attibut-valeur (type, attribute, value). Conjunction $\rightarrow$ (type, attribute, operator, value). 
+	\item Like Symphony, the key to Mercury's route optimization is the selection of \textit{k long distance} links that are maintained in addition to the successor and predecessor links.	
+	\item textbf{Node Join}: Le noeud doit déjà avoir des informations sur au moins un noeud du système pour se connecter, il interroge un noeud et obtient des informations sur les "hubs", il choisit ensuite un "hub" aléatoirement et contacte un des noeuds. Il copie ensuite le "routing state" de son successeur et initialise deux processus de maintenance.
+	\item \textbf{Node Departure}: Il faut "refaire" les liens entre le successeur et le prédécesseur, le lien de longue distance et les liens inter-hub.Pour le lien succ/pred, chaque noeud a une courte liste pour "réparer" le lien. Pour le lien d elongue distance, création d'un nouveau lien et périodiquement reconstruction des liens de longue distance en utilisant une estimation récentedu nombre de noeud. Pour les liens inter-hub, il y a trois choix, premièrement utilisation d'une sauvegarde de "cross-hub link", si pas possible demande à son successeur et prédecesseur et sinon demande au "bootstarp server".
+	\item Mercury, bulding block for distributed applications ( Online Games, etc.). Une des difficultés dans les MMOGs est de maintenir le "Game State",le challenge est de fournir une manière pour les mises à jours de la vue du "Game State" des noeuds. Idée de AOI et public/subcr pour maj des états.
+	\item API pour pub/sub, trois appel basique : send\_publication(envoyer un objet via Mercury), register\_interest(s'abonner au maj), unregister\_interest(se désabonner).
 	\item ...
   \end{itemize}
 
