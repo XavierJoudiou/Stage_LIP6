@@ -1,0 +1,30 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{../Ressources/LaTex/Fiche_Lecture_Type} %% cibler doc/modules/
+
+\usepackage{fancyhdr}
+\fancypagestyle{basdepage}{
+\fancyfoot{} % clear all footer fields
+\fancyfoot[C]{Stage Lip6 : Amélioration de la réactivité des réseaux p2p pour les MMOGs [\thepage]}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}}
+\pagestyle{basdepage}
+
+\title{Fiche de Lecture Type}
+\author{Xavier Joudiou}
+\date{09/04/10}
+
+\begin{document}
+  %\thispagestyle{basdepage}
+  \fairetitre{Fiche de Lecture A Measurement Study of Virtual Populations in MMOGs}{Xavier Joudiou}{26/04/10}
+  \infoFicheLecture{A Measurement Study of Virtual Populations in Massively Multiplayer Online Games}{Daniel Pittman, Chris GauthierDickey}{2007}{Proceedings of the 6th ACM SIGCOMM workshop on Network and system support for games}{MMOG, }
+	
+  \begin{itemize}
+  \renewcommand{\labelitemi}{$\Rightarrow$}
+	\item Les MMOGs sont joués par beaucoup de joueurs en même temps, il y a donc un découpage des mondes en \textit{realms}, chaque \textit{realms} est habituellement managé par un serveur logique ( une ou plusieurs machines physiques). Chaque \textit{realms} est découpée en \textit{zones}.
+	\item Etude du nombre de joueurs présents, nombre d'arrivées et de départs, durée d'une session et distributions des joueurs. Plus de joueurs le soir et le wek end, les joueurs de niveau supérieur à 70 sont exclus des mesures car ils agissent différement.
+	\item Surtout des mesures sur les heures d'arrivée, de départ, le nombre de joueur en fonction de l'heure, etc.
+	\item ...
+  \end{itemize}
+
+\end{document}  
