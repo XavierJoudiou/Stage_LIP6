@@ -21,7 +21,16 @@
 	
   \begin{itemize}
   \renewcommand{\labelitemi}{$\Rightarrow$}
-	\item 
+	\item Les applications Peer-to-Peer deviennent de plus en plus omniprésente, il y a deux style d'overlay P2P ( structuré ou non structuré). Ces deux types d'overlay ont un désavantage commun, ils ne sont pas flexibles.
+	\item Mise en place d'un overlay maléable, c'est à dire que les communications caractéristiques de l'application distribuée va influencé la structure de l'overlay. Les deux buts sont d'optimiser les perdormances des overlays, et de garder les propriétés de tolérance aux fautes et de scalabilité.
+	\item Mise en place de deux types de lien:
+	\begin{itemize}
+  	\renewcommand{\labelitemi}{$\surd$}
+		\item lien non-applicatif: Maintient l'overlay global proche d'un graphe aléatoire avec un faible degré de clustering (regroupement).
+		\item lien applicatif: Cela permet de créer un graphe fortement connecté, pour regrouper les noeuds, chausse noeud d'un groupe crée aléatoirement des liens applicatifs vers des membres du groupe. Cela va permettre une rapide propagation des états lors des updates et des messages applicatifs multicast. 
+	\end{itemize} 
+	\item Possibilité d'ajout de noeud, de détection de défaillance, remplacement de lien, etc.
+	\item textit{group}-based applications influencent l'overlay sous-jacent en remplaçant les liens inter-nodes par des liens entres les applications. L'algorithme maintient une bonne connectivité.
 	\item ...
   \end{itemize}
 
