@@ -22,11 +22,11 @@
   \begin{itemize}
   \renewcommand{\labelitemi}{$\Rightarrow$}
 	\item MOGs sont très souvent construit en Client/Serveur. Autorité centrale pour stocker l'état global, gérer les conflits et faire les mises à jour.Investissements à faire pour mettre en place le serveur( construit comme un cluster).
-	\item Utilisation du P2P, utilisation de DHT. Introduction du concpet de "zoned federation model", découpage en zone, "zoning layer" entre le programme et les DHTs ou le réseau. 
-	\item Distribuer les tâches et les états globaux qui étaient sur le serveur, chaque noeuds doit lire l'etat global frequemment. Chaque zone n'a pas besoin de toutes les informations à chaque instant. Une zone est l'unité minimum des états globaux distibués dans les DHTs. "Zone owner" peut modifier l'état de la zone, gère les requêtes des autres noeuds, gère les conflits ... Gestion du changement de "zone owner" etc ... Un noeud peut être "zone owner" dans un zone et juste membre dans une autre zone.
+	\item Utilisation du P2P, utilisation de DHT. Introduction du concept de "zoned federation model", découpage en zone, "zoning layer" entre le programme et les DHTs ou le réseau. 
+	\item Distribuer les tâches et les états globaux qui étaient sur le serveur, chaque nœuds doit lire l'état global fréquemment. Chaque zone n'a pas besoin de toutes les informations à chaque instant. Une zone est l'unité minimum des états globaux distribués dans les DHTs. "Zone owner" peut modifier l'état de la zone, gère les requêtes des autres nœuds, gère les conflits ... Gestion du changement de "zone owner" etc ... Un nœud peut être "zone owner" dans un zone et juste membre dans une autre zone.
 	\item Problème du modèle $\rightarrow$ les jeux demandent une faible latence et ici tout passe par les DHTs etc donc latence assez élevée.
 	\item Donc utilisation des DHTs limitée au sauvegarde des états globaux et rendez vous initial.
-	\item Donc : découpage en zone, propiétaire de zone et membres, DHT zoning layer
+	\item Donc : découpage en zone, propriétaire de zone et membres, DHT zoning layer
 	\item ...
   \end{itemize}
 
