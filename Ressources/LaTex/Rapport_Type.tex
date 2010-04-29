@@ -4,14 +4,15 @@
 
 \usepackage{fancyhdr}
 \fancypagestyle{basdepage}{
+\fancyhead{}
 \fancyfoot{} % clear all footer fields
-\fancyfoot[C]{Stage Lip6 : Amélioration de la réactivité des réseaux p2p pour les MMOGs [\thepage]}
+\fancyfoot[C]{Stage Lip6 : Amélioration de la réactivité des réseaux p2p pour les MMOGs (\thepage)}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}}
 \pagestyle{basdepage}
 
 \begin{document}
-  \fairetitre{Amélioration de la réactivité des réseaux pair à pair pour les MMOGs}{Rapport Type}{Xavier Joudiou}{09/04/10}
+  \fairetitre{Amélioration de la réactivité des réseaux pair à pair pour les MMOGs}{Rapport Bibliographique}{Xavier Joudiou}{29/04/10}
 
 \newpage
 \tableofcontents
@@ -25,27 +26,17 @@
 \input{intro}
 
 \newpage
-\section{Premier point}
-	\subsection{Petit A}
-	Petit A \\
-	\subsection{Petit B}
-	Petit B \\
-	
-\newpage
-\section{Deuxieme point}
-	\subsection{Petit A}
-        Petit A \\
-	Comme il est très bien dit dans \cite{1613041}\\
-	\par suite Petit A
-	\newpage
-	\subsection{Petit B}
-        Petit B \\
-\newpage
 \input{whyp2p}
+
 \newpage
-\input{AOI}
+\input{MecaExist}
+
+\newpage
+\input{Sollipsis}
+
 \newpage
 \input{BlueBanana}
+
 \newpage
 \bibliographystyle{plain}
 \bibliography{Biblio}
