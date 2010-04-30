@@ -1,4 +1,5 @@
 \section{Pourquoi passer à des solutions pair à pair?}
+	\label{whyp2p}
 	Nous allons voir pourquoi est-il nécessaire de passer d'une architecture Client/Serveur à une architecture pair à pair, nous verrons les différences des deux solutions.
 	\subsection{Les solutions existantes}
 	Dans la plupart des Massively Multiplayer Online Games, l'architecture est de type client/serveur (voir page ~\pageref{P2P/ClServ}). Dans cette architecture, il a forte distinction entre le client, qui envoie des requêtes au serveur et attend les réponses, et le serveur qui est à l'écoute de requêtes des clients. Cela va simplifier la sécurité et le fonctionnent global des jeux. Par exemple, pour effectuer des updates sur l'état global du jeu, il suffit de le faire sur un seule machine et il n'y aura pas de problème d'incohérence entre les données. De même pour la sécurité, toutes les données étant regroupées sur une seule machine, le contrôle sera beaucoup plus simple que dans des systèmes distribués où le nombre de point d'entrée sera beaucoup plus important. \\

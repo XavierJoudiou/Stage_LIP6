@@ -1,4 +1,5 @@
 \section{Sollipsis}
+	\label{sollipsis}
 	\textbf{Expliquer le travail qui a été fait dans Sollipsis car base de BlueBanana. }
 	\subsection{Introduction sur Sollipsis} 
 	Nous allons expliquer le fonctionnement global et les fonctionnalités importantes de Sollipsis. Sollipsis est fait pour accepter un nombre illimité d'utilisateur et pour être accessible par n'importe quel ordinateur, il peut fonctionner sur des ordinateurs peu puissant et avec des connections internet à 56Kbs ou sans fil. Une fois les nœuds connectés, ils peuvent échanger des données tels que de la vidéo, du son, le mouvement d'avatar ou toutes choses affectant la représentation du monde virtuel. \\
@@ -8,9 +9,10 @@
 		\item Local Awareness:\\
 		Cela consiste à délimiter le champs de perception des entités et de mettre en place des mécanismes de communication seulement avec les entités appartenant à sa zone. \textbf{recopier AOI ou non }
 		\item Global Connectivity:\\
-		Une entité doit connaître toutes les entités se trouvant dans son "champs de vision". Elle doit pouvoir détecter l'arrivée ou le départ d'un entité de son "champs de vision". Cette propriété est basé sur la Géométrie Informatique, elle assure qu'une entité ne "tourne pas le dos" à une partie du monde. L'enveloppe convexe des entités est le plus petit polygone convexe formé par cet ensemble. Un mécanisme pour éviter qu'une partie du graphe soit isolée a aussi été mis en place.
-	\end{itemize} 
-	Sollipsis a aussi des mécanismes de collaboration pour maintenir les propriétés précédentes, nous allons voir ces deux propriétés:
+		Une entité doit connaître toutes les entités se trouvant dans son "champs de vision". Elle doit pouvoir détecter l'arrivée ou le départ d'un entité de son "champs de vision". Cette propriété est basé sur la Géométrie Informatique, elle assure qu'une entité ne "tourne pas le dos" à une partie du monde. L'enveloppe convexe des entités est le plus petit polygone convexe formé par cet ensemble. Un mécanisme pour éviter qu'une partie du graphe soit isolée a aussi été mis en place.\\
+	\end{itemize}
+
+Sollipsis a aussi des mécanismes de collaboration pour maintenir les propriétés précédentes, nous allons voir ces deux propriétés:
 	\begin{itemize}
 		\item \textit{Spontaneous Collaboration for Local Awareness:}\\
 		Pour vérifier la propriété \textit{Local Awareness}, il faut qu'une entité puisse connaître tous ces voisins à chaque instant. Pour faciliter cette connaissance du voisinage, et comme il y a beaucoup de mouvement dans le monde virtuel, un système de collaboration entre les nœuds a été mis en place. Une entité pourrait demander régulièrement à ces voisins si ils détectent une nouvelle entité mais cela implique un grand nombre de message inutile et une perte temporelle de consistence. Pour éviter ces problèmes, une entité va prévenir une autre entité si une entité entre dans sa zone. (\textbf{REVOIR?}) 
