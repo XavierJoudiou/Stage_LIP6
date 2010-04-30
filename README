@@ -44,6 +44,12 @@
 
 	Type_Vocabulaire.tex : Fiche de vocabulaire type
 
+	Rapport_Type.tex : Squelette du rapport bibliographique
+	
+	Rapport_Type.sty: Fihier de style du rapport bibliographique
+
+	*.tex: fichiers nécessaires au rapport bibliographique 
+
 
 /Repertoire : ./Old
 
