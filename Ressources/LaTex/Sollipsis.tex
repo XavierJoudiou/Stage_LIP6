@@ -1,15 +1,15 @@
 \section{Sollipsis}
 	\label{sollipsis}
-	\textbf{Expliquer le travail qui a été fait dans Sollipsis car base de BlueBanana. }
+	Sollipsis est le "socle" du travail Blue Banana, nous allons le présenter rapidement et voir les propriétés importantes qui caractérise Sollipsis.
 	\subsection{Introduction sur Sollipsis} 
-	Nous allons expliquer le fonctionnement global et les fonctionnalités importantes de Sollipsis. Sollipsis est fait pour accepter un nombre illimité d'utilisateur et pour être accessible par n'importe quel ordinateur, il peut fonctionner sur des ordinateurs peu puissant et avec des connections internet à 56Kbs ou sans fil. Une fois les nœuds connectés, ils peuvent échanger des données tels que de la vidéo, du son, le mouvement d'avatar ou toutes choses affectant la représentation du monde virtuel. \\
+	Nous allons expliquer le fonctionnement global et les fonctionnalités importantes de Sollipsis. Sollipsis est fait pour accepter un nombre illimité d'utilisateur et pour être accessible par n'importe quel ordinateur, il peut fonctionner sur des ordinateurs peu puissant et avec des connections internet faibles ( 56Kbs) ou sans fil. Une fois les nœuds connectés, ils peuvent échanger des données tels que de la vidéo, du son, le mouvement d'avatar ou toutes choses affectant la représentation du monde virtuel. \\
 	\subsection{Propriétés de Sollipsis}
-	Le monde de Sollipsis est un tore à deux dimensions, chaque entité détermine et est responsable de sa position dans ce monde. Nous pouvons dérouler le tore pour avoir une représentation plate du monde qui ressemble à une tuile rectangulaire. Les connections entre les nœuds sont bidirectionnelles. Sollipsis doit permettre aux utilisateurs de se déplacer à travers le monde, il faut pour cela que les deux propriétés locales suivantes soient respectées.
+	Le monde de Sollipsis est un tore à deux dimensions, chaque entité détermine sa position dans le monde et elle en est responsable. Nous pouvons dérouler le tore pour avoir une représentation plate du monde qui ressemble à une "tuile" rectangulaire. Les connections entre les nœuds sont bidirectionnelles. Sollipsis doit permettre aux utilisateurs de se déplacer à travers le monde, il faut pour cela que les deux propriétés locales suivantes soient respectées.
 	\begin{itemize}
 		\item Local Awareness:\\
-		Cela consiste à délimiter le champs de perception des entités et de mettre en place des mécanismes de communication seulement avec les entités appartenant à sa zone. \textbf{recopier AOI ou non }
+		Cela consiste à délimiter le champs de perception des entités et de mettre en place des mécanismes de communication seulement avec les entités appartenant à sa zone. C'est le même principe que l'\textit{Area Of Interest} que nous avons décrit précédemment. 
 		\item Global Connectivity:\\
-		Une entité doit connaître toutes les entités se trouvant dans son "champs de vision". Elle doit pouvoir détecter l'arrivée ou le départ d'un entité de son "champs de vision". Cette propriété est basé sur la Géométrie Informatique, elle assure qu'une entité ne "tourne pas le dos" à une partie du monde. L'enveloppe convexe des entités est le plus petit polygone convexe formé par cet ensemble. Un mécanisme pour éviter qu'une partie du graphe soit isolée a aussi été mis en place.\\
+		Une entité doit connaître toutes les entités se trouvant dans son "champs de vision". Elle doit pouvoir détecter l'arrivée ou le départ d'un entité de son "champs de vision". Cette propriété est basé sur la Géométrie Informatique, elle assure qu'une entité ne "tourne pas le dos" à une partie du monde. L'enveloppe convexe des entités est le plus petit polygone convexe formé par cet ensemble.(PAS CLAIR) Un mécanisme pour éviter qu'une partie du graphe soit isolée a aussi été mis en place.\\
 	\end{itemize}
 
 Sollipsis a aussi des mécanismes de collaboration pour maintenir les propriétés précédentes, nous allons voir ces deux propriétés:
