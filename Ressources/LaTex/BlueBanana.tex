@@ -2,7 +2,7 @@
 	\label{BlueBanana}
 	La mobilité des avatars implique de nombreux échanges de données à travers le réseau pair à pair. Comme les overlays de l'état de l'art n'anticipent pas cette mobilité, les données nécessaires ne seront pas chargées à temps, ce qui conduit à des défaillances transitoires au niveau applicatif. Blue Banana a été réalisé pour résoudre ce problème, il modélise et prédit les mouvements des avatars ce qui permet à l'overlay de s'adapter par anticipation aux besoins du jeux.
 	\subsection{Explications}
-	Blue Banana est implémenté au dessus de Sollipsis que l'on a pu étudié auparavant. Une des premières innovations qui a été introduite est la distinction de plusieurs états d'un avatar. Car comme il a été possible de voir dans la partie sur la collecte de trace, un avatar se comporte différemment en fonction des zones du monde. Deux états ont donc été introduit:
+	Blue Banana est implémenté au dessus de Sollipsis que l'on a pu étudier auparavant. Une des premières innovations qui a été introduite est la distinction de plusieurs états d'un avatar. Car comme il a été possible de voir dans la partie sur la collecte de trace, un avatar se comporte différemment en fonction des zones du monde. Deux états ont donc été introduit:
 	\begin{itemize}
 		\item \textbf{T}(ravelling): l'avatar se déplace rapidement sur la carte et il a une trajectoire droite.  
 		\item \textbf{E}(xploring): l'avatar est en train d'explorer une zone, sa trajectoire est confuse et sa vitesse est lente.
