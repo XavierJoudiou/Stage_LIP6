@@ -16,7 +16,6 @@
         \label{AOI}
         \end{figure}
 	\vspace{1cm}
-\newpage
 	\subsection{Découpage de la carte}
 	Pour plusieurs raisons, dont la tenue en charge, le monde a été découpé en plusieurs zones. Différentes techniques pour le découpage ont été étudiées, l'une des plus courantes est d'utiliser le découpage grâce au découpage de Voronoi ~\cite{1016552}, c'est de cette technique que la triangulation de Delaunay s'inspire. Les découpages suivant ces principes sont répandus car un découpage aléatoire ne prendrait pas en compte la densité des objets dans le monde qui peut être très variable entre les régions. Le principe est de découper en zone en fonction de la distance entre les différents objets qui se trouvent dans l'environnement. Dans une région, on aura un objet qui sera entouré de ses voisins, la frontière entre la région de deux voisins se trouve au milieu d'une droite séparant les deux voisins. Comme il est possible de voir sur le schéma ~\ref{Voronoi}, les zones ont des formes et des tailles qui sont différentes. Nous avons ainsi des zones qui comprennent un seul nœud. La différence entre la triangulation de Delaunay et le découpage de Voronoi est que la première, les arrêtes seront les droite entre les sommets si ils sont voisins et dans le deuxième cas, les arrêtes seront formés grâce aux médiatrices des arrêtes de la triangulation de Delaunay.\\ 
 	\vspace{1cm}
@@ -28,7 +27,28 @@
         \end{figure}
         \vspace{1cm}
 
+	\subsection{Overlays}
+	Plusieurs travaux sur la modification de l'overlay ont été fait ~\cite{999375,10.1109/SRDS.2006.33,citeulike:6040284}, le but principal de ces travaux est de mettre en place un overlay qui puisse facilement s'adapter aux besoins des nœuds.
+		\subsubsection{Semantic overlay}
+			Le but principal de cet overlay sémantique~\cite{999375} est de créer des liens entre des nœuds qui s'intéressent aux mêmes documents, car la recherche de fichiers est devenu très importante au moment de l'arrivée des logiciels de partage de fichier tel que Napster, Gnutella, KaZaA, etc. L'approche consiste de constituer des groupes sémantiques avec les documents et de construire un overlay au dessus du réseau pour chaque groupe. Le problème est donc d'identifier et de constituer des groupes efficacement. Trois stratégies ont été mises en place:
+		\begin{itemize}
+		\renewcommand{\labelitemi}{$\bullet$}
+                	\item \textit{LRU:} Stratégie basé sur les éléments les plus récemment utilisés
+                	\item \textit{History:} On maintient les liens sémantiques vers la même classe de préférence, cette technique oblige le maintien d'un nœud \textit{counter}.C'est une technique lourde en nombre de messages et en stockage, de plus il y peu y avoir des problèmes avec les \textit{counters} dans certains cas.
+	                \item \textit{Popularity:} Création de liens entre les nœuds du même type, introduction de deux paramètres: Numrep ( nombre de réponse positive pour obtenir le document) et Lastreply ( date de la dernière réponse )
+        	\end{itemize}
+	        Les résultats montrent que Popularity est l'algorithme le plus adapté, cette stratégie a un bon compromis entre efficacité et complexité de mise en place.
 
-	\subsection{revoir fiches lecture} 
+		\subsubsection{Application-Malleable Overlay}
+			Il y a deux types d'overlay (structuré et non structuré), mais ces deux types ont un désavantage commun, ils ne sont pas flexibles. MOve~\cite{10.1109/SRDS.2006.33} souhaite mettre en place un overlay malléable, c'est à dire que les communications de l'application distribué vont influencer la structure de l'overlay. Les deux buts principaux sont d'optimiser les performances de l'overlay et de garder les propriétés de tolérance aux fautes et de passage à l'échelle. Les auteurs mettent en place deux types de liens:
+		\begin{itemize}
+	        \renewcommand{\labelitemi}{$\bullet$}
+	                \item \textit{Lien non-applicatif:} Ils maintiennent l'overlay global proche d'un graphe aléatoire avec un faible degré de clustering (regroupement).
+        	        \item \textit{Lien applicatif:} Ils  permettent de créer un graphe fortement connecté, pour regrouper les nœuds, chaque nœud d'un groupe crée aléatoirement des liens applicatifs vers des membres du groupe. Cela va permettre une rapide propagation des états lors des updates et des messages applicatifs multicast.
+        	\end{itemize}
+        Cette solution offre différentes possibilités d'ajout de nœud, de détection de défaillance, de remplacement de lien, etc. \textit{group}-based applications influencent l'overlay sous-jacent en remplaçant les liens inter nodes par des liens entres les applications. L'algorithme maintient une bonne connectivité.
+		\subsubsection{Voronoi-based Overlay Network}
+		 	VON veut exploiter la localité des intérêts des utilisateurs pour maintenir la topologie pair à pair avec un faible \textit{overhead}.
+		
 
-	Doppelgängers ????
+	
