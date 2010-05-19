@@ -8,24 +8,24 @@
 	Colyseus ~\cite{1267692} est un travail postérieur à Mercury, les principes sont les mêmes avec l'utilisation de \textit{range-queriable} DHT ou de DHTs pour stocker les informations. Les \textit{range-queriable} DHTs vont s'organiser en un overlay circulaire où chaque nœud adjacent est responsable d'une suite continue de clés. Grâce à cela, il sera possible de prendre les coordonnées "x" comme clé et ainsi les performances seront bien meilleures qu'avec des DHTs normales ( aléatoire). Les différents résultats réalisés montrent bien que les \textit{range-queriable} DHTs utilisent de bande passante que les DHTs normales. \\
 	\subsubsection{Donnybrook}
 	Dans Donnybrook ~\cite{1403002}, le concept d'Area Of Interest fait référence au travail réalisé dans Colyseus. Comme chaque joueur envoie ses mises à jour à chaque joueur qui se trouve dans sa zone, il faut une limitation du nombre de joueurs dans une même zone. Donnybrook introduit la notion de \textit{player's interest set}, un joueur va pouvoir se concentrer sur un nombre fixe de joueur ( cinq dans l'article), à la différence du nombre d'objet dans l'AOI qui peut varier. Un mécanisme d'abonnement sera mis en place pour s'échanger les informations entre les joueurs. Un mécanisme d'\textit{intérêt estimé} est mis en place pour définir les joueurs qui feront partis de son \textit{interest set}. Plusieurs critères sont pris en compte pour choisir les joueurs qui seront sélectionnés, trois principales propriétés sont prises en compte: la proximité spatiale entre les joueurs, les objectifs des joueurs et les interactions récentes que les joueurs peuvent avoir eu entre les deux joueurs.\\
-	\vspace{1cm}
+	\vspace{5mm}
         \begin{figure}[!h]
         \centering
         \includegraphics[scale=0.7]{../Images/AOI.png}\\
         \caption{Principe de l'\textit{Area Of Interest}}
         \label{AOI}
         \end{figure}
-	\vspace{1cm}
+	\vspace{5mm}
 	\subsection{Découpage de la carte}
 	Pour plusieurs raisons, dont la tenue en charge, le monde a été découpé en plusieurs zones. Différentes techniques pour le découpage ont été étudiées, l'une des plus courantes est d'utiliser le découpage grâce au découpage de Voronoi ~\cite{1016552}, c'est de cette technique que la triangulation de Delaunay s'inspire. Les découpages suivant ces principes sont répandus car un découpage aléatoire ne prendrait pas en compte la densité des objets dans le monde qui peut être très variable entre les régions. Le principe est de découper en zone en fonction de la distance entre les différents objets qui se trouvent dans l'environnement. Dans une région, on aura un objet qui sera entouré de ses voisins, la frontière entre la région de deux voisins se trouve au milieu d'une droite séparant les deux voisins. Comme il est possible de voir sur le schéma ~\ref{Voronoi}, les zones ont des formes et des tailles qui sont différentes. Nous avons ainsi des zones qui comprennent un seul nœud. La différence entre la triangulation de Delaunay et le découpage de Voronoi est que la première, les arrêtes seront les droite entre les sommets si ils sont voisins et dans le deuxième cas, les arrêtes seront formés grâce aux médiatrices des arrêtes de la triangulation de Delaunay.\\ 
-	\vspace{1cm}
+	\vspace{5mm}
         \begin{figure}[!h]
         \centering
         \includegraphics[width=5cm,height=5cm]{../Images/voronoi.png}\\
         \caption{Principe du découpage de Voronoi}
         \label{Voronoi}
         \end{figure}
-        \vspace{1cm}
+        \vspace{5mm}
 
 	\subsection{Overlays}
 	Plusieurs travaux sur la modification de l'overlay ont été fait ~\cite{999375,10.1109/SRDS.2006.33,citeulike:6040284}, le but principal de ces travaux est de mettre en place un overlay qui puisse facilement s'adapter aux besoins des nœuds.
@@ -48,7 +48,15 @@
         	\end{itemize}
         Cette solution offre différentes possibilités d'ajout de nœud, de détection de défaillance, de remplacement de lien, etc. \textit{group}-based applications influencent l'overlay sous-jacent en remplaçant les liens inter nodes par des liens entres les applications. L'algorithme maintient une bonne connectivité.
 		\subsubsection{Voronoi-based Overlay Network}
-		 	VON veut exploiter la localité des intérêts des utilisateurs pour maintenir la topologie pair à pair avec un faible \textit{overhead}.
+		 	VON veut exploiter la localité des intérêts des utilisateurs pour maintenir la topologie pair à pair avec un faible \textit{overhead}. VON utilise un principe d'AOI dynamique, il utilise le découpage de Voronoi et chaque nœud est représenté par un site dans le diagramme. VON introduit trois procédures principales :
+		\begin{itemize}
+	        \renewcommand{\labelitemi}{$\bullet$}
+                	\item \textit{Join Procedure:} Le textit{joining node} contacte le server pour avoir un ID unique. Puis envoie une requête avec ses coordonnées à tous les nœuds existants. Création de la liste des voisins, mis à jour chez les voisins, etc.
+                	\item \textit{Move Procedure:} Lorsque un nœud bouge ses coordonnées sont mises à jour chez ses voisins ( gestion si nœud est à la limite de la région, si il y a des nouveaux voisins, etc).
+                	\item \textit{Leave Procedure:} Le nœud se déconnecte( qu'importe sa raison et la manière) et ses voisins vont se mettre à jour.
+        	\end{itemize}
+        	VON permet de gérer un grand nombre d'utilisateurs et de garder un topologie consistante. Il y a beaucoup de message introduit par l'AOI et si les utilisateurs se déplacent trop vite, on a des problèmes pour notifier les nouveaux voisins.
+
 		
 
 	
