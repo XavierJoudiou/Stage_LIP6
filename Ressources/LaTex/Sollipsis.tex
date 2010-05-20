@@ -10,7 +10,7 @@
 	\begin{itemize}
 	\renewcommand{\labelitemi}{$\bullet$}
 		\item \textit{Local Awareness:}\\
-		Cela consiste à délimiter le champs de perception des entités et de mettre en place des mécanismes de communication seulement avec les entités appartenant à sa zone. C'est le même principe que l'\textit{Area Of Interest} que nous avons décrit précédemment. 
+		Une entité doit être connecté avec tous ses plus proches voisins. Il est important de noter qu'une entité a la possibilité de connaître des entités en dehors de son environnement virtuel local. En revanche, cette propriété impose que l'entité situé à l'intérieur.	
 		\item \textit{Global Connectivity:}\\
 		Une entité doit connaître toutes les entités se trouvant dans son "champs de vision". Elle doit pouvoir détecter l'arrivée ou le départ d'un entité de son "champs de vision". Cette propriété est basée sur la Géométrie Informatique, elle assure qu'une entité ne "tourne pas le dos" à une partie du monde. L'enveloppe convexe des entités est le plus petit polygone convexe formé par cet ensemble. Un mécanisme pour éviter qu'une partie du graphe soit isolée a aussi été mis en place.\\
 	\end{itemize}
