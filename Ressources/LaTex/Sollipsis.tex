@@ -17,7 +17,7 @@
         \vspace{1cm}
 	\begin{figure}[!h]
 	\centering
-        \includegraphics[scale=0.8]{../Images/composant_isole1.png}\\
+        \includegraphics[scale=0.9]{../Images/composant_isole1.png}\\
         \caption{Un composant connexe isolé et les connexions qui évitent la création d'une île}
         \label{Envelop_Convex}
         \end{figure}
@@ -27,14 +27,14 @@ Solipsis a aussi des mécanismes de collaboration pour maintenir les propriété
 	\begin{itemize}
 	\renewcommand{\labelitemi}{$\bullet$}
 		\item \textit{Spontaneous Collaboration for Local Awareness:}\\
-		 Pour vérifier la propriété \textit{Local Awareness}, il faut qu'une entité puisse connaître tous ses voisins à chaque instant. Pour faciliter cette connaissance du voisinage, et comme il y a beaucoup de mouvements dans le monde virtuel, un système de collaboration entre les nœuds a été mis en place. Une entité pourrait demander régulièrement à ses voisins si ils détectent une nouvelle entité mais cela implique un grand nombre de message inutile et une perte temporelle de consistence. Pour éviter ces problèmes, une entité va prévenir une autre entité si une entité entre dans sa zone.
+		 Pour vérifier la propriété \textit{Local Awareness}, il faut qu'une entité puisse connaître tous ses voisins à chaque instant. Pour faciliter cette connaissance du voisinage, et comme il y a un grand nombre de mouvements dans le monde virtuel, un système de collaboration entre les nœuds a été mis en place. Une entité pourra alors demander régulièrement à ses voisins si ils détectent une nouvelle entité mais cela implique un grand nombre de message inutile et une perte temporelle de consistence. Pour éviter ces problèmes, une entité \textit{a} va prévenir une entité \textit{b} si une entité \textit{c} est en train de se diriger vers la zone de l'entité \textit{b}.
 		\item \textit{Recursive Query-Response for Global Connectivity:}\\
 		Il faut prévoir une mécanisme pour le maintien d'une entité dans l'enveloppe convexe. Quand une entité \textit{e} détecte deux entités consécutives, elle se lance immédiatement à la recherche d'une ou plusieurs entités dans le même secteur en envoyant des messages dans la zone. \\ 
 	\end{itemize}
         \vspace{1cm}
         \begin{figure}[!h]
 	\centering
-        \includegraphics[scale=0.8]{../Images/envelop_convex1.png}\\
+        \includegraphics[scale=0.9]{../Images/envelop_convex1.png}\\
         \caption{Deux différentes enveloppes convexes des voisins de \textit{e}. A gauche, \textit{e} respecte la règle de \textit{Global Connectivity} et à droite non.}
         \label{Envelop_Convex}
         \end{figure}
