@@ -1,63 +1,74 @@
 ## Xavier Joudiou
-## Stage au LIP6 : Amélioration de la réactivité des réseaux pair à pair pour les MMOGs
+## Stage au LIP6: Amélioration de la réactivité des réseaux pair à pair pour les MMOGs
 
 ##Possibilité de voir le contenu du depot Git à l'adresse :
 ##	http://github.com/XavierJoudiou/Stage_LIP6
 
 
-/Repertoire : ./Fiches_Lectures
+/Repertoire: ./Fiches_Lectures
 
-	*.tex : Fiche de lecture pour l'article correspondant 
+	*.tex: Fiche de lecture pour l'article correspondant 
+
+	Makefile: makefile pour passer en pdf, nettoyer le dossier et afficher le pdf
+
+
+/Repertoire: ./Vocabulaire
+
+	*.tex: Fiche de vocabulaire pour l'article correspondant 
 
 	Makefile : makefile pour passer en pdf, nettoyer le dossier et afficher le pdf
 
 
-/Repertoire : ./Vocabulaire
+/Repertoire: ./Ressources/Images
 
-	*.tex : Fiche de vocabulaire pour l'article correspondant 
-
-	Makefile : makefile pour passer en pdf, nettoyer le dossier et afficher le pdf
+	*.png: Images nécessaires au rapport type ou autres
 
 
-/Repertoire : ./Ressources/Images
+/Repertoire: ./Ressources/Scripts
 
-	*.png : Images nécessaires au rapport type ou autres
-
-
-/Repertoire : ./Ressources/Scripts
-
-	new_paper [arg] : prends le nom de fichier que l'on veut creer pour l'article correspondant
+	new_paper [arg]: prends le nom de fichier que l'on veut creer pour l'article correspondant
 		  Crée une fiche de lecture et une fiche pour le vocabulaire vierge.
 
-	copyGittoSvn : met a jour le dossier pour le Svn avec les fichiers Git
+	copyGittoSvn: met a jour le dossier pour le Svn avec les fichiers Git
 
 
-/Repertoire : ./Ressources/LaTex
+/Repertoire: ./Ressources/LaTex
 
-	Bilio.tex : Fichier pour la bibliographie en BibTex
+	Bilio.tex: Fichier pour la bibliographie en BibTex
 
-	Fiche_Lecture_Type.sty : Fichier de style pour la fiche de lecture type
+	Fiche_Lecture_Type.sty: Fichier de style pour la fiche de lecture type
 	
-	Fiche_Type.tex : Fiche de lecture type
+	Fiche_Type.tex: Fiche de lecture type
  
-	Type_Vocabulaire.sty : Fichier de style pour la fiche de vocabulaire
+	Type_Vocabulaire.sty: Fichier de style pour la fiche de vocabulaire
 
-	Type_Vocabulaire.tex : Fiche de vocabulaire type
+	Type_Vocabulaire.tex: Fiche de vocabulaire type
 
-	Rapport_Type.tex : Squelette du rapport bibliographique
+	Rapport_Type.tex: Squelette du rapport bibliographique
 	
-	Rapport_Type.sty: Fihier de style du rapport bibliographique
+	Rapport_Type.sty: Fichier de style du rapport bibliographique
 
-	*.tex: fichiers nécessaires au rapport bibliographique 
-
-
-/Repertoire : ./Old
-
-	* : Anciens fichiers types ou autres
+	*.tex: Fichiers nécessaires au rapport bibliographique 
 
 
-/Repertoire : ./docs ( seulement sus le depot GIT)
+/Repertoire: ./src
 
-	* : documentation nécessaire, articles, thèses, ...
+	Bilio.tex: Fichier pour la bibliographie en BibTex
+
+	Etude_BB.sty: Fichier de style pour l'étude rapide du code de Blue Banana 
+
+	Etude_BB.tex: Étude rapide du code de Blue Banana
+
+	*.tex: Fichiers nécessaires à l'étude rapide du code de Blue Banana
+
+
+/Repertoire: ./Old
+
+	*: Anciens fichiers types ou autres
+
+
+/Repertoire: ./docs ( seulement sus le depot GIT)
+
+	*: documentation nécessaire, articles, thèses, ...
 	
 
