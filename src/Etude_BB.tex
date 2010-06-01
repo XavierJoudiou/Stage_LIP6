@@ -1,0 +1,150 @@
+\documentclass[11pt,a4paper]{article}
+%\documentclass[10pt,twocolumn]{article}
+
+
+\usepackage{Etude_BB} %% cibler doc/modules/
+\setlength{\columnsep}{1cm}
+
+
+%\onecolumn
+\begin{document}
+  \fairetitre{Amélioration de la réactivité des réseaux pair à pair pour les MMOGs}{Étude du code existant de Blue Banana}{Xavier Joudiou}{Sergey Legtchenko \& Sébastien Monnet}{1/06/10}
+
+\newpage
+%\onecolumn
+\tableofcontents
+\newpage
+%\twocolumn
+
+\input{abstract}
+
+\section{Introduction}
+\par Dans ce document, nous allons regrouper les différentes observations et les descriptions du code existants de Blue Banana~\cite{191}, afin de faciliter les recherches et les modifications de celui-ci. Blue Banana est un mécanisme d'anticipation des mouvements des avatars dans les MMOG (Massively Multiplayer Online Game) utilisant une architecture pair à pair. Ce mécanisme d'anticipation permet d'avoir les données qui serviront aux prochaines itérations à disposition. Les performances du jeu, dans certaines conditions, se verront être améliorées de façon significative sans altérer trop le réseau.
+\par Nous identifierons les fichiers et les fonctions importantes, et si nécessaire nous expliquerons quelques unes de ces fonctions. Tous les fichiers, que nous allons voir se trouve dans le répertoire \textit{VirtualMobility/AMAM/simu/SolipsisPeersim}. Nous allons commencer par le fichier de configuration, ensuite nous verrons TODO.
+
+\newpage
+\section{Le fichier de configuration}
+\par Le fichier de configuration va nous permettre de configurer comme nous le souhaitions les expérimentations, celui qui nous intéresse est: \textit{params\_CURRENT\_2010.cfg}. Ce fichier de configuration se trouve dans le répertoire \textit{Config}, d'autres fichiers de configuration sont présents dans ce répertoire mais nous n'en parlerons pas. Pour cela, il nous faut connaître au mieux l'utilité des différentes variables présentes dans ce fichier.
+
+\subsection{Les variables globales importantes}
+\subsubsection{Variables du monde}
+Nous allons décrire les variables qui servent à définir le monde virtuel:
+\begin{itemize}
+	\renewcommand{\labelitemi}{$\bullet$}
+	\item \textit{SIZE:} Nombre d'avatar? 
+	\item \textit{OUTOFZONENB:} Nombe d'avatar en dehors d'une zone?
+	\item \textit{TSPEED:} Vitesse limite pour passer en état \textbf{T}, vitesse en mètre par seconde.
+	\item \textit{WSPEED:} Vitesse limite pour passer en état \textbf{W} (E dans BB ?), vitesse en mètre par seconde.
+	\item \textit{MAPSIZE:} Taille du monde virtuel, taille en centimètre.
+	\item \textit{ZONESIZE:} Taille d'une zone.
+	\item \textit{SMALLZONESIZE:} Taille d'une zone de petite taille.
+	\item \textit{SMALLZONENB:} Nombre de zone de petite taille.
+	\item \textit{ZONENB:} Nombre de zone.
+	\item \textit{SMALLWORLDLINKS:} Lien ?
+\end{itemize}
+
+\subsubsection{Variables de la simulation}
+Les variables de la simulation permettent de faire varier les délais des messages, le nombre de \textit{step},...
+\begin{itemize}
+	\renewcommand{\labelitemi}{$\bullet$} 
+	\item \textit{MINDELAY:} Délai minimal pour la transmission d'un message
+	\item \textit{MAXDELAY:} Délai maximal pour la transmission d'un message
+	\item \textit{DROPTHRESHOLD:} Seuil de drop? Sert à quoi?
+	\item \textit{ANIMATESTEP:} Le pas des animations, 100 correspond à 100ms? 
+	\item \textit{SHOWSTEP:} Le pas de visualisation?
+i	\item \textit{SWSTEP:} Le pas de visualisation pour Small World?
+\end{itemize}
+RANDOM: 0 ? Distribution?\\
+SCEWED: 1 ?\\
+
+\subsubsection{Les différentes stratégies}
+\label{strat_app}
+Il est possible de choisir différentes stratégies, lors de la simulation. On verra ensuite comment affecter l'une des stratégies au simulateur.
+\begin{itemize}
+	\renewcommand{\labelitemi}{$\bullet$}
+	\item \textit{BASIC:} La stratégie de base sans évolution.
+	\item \textit{ENHANCED:} La stratégie avec anticipation des mouvements.
+	\item \textit{SMALLWORLD:} ?
+	\item \textit{LA\_MIENNE:} Une nouvelle stratégie qu'il faudra implémenté.
+\end{itemize}
+
+EXPAND\_COEF: 4 ?\\
+SHARP: 0 ?algo applicatif\\
+EXPAND: 1 ?\\
+STATIC: 0 ? evlatype?\\
+DYNAMIC: 1 ?\\
+EFFICIENCY: 2 ?\\
+
+\subsubsection{Mobility state machine transition probabilities}
+\label{prob_var}
+Voici la liste des transitions possibles entre les états et les probabilités correspondantes: (pourquoi ces probabilités?)
+\begin{itemize}
+        \renewcommand{\labelitemi}{$\bullet$}
+	\item \textit{HTH:} 8900
+	\item \textit{HTT:} 100
+	\item \textit{HTW:} 2000 
+	\item \textit{WTH:} 20
+	\item \textit{WTT:} 80
+	\item \textit{WTW:} 6850
+	\item \textit{CWD:} 3050
+	\item \textit{TTH:} 100
+	\item \textit{TTW:} 230
+	\item \textit{TTT:} 9670
+\end{itemize}
+
+\subsection{Les différentes couches, l'initialisation et les contrôleurs}
+
+Un des paramètres importants, est le temps de simulation. La variable suivante permet de définir le temps de fin de la simulation: \textit{simulation.endtime}, le temps est en millisecond. Par exemple, 60000*60*120 correspond à une durée de 120 heures(432 000 000). 
+
+\subsubsection{Les couches: applicative et protocolaire}
+La variable \textit{protocol.transport} permet de définir le protocole de transport qui sera utilisé (\textit{peersim.solipsis.GenericTransportLayer} dans notre cas). Ensuite différentes variables permettent de configurer la couche applicative:
+\begin{itemize}
+        \renewcommand{\labelitemi}{$\bullet$}
+	\item \textit{protocol.applicative:} Le protocole applicative à mettre en place (\textit{peersim.solipsis.SolipsisProtocol}).
+	\item \textit{protocol.applicative.tolerance\_level:} Niveau de tolérance ??
+	\item \textit{protocol.applicative.exp:} ?
+	\item \textit{protocol.applicative.prefetch\_exp:} ?
+	\item \textit{protocol.applicative.type:} Le type de stratégie utilisée (voir stratégies en~\ref{strat_app}).
+	\item \textit{protocol.applicative.algorithm:} Le type d'algorithme utilisé ?SHARP
+	\item \textit{protocol.applicative.expand\_coef:} ?
+\end{itemize}
+
+\subsubsection{L'initialisation}
+
+L'initialisation des différentes composantes du monde se fait grâce aux paramètres suivants:
+\begin{itemize}
+        \renewcommand{\labelitemi}{$\bullet$}
+	\item \textit{init.populator.distribution:} Modèle de distribution ?
+	\item \textit{init.populator.mapSize:} Taille de la carte.
+	\item \textit{init.populator.zoneSize:} Taille des zones.
+	\item \textit{init.populator.zoneNb:} Nombre de zone.
+	\item \textit{init.populator.outOfZoneNb:} Nombre en dehors des zones.
+	\item \textit{init.populator.smallZoneNb:} Nombre petite zone.
+	\item \textit{init.populator.smallZoneSize:} Taille d'une petite zone.
+	\item \textit{init.populator.wanderingSpeed:} Vitesse pour état \textbf{W}
+	\item \textit{init.populator.travellingSpeed:} Vitesse pour état \textbf{T} 
+	\item \textit{init.populator.quiet:} true  ??
+\end{itemize}
+Et des paramètres pour fixer les probabilités de transition avec les variables vues en~\ref{prob_var}, les paramètres seront de la forme: \textit{init.populator.hthTransitionProbability} 
+
+\subsubsection{Module de contrôle}
+\begin{itemize}
+        \renewcommand{\labelitemi}{$\bullet$}
+	\item \textit{control.overview:} Classe pour le contrôleur de la vue d'ensemble .
+	\item \textit{control.overview.step:} Nombre d'étape.
+	\item \textit{control.animate:} Classe pour le contrôleur d'animation.
+	\item \textit{control.animate.step:} Nombre d'étape pour l'animation.
+\end{itemize}
+
+\section{Le fichier SolipsisProtocol}
+Nous allons "analyser" le fichier \textit{SolipsisProtocol}, nous commencerons par la fonction \textit{receive} qui nous montreras déjà le fonctionnement global. 
+
+\newpage
+\bibliographystyle{plain}
+\bibliography{Biblio}
+
+
+ 
+
+\end{document}
+
