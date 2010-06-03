@@ -40,7 +40,6 @@ Nous allons décrire les variables qui servent à définir le monde virtuel:
 	\item \textit{SMALLZONESIZE:} Taille d'une zone de petite taille.
 	\item \textit{SMALLZONENB:} Nombre de zone de petite taille.
 	\item \textit{ZONENB:} Nombre de zone.
-	\item \textit{SMALLWORLDLINKS:} Lien ?
 \end{itemize}
 
 \subsubsection{Variables de la simulation}
@@ -52,7 +51,6 @@ Les variables de la simulation permettent de faire varier les délais des messag
 	\item \textit{DROPTHRESHOLD:} Seuil de drop? Sert à quoi?
 	\item \textit{ANIMATESTEP:} Le pas des animations, 100 correspond à 100ms? 
 	\item \textit{SHOWSTEP:} Le pas de visualisation?
-i	\item \textit{SWSTEP:} Le pas de visualisation pour Small World?
 \end{itemize}
 RANDOM: 0 ? Distribution?\\
 SCEWED: 1 ?\\
@@ -101,9 +99,9 @@ La variable \textit{protocol.transport} permet de définir le protocole de trans
 \begin{itemize}
         \renewcommand{\labelitemi}{$\bullet$}
 	\item \textit{protocol.applicative:} Le protocole applicative à mettre en place (\textit{peersim.solipsis.SolipsisProtocol}).
-	\item \textit{protocol.applicative.tolerance\_level:} Niveau de tolérance ??
-	\item \textit{protocol.applicative.exp:} ?
-	\item \textit{protocol.applicative.prefetch\_exp:} ?
+	\item \textit{protocol.applicative.tolerance\_level:} Va servir pour le nombre de voisin.
+	\item \textit{protocol.applicative.exp:} Va servir pour le nombre de voisin.
+	\item \textit{protocol.applicative.prefetch\_exp:} ? Dans le cas où on utilise l'anticipation?
 	\item \textit{protocol.applicative.type:} Le type de stratégie utilisée (voir stratégies en~\ref{strat_app}).
 	\item \textit{protocol.applicative.algorithm:} Le type d'algorithme utilisé ?SHARP
 	\item \textit{protocol.applicative.expand\_coef:} ?
@@ -123,7 +121,7 @@ L'initialisation des différentes composantes du monde se fait grâce aux param�
 	\item \textit{init.populator.smallZoneSize:} Taille d'une petite zone.
 	\item \textit{init.populator.wanderingSpeed:} Vitesse pour état \textbf{W}
 	\item \textit{init.populator.travellingSpeed:} Vitesse pour état \textbf{T} 
-	\item \textit{init.populator.quiet:} true  ??
+	\item \textit{init.populator.quiet:} true  utilisé dans statisticsGatherer
 \end{itemize}
 Et des paramètres pour fixer les probabilités de transition avec les variables vues en~\ref{prob_var}, les paramètres seront de la forme: \textit{init.populator.hthTransitionProbability} 
 
@@ -137,7 +135,21 @@ Et des paramètres pour fixer les probabilités de transition avec les variables
 \end{itemize}
 
 \section{Le fichier SolipsisProtocol}
-Nous allons "analyser" le fichier \textit{SolipsisProtocol}, nous commencerons par la fonction \textit{receive} qui nous montreras déjà le fonctionnement global. 
+Nous allons "analyser" le fichier \textit{SolipsisProtocol}, nous commencerons par suivre les différents traitements de la fonction \textit{Receive}, ce qui nous montrera déjà un début du fonctionnement global. 
+\subsection{La fonction Receive}
+La fonction \textit{Receive} va rediriger, en fonction de leur type, les différents messages. Dans la classe \textit{Message}, nous pouvons voir les différents types de message disponibles. Cette fonction va gérer les types de message suivants:
+\begin{itemize}
+	\renewcommand{\labelitemi}{$\bullet$}
+	\item \textit{HELLO:}
+	\item \textit{CONNECT:}
+	\item \textit{DELTA:}
+	\item \textit{DETECT:}
+	\item \textit{SEARCH:}
+	\item \textit{FOUND:}
+	\item \textit{CLOSE:}
+	\item \textit{PREFETCH:}
+	\item \textit{FIND\_NEAREST:}
+\end{itemize}
 
 \newpage
 \bibliographystyle{plain}
