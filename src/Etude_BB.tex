@@ -34,7 +34,7 @@ Nous allons décrire les variables qui servent à définir le monde virtuel:
 	\item \textit{SIZE:} Nombre d'avatar? 
 	\item \textit{OUTOFZONENB:} Nombe d'avatar en dehors d'une zone?
 	\item \textit{TSPEED:} Vitesse limite pour passer en état \textbf{T}, vitesse en mètre par seconde.
-	\item \textit{WSPEED:} Vitesse limite pour passer en état \textbf{W} (E dans BB ?), vitesse en mètre par seconde.
+	\item \textit{WSPEED:} Vitesse limite pour passer en état \textbf{W}, vitesse en mètre par seconde.
 	\item \textit{MAPSIZE:} Taille du monde virtuel, taille en centimètre.
 	\item \textit{ZONESIZE:} Taille d'une zone.
 	\item \textit{SMALLZONESIZE:} Taille d'une zone de petite taille.
@@ -49,8 +49,8 @@ Les variables de la simulation permettent de faire varier les délais des messag
 	\item \textit{MINDELAY:} Délai minimal pour la transmission d'un message
 	\item \textit{MAXDELAY:} Délai maximal pour la transmission d'un message
 	\item \textit{DROPTHRESHOLD:} Seuil de drop? Sert à quoi?
-	\item \textit{ANIMATESTEP:} Le pas des animations, 100 correspond à 100ms? 
-	\item \textit{SHOWSTEP:} Le pas de visualisation?
+	\item \textit{ANIMATESTEP:} Le pas des animations, 100 correspond à 100ms 
+	\item \textit{SHOWSTEP:} Le pas de visualisation
 \end{itemize}
 RANDOM: 0 ? Distribution?\\
 SCEWED: 1 ?\\
@@ -62,7 +62,7 @@ Il est possible de choisir différentes stratégies, lors de la simulation. On v
 	\renewcommand{\labelitemi}{$\bullet$}
 	\item \textit{BASIC:} La stratégie de base sans évolution.
 	\item \textit{ENHANCED:} La stratégie avec anticipation des mouvements.
-	\item \textit{SMALLWORLD:} ?
+	\item \textit{SMALLWORLD:} Autre Stratégie avec des liens longs, ne pas regarder.
 	\item \textit{LA\_MIENNE:} Une nouvelle stratégie qu'il faudra implémenté.
 \end{itemize}
 
@@ -75,20 +75,34 @@ EFFICIENCY: 2 ?\\
 
 \subsubsection{Mobility state machine transition probabilities}
 \label{prob_var}
-Voici la liste des transitions possibles entre les états et les probabilités correspondantes: (pourquoi ces probabilités?)
-\begin{itemize}
-        \renewcommand{\labelitemi}{$\bullet$}
-	\item \textit{HTH:} 8900
-	\item \textit{HTT:} 100
-	\item \textit{HTW:} 2000 
-	\item \textit{WTH:} 20
-	\item \textit{WTT:} 80
-	\item \textit{WTW:} 6850
-	\item \textit{CWD:} 3050
-	\item \textit{TTH:} 100
-	\item \textit{TTW:} 230
-	\item \textit{TTT:} 9670
-\end{itemize}
+Les différents états de l'avatar sont quelques peu différents de ceux énoncés dans Blue Banana, trois états sont définis:
+l'état \textbf{H} pour à l'arrêt, l'état \textbf{W} pour en exploration et l'état \textbf{T} pour les déplacements rapides.
+Voici la liste des transitions possibles entre les états et les probabilités correspondantes: (tableau rapport Sergey)
+\begin{table}[h!]
+  \begin{center}
+    \begin{tabular}{|c|c|l|l|}
+      \hline
+      Transition & Probabilité & État courant & Description\\
+      \hline
+      HtoH & 0.85 & Repos & Rester à l'arrêt\\
+      HtoT & 0.0004 & Repos & Commencer à voyager\\
+      HtoW & 0.1496 & Repos & Commencer à explorer\\
+      WtoH & 0.01-x & Exploration & S'arrêter\\
+      WtoT & x & Exploration & Commencer à voyager\\
+      WtoW1 & 0.8 & Exploration & Continuer à explorer dans la même direction\\
+      WtoW2 & 0.19 & Exploration & Changer de direction d'exploration\\
+      TtoH & 0.0002 & Voyage & S'arrêter\\
+      TtoW & 0.0005 & Voyage & Commencer à explorer\\
+      TtoT & 0.9993 & Voyage & Continuer à voyager\\
+      \hline
+    \end{tabular}
+  \end{center}
+  \label{tab:automate}
+  \caption{\textit{\small Tableau descriptif de l'automate de
+      déplacement avec les probabilités associées à chaque
+      transition. Les probabilités sont évaluées toutes les 100ms. x
+      varie entre 0.0002 et 0.005}}
+\end{table}
 
 \subsection{Les différentes couches, l'initialisation et les contrôleurs}
 
@@ -140,15 +154,14 @@ Nous allons "analyser" le fichier \textit{SolipsisProtocol}, nous commencerons p
 La fonction \textit{Receive} va rediriger, en fonction de leur type, les différents messages. Dans la classe \textit{Message}, nous pouvons voir les différents types de message disponibles. Cette fonction va gérer les types de message suivants:
 \begin{itemize}
 	\renewcommand{\labelitemi}{$\bullet$}
-	\item \textit{HELLO:}
-	\item \textit{CONNECT:}
-	\item \textit{DELTA:}
-	\item \textit{DETECT:}
-	\item \textit{SEARCH:}
-	\item \textit{FOUND:}
-	\item \textit{CLOSE:}
-	\item \textit{PREFETCH:}
-	\item \textit{FIND\_NEAREST:}
+	\item \textit{CONNECT:} Provoque l'invocation de la méthode \textit{processConnectMsg}, qui va traiter le message en ajoutant le nœud à la liste des voisins. 
+	\item \textit{DELTA:} Provoque l'invocation de la méthode \textit{processDeltaMsg}, 
+	\item \textit{DETECT:} Provoque l'invocation de la méthode \textit{processDetectMsg}, qui va regarder tout d'abord si l'entité est dans la liste de détection, et si c'est le cas la supprime. Si l'entité ne fait déjà pas parti des voisins de l'entité réceptrice, alors on l'ajoute à la liste des voisins. Ensuite traitement pour SmallWorld??
+	\item \textit{SEARCH:} Provoque l'invocation de la méthode \textit{processSearchMsg}, qui va chercher un voisin et va créer un message \textit{FOUND} à celui-ci. Ensuite si la source n'existe pas, elle va récupérer l'identité du nœud "étranger". Elle va envoyer le message créer ultérieurement. 
+	\item \textit{FOUND:} Provoque l'invocation de la méthode \textit{processFoundMsg}, si les nœuds ne sont pas déjà voisin alors on ajoute le nœud à sa liste de voisin (gestion cas mode REGULAR et PREFETCH). Si les nœuds sont voisins, on va analyser l'enveloppe convexe.
+	\item \textit{CLOSE:} Provoque l'invocation de la méthode \textit{processCloseMsg}, va enlever le nœud de la liste des voisins et checker l'enveloppe convexe.
+	\item \textit{PREFETCH:} Provoque l'invocation de la méthode \textit{processPrefetchMsg}, on teste si il est intéressant de prefetcher le nœud (distance trop courte?), traitement et envoie vers nœuds.
+	\item \textit{FIND\_NEAREST:} Provoque l'invocation de la méthode \textit{processFindNearest}, recherche le plus près.
 \end{itemize}
 
 \newpage
