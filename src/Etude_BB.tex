@@ -150,8 +150,7 @@ Et des paramètres pour fixer les probabilités de transition avec les variables
 
 \section{Le fichier SolipsisProtocol}
 Nous allons "analyser" le fichier \textit{SolipsisProtocol}, nous commencerons par suivre les différents traitements de la fonction \textit{Receive}, ce qui nous montrera déjà un début du fonctionnement global. 
-\subsection{La fonction Receive}
-La fonction \textit{Receive} va rediriger, en fonction de leur type, les différents messages. Dans la classe \textit{Message}, nous pouvons voir les différents types de message disponibles. Cette fonction va gérer les types de message suivants:
+\par La fonction \textit{Receive} va rediriger, en fonction de leur type, les différents messages. Dans la classe \textit{Message}, nous pouvons voir les différents types de message disponibles. Cette fonction va gérer les types de message suivants:
 \begin{itemize}
 	\renewcommand{\labelitemi}{$\bullet$}
 	\item \textit{CONNECT:} Provoque l'invocation de la méthode \textit{processConnectMsg}, qui va traiter le message en ajoutant le nœud à la liste des voisins. 
