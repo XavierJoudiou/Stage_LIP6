@@ -26,10 +26,14 @@
 
 /Repertoire: ./Ressources/Scripts
 
-	new_paper [arg]: prends le nom de fichier que l'on veut creer pour l'article correspondant
+	new_paper [arg]: prends le nom de fichier que l'on veut créer pour l'article correspondant
 		  Crée une fiche de lecture et une fiche pour le vocabulaire vierge.
 
 	copyGittoSvn: met a jour le dossier pour le Svn avec les fichiers Git
+
+	cite [arg1]: regarde dans les fichiers dans le dossier si ils contiennent "arg1"
+	
+	cite [arg1] [arg2]: regarde dans les fichiers dans le dossier si ils contiennent "arg1" dans les fichiers de type "arg2"	
 
 
 /Repertoire: ./Ressources/LaTex
