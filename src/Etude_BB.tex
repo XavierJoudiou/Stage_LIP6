@@ -19,8 +19,8 @@
 \input{abstract}
 
 \section{Introduction}
-\par Dans ce document, nous allons regrouper les différentes observations et les descriptions du code existants de Blue Banana~\cite{191}, afin de faciliter les recherches et les modifications de celui-ci. Blue Banana est un mécanisme d'anticipation des mouvements des avatars dans les MMOG (Massively Multiplayer Online Game) utilisant une architecture pair à pair. Ce mécanisme d'anticipation permet d'avoir les données qui serviront aux prochaines itérations à disposition. Les performances du jeu, dans certaines conditions, se verront être améliorées de façon significative sans altérer trop le réseau.
-\par Nous identifierons les fichiers et les fonctions importantes, et si nécessaire nous expliquerons quelques unes de ces fonctions. Tous les fichiers, que nous allons voir se trouve dans le répertoire \textit{VirtualMobility/AMAM/simu/SolipsisPeersim}. Nous allons commencer par le fichier de configuration, ensuite nous verrons TODO.
+\par Dans ce document, nous allons regrouper les différentes observations et les descriptions du code existant de Blue Banana~\cite{191}, afin de faciliter les recherches et les modifications de celui-ci. Blue Banana est un mécanisme d'anticipation des mouvements des avatars dans les MMOG (Massively Multiplayer Online Game) utilisant une architecture pair à pair. Ce mécanisme d'anticipation permet aux nœuds d'avoir les données qui serviront aux prochaines itérations à disposition. Les performances du jeu, dans certaines conditions, se verront être améliorées de façon significative sans trop altérer le réseau.
+\par Nous identifierons les fichiers et les fonctions importantes, et si nécessaire nous expliquerons quelques unes de ces fonctions. Tous les fichiers, que nous allons voir se trouve dans le répertoire \textit{VirtualMobility/AMAM/simu/SolipsisPeersim}. Nous allons commencer par le fichier de configuration, ensuite nous verrons le fichier \textit{SolipsisProtocol}, et plus précisément les différents traitements de la fonction \textit{Receive}.
 
 \newpage
 \section{Le fichier de configuration}
