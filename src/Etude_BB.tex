@@ -163,6 +163,71 @@ Nous allons "analyser" le fichier \textit{SolipsisProtocol}, nous commencerons p
 	\item \textit{FIND\_NEAREST:} Provoque l'invocation de la méthode \textit{processFindNearest}, recherche le plus près.
 \end{itemize}
 
+\section{Fichier: \textit{PrefetchingModule}}
+Nous allons essayer de comprendre les fonctions importantes de ce fichier, ce qui nous permettra de commencé à faire des nouveaux modules.
+
+\subsection{La fonction: \textit{processPrefecthMsg}}
+On commence par récupérer le contenu du message et ensuite on décrémente son ttl. Si le nœud récepteur n'a pas comme voisin le nœud émetteur, alors il lui envoie un message de connection. Ensuite si le ttl n'est pas nul, on différencie le traitement en fonction de la distance qui nous sépare du nœud.
+\par Si il est assez loin, alors on fait appel à une fonction qui va choisir la destination. Si \textit{size}, qui est un calcul en fonction de la taille de la destination et du ttl, est positif alors on envoie un message au premier voisin. On va aussi boucler en fonction de \textit{size}, et on envoie des messages de propagation à chaque nœud (voir ci dessous).
+\begin{verbatim}
+for (int i = 1; i < size; i++) {
+    destination = destinations.get(i);
+    prefetchedProxy = this.proxies.get(destination).clone();
+    prefetchedProxy.setQuality(NeighborProxy.PREFETCHED);
+    propagateMsg = this.protocol.createFoundMsg(prefetchedProxy, 
+    prefetch.getSource().getId());
+    this.protocol.send(propagateMsg, prefetch.getSource());
+}	
+\end{verbatim}
+\par Si est pas à la bonne distance, on fait encore appel à un fonction pour choisir la destination, et ensuite on fait un traitement en fonction de l'algorithme de prefecthing choisi (voir si dessous).
+\begin{verbatim}
+case PrefetchingModule.SHARP:
+    msg.setTtl(ttl);
+    if (size > 0) {
+        this.protocol.send(msg, this.proxies.get(destinations.get(0)));	
+    }
+    break;
+case PrefetchingModule.EXPANDED:
+    size = (size > this.expandCoefficient)?this.expandCoefficient:size;
+    if (size > 0) {
+        ttl = (this.prefetchExp -this.countPrefetched()) / size;
+        msg.setTtl(ttl);
+        for (int i = 0; i < size; i++) {
+            destination = destinations.get(i);
+            this.protocol.send(msg, this.proxies.get(destination));	
+        }
+    }
+break;
+\end{verbatim}
+
+\subsection{La fonction: \textit{prospectPrefetched}}
+On commence par récupérer la liste des nœuds préfectés, on va ensuite boucler sur cette liste. Après on regarde si le nœud est important pour la connaissance de la zone ou pour maintenir l'enveloppe connexe. Chaque cas donne lieu à un traitement différent, voici les trois traitements:
+\begin{itemize}
+	\renewcommand{\labelitemi}{$\bullet$} 
+	\item Important pour la connaissance de la zone:\\
+		On met la \textit{Quality} à REGULAR, on envoie un message de connection au nœud courant et on incrémente un compteur.
+	\item Important pour l'enveloppe connexe:\\
+		On met à jour la distance minimale entre la position et les coordonnées subjectives. \textbf{(cad?)} On incrémente un compteur, on met la \textit{Quality} à REGULAR et on envoie un message de connection au nœud courant.
+	\item Sinon:\\
+		On supprime le nœud si c'est nécessaire( fonction \textit{leftAside}).
+\end{itemize}
+Pour finir, on fait une requête de propagation de prefecth si c'est nécessaire.
+
+\subsection{La fonction: \textit{propagatePrefetchRequest}}
+La propagation va se faire selon différentes techniques, nous allons voir pour les deux implémentées pour le moment:
+\begin{itemize}
+	\renewcommand{\labelitemi}{$\bullet$} 
+	\item \textit{SHARP:} Si la liste des destinations n'est pas vide, on envoie un message de prefetch au premier de la liste et on modifie le ttl.
+	\item \textit{EXPANDED:} Si la liste des destinations n'est pas vide, on envoie aléatoirement un message de prefetch à chaque nœud de la liste et on modifie le ttl.
+\end{itemize}
+
+\subsection{La fonction: \textit{choosePrefetchDestination}}
+On boucle sur la liste des voisins, pour chaque itération on récupère le nœud courant et la distance entre ce nœud et la requête de prefetch. Si la distance n'est pas nulle, on va comparer des distances pour choisir le nœud que l'on voudra ajouter. Ensuite on va trier le tableau?
+
+\section{Le fichier: \textit{VirtualEntity}}
+Nous allons voir le fichier \textit{VirtualEntity} qui est la représentation d'un avatar. Nous allons voir qu'un avatar a un certain nombre de propriétés. Un avatar peut avoir plusieurs propriétés: des coordonnées, un id, une accélération, un temps de départ, des coordonnées d'origine, un comportement, une activité (vraie ou fausse), une vitesse maximale, une direction, une destination et une liste d'ajout en mouvement (?).
+\par Nous pouvons avoir accès à des fonctions sur les voisins (NeighborProxy et SolipsisProtocol), des fonctions pour effectuer un déplacement, pour définir une nouvelle destination, des fonctions pour les coordonnées ...
+
 \newpage
 \bibliographystyle{plain}
 \bibliography{Biblio}
