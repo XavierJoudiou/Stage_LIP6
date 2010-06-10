@@ -543,15 +543,6 @@ public class SolipsisProtocol implements EDProtocol {
 	public String getPrefix() {
 		return this.prefix;
 	}
-	
-//	public void ban(long entity) {
-//		this.banned.put(entity,true);
-//	}
-//	
-//	public void authorize(long entity) {
-//		this.banned.remove(entity);
-//	}
-	
 	public void setConnectionTime(int id) {
 		this.connectionTime.put(id, CommonState.getTime());
 	}
@@ -563,11 +554,7 @@ public class SolipsisProtocol implements EDProtocol {
 	public HashMap<Integer,Long> getConnectionTimes() {
 		return this.connectionTime;
 	}
-	
-//	private boolean isBanned(long entity) {
-//		return this.banned.get(entity) != null;
-//	}
-	
+		
 	public boolean stateUpdateTimerReady() {
 		return (CommonState.getTime() - this.sendStateUpdateTimer) >= this.timerInterval;
 	}
@@ -670,11 +657,7 @@ public class SolipsisProtocol implements EDProtocol {
 		
 		return msg;
 	}
-	
-//	public Iterator getNeighbors() {
-//		return this.proxies.entrySet().iterator();
-//	}
-	
+		
 	public long[] getPosition() {
 		return this.mainVirtualEntity.getCoord();
 	}
@@ -710,20 +693,10 @@ public class SolipsisProtocol implements EDProtocol {
 	
 	public void addLocalView(NeighborProxy entity) {
 		NeighborProxy view = entity.clone();
-//		try {
-//			throw new Exception();
-//		} catch(Exception e) {
-//			if (CommonState.getTime() > 0) {
-//				System.out.println("Time "+CommonState.getTime()+" "+this.mainVirtualEntity.getId()+": adding "+entity.getId());
-//				for (int i = 0; i < e.getStackTrace().length; i++)
-//					System.out.println(e.getStackTrace()[i].getMethodName());
-//			}
-//		}
 		this.proxies.put(view.getId(), view);
 	}
 
 	private int count() {
-//		Iterator it = this.proxies.entrySet().iterator();
 		LinkedList<Integer> regular = this.getParticularNeighbors(NeighborProxy.REGULAR);
 		NeighborProxy proxy;
 		int counter = 0;
@@ -968,10 +941,7 @@ public class SolipsisProtocol implements EDProtocol {
 					break;
 				case NeighborProxy.PREFETCHED:
 					if (!this.prefetchingModule.leftAside(peer) && !this.prefetchingModule.prefetchSetFull()) {
-//						peer.setQuality(NeighborProxy.REGULAR);
 						this.mainVirtualEntity.addNeighbor(peer);
-//						this.sendConnectMessage(peer);
-//						this.clearConnectionTime(peer.getId());
 					}
 					break;
 				}
@@ -1000,11 +970,7 @@ public class SolipsisProtocol implements EDProtocol {
 		long[] old = new long[2];
 		old[0] = entity.getCoord()[0];
 		old[1] = entity.getCoord()[1];
-//		if (vector != null) {
 			entity.setCoord(VirtualWorld.sumCoords(entity.getCoord(), vector));
-//			if (!VirtualWorld.samePosition(entity.getCoord(), this.neighborProxyToVirtualEntity(entity).getCoord())) 
-//			System.out.println(entity.getCoord()[0]+","+entity.getCoord()[1]+" vs "+this.neighborProxyToVirtualEntity(entity).getCoord()[0]+","+this.neighborProxyToVirtualEntity(entity).getCoord()[1]+" old = "+old[0]+","+old[1]);
-//		}
 	}
 	
 	private void updatePredictionData(int id, long[] oldCoord, long[] newCoord) {
@@ -1021,11 +987,7 @@ public class SolipsisProtocol implements EDProtocol {
 		LinkedList<NeighborProxy> longRange;
 		int size;
 		Iterator it;
-//		this.prospectAwaitingRequests();
 		if (Globals.topologyIsReady && stateUpdateTimerReady()) {
-//			if (this.getState() == MobilityStateMachine.WANDERING) {
-//				System.out.println("ouaps "+this.mainVirtualEntity.getId()+" "+this.timerInterval);
-//			}
 			neighbors = this.getParticularNeighbors(NeighborProxy.REGULAR);
 			size = neighbors.size();
 			time = CommonState.getTime();
@@ -1035,15 +997,6 @@ public class SolipsisProtocol implements EDProtocol {
 					timestamp = this.updateTimestamps.get(current.getId());
 					if (this.type == SolipsisProtocol.ENHANCED && timestamp != null && (time - timestamp.longValue()) >= SolipsisProtocol.WANDERING_UPDATE_INTERVAL + this.transportLayer.getMaxLatency()) {
 						this.predictTrajectory(current);
-//						System.out.println("ici"+(time - timestamp.longValue()));
-//						if (this.neighborProxyToVirtualEntity(current).getState() != MobilityStateMachine.TRAVELLING && (time - timestamp.longValue()) > 3000) {
-//							System.out.println(this.mainVirtualEntity.getId() + " ici"+(time - timestamp.longValue())+" state  "+this.predictionVector.get(current.getId())[0]+","+this.predictionVector.get(current.getId())[1] + " "+this.neighborProxyToVirtualEntity(current).getId());
-//							if (this.neighborProxyToVirtualEntity(current).getProtocol().getProxies().get(this.mainVirtualEntity.getId()) == null ){
-//								System.out.println("Time "+CommonState.getTime()+" "+"pasmon voisin");
-//								System.exit(333);
-//							}
-//						}
-//						this.updateTimestamps.put(current.getId(), time);
 					}
 				}
 				msg = this.statePropagationMessage(current);
@@ -1058,16 +1011,7 @@ public class SolipsisProtocol implements EDProtocol {
 					msg = this.statePropagationMessage(current);
 					this.send(msg, current);
 				}
-//				longRange = this.smallWorldModule.getPointingAtMe();
-//				size = longRange.size();
-//				
-//				for (int i = 0; i < size; i++) {
-//					current = longRange.get(i);
-//					msg = this.statePropagationMessage(current);
-//					this.send(msg, current);
-//				}
 			}
-		//			if(this.mainVirtualEntity.getOrder()==1)System.out.println("sending update at "+CommonState.getTime());
 			rearmStateUpdateTimer();
 		} 
 	}
@@ -1077,7 +1021,6 @@ public class SolipsisProtocol implements EDProtocol {
 		int incomingId = msg.getSource();
 		NeighborProxy proxy = this.proxies.get(incomingId);
 		long[] oldCoord = new long[2];
-//		if (!isBanned(incomingId)) {
 			if (proxy != null) {
 				this.sentinelAlgorithm(knowledgeZone,proxy);
 				oldCoord[0] = proxy.getCoord()[0];
@@ -1089,14 +1032,7 @@ public class SolipsisProtocol implements EDProtocol {
 					if (knowledgeZone.getState() == MobilityStateMachine.TRAVELLING) {
 						this.updateTimestamps.put(proxy.getId(), CommonState.getTime());
 						this.updatePredictionData(proxy.getId(), oldCoord, proxy.getCoord());
-//						if (VirtualWorld.isNullCoord(this.predictionVector.get(proxy.getId()))) {
-////							System.out.println(knowledgeZone.getOrigin()[0]+","+knowledgeZone.getOrigin()[1]+" "+proxy.getCoord()[0]+","+proxy.getCoord()[1]);
-//							this.updateTimestamps.remove(proxy.getId());
-//						} //else {
-//							System.exit(132);
-//						}
 					} else {
-//						System.out.println(this.mainVirtualEntity.getId() +" : got "+knowledgeZone.getState() +" from"+proxy.getId());
 						this.updateTimestamps.remove(proxy.getId());
 						this.predictionVector.remove(proxy.getId());
 					}
@@ -1110,7 +1046,6 @@ public class SolipsisProtocol implements EDProtocol {
 					}
 				}
 			}
-//		}
 	}
 	
 	private void sentinelAlgorithm(GeometricRegion delta, NeighborProxy source) {
@@ -1127,13 +1062,10 @@ public class SolipsisProtocol implements EDProtocol {
 		long [] myCoord = this.mainVirtualEntity.getCoord();
 		
 		boolean b1,b2,b3,b4,r1;
-//		LinkedList<VirtualEntityInterface> neighbors = this.mainVirtualEntity.getNeighbors();
-//		Iterator it = //this.proxies.entrySet().iterator();
 		LinkedList<Integer> neighbors = this.getParticularNeighbors(NeighborProxy.REGULAR);
 		double newDistance, oldDistance, thisToCurrentDistance, thisToMovingDistance = VirtualWorld.simpleDistance(newOrigin, myCoord);
 		int size = neighbors.size();
-		for (int i = 0; i < size; i++) {//while(it.hasNext()) {
-//			currentProxy = (NeighborProxy)((Map.Entry)it.next()).getValue();
+		for (int i = 0; i < size; i++) {
 			currentProxy = this.proxies.get(neighbors.get(i));
 			if (currentProxy != source && currentProxy.getQuality() == NeighborProxy.REGULAR) {
 				currentCoord = this.subjectiveCoord(currentProxy.getCoord());
@@ -1169,23 +1101,10 @@ public class SolipsisProtocol implements EDProtocol {
 			return sector == null;
 	}
 	
-//	private boolean beforeLastResponse(long id, long stamp) {
-//		boolean yes = false;//true;
-//		Long lastResponse = this.lastResponses.get(id);
-//		if (lastResponse != null) {
-//			yes = lastResponse.longValue() > stamp;
-//		}
-//		
-//		return yes;
-//	}
-	
 	private void processCloseMsg(Message msg) {
 		int peerToForget = msg.getSource();
-//		if (!this.beforeLastResponse(peerToForget, msg.getTimestamp())) {
 			Long connect = this.connectTimestamps.get(peerToForget);
-//			System.out.println("Time "+CommonState.getTime()+" "+this.mainVirtualEntity.getId()+": disconnect from "+peerToForget+ " stamp="+msg.getTimestamp() +" (connect="+connect+")");
 			if (this.hasNeighbor(peerToForget)) {
-//				this.sendHelloMsg(this.mainVirtualEntity.getNeighbor(peerToForget), 0);
 				if (connect != null) {
 					if (connect.longValue() < msg.getTimestamp()) {
 						this.mainVirtualEntity.removeNeighbor(peerToForget);
@@ -1204,19 +1123,9 @@ public class SolipsisProtocol implements EDProtocol {
 				}
 			}
 			this.disconnectTimestamps.put(peerToForget, msg.getTimestamp());
-//		} 
 	}
 	
 	public void removeProxy(int neighbor) {
-//		try {
-//			throw new Exception();
-//		} catch(Exception e) {
-//			if (CommonState.getTime() > 0) {
-//				System.out.println("Time "+CommonState.getTime()+" "+this.mainVirtualEntity.getId()+": removing "+neighbor);
-//				for (int i = 0; i < e.getStackTrace().length; i++)
-//					System.out.println(e.getStackTrace()[i].getMethodName());
-//			}
-//		}
 		this.proxies.remove(neighbor);
 		this.clearConnectionTime(neighbor);
 		this.updateTimestamps.remove(neighbor);
@@ -1234,19 +1143,15 @@ public class SolipsisProtocol implements EDProtocol {
 	
 	public void sendConnectMessage(NeighborProxy peer) {
 		NeighborProxy mySelf = this.createMyImage();
-//		System.out.println("Time "+CommonState.getTime()+" "+this.mainVirtualEntity.getId()+": connect to "+peer.getId());
 		Message msg = new Message(Message.CONNECT, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), mySelf);
 		msg.setTimestamp(CommonState.getTime());
-//		this.ban(peer.getId());
 		this.send(msg, peer);
 	}
 
 	private void processConnectMsg(Message msg) {
 		NeighborProxy peer = (NeighborProxy)msg.getContent();
-//		if (!this.beforeLastResponse(peer.getId(), msg.getTimestamp())) {
 			Long disconnect = this.disconnectTimestamps.get(peer.getId());
 			long connect = msg.getTimestamp();
-//			System.out.println("Time "+CommonState.getTime()+" "+this.mainVirtualEntity.getId()+": connect from "+peer.getId()+" stamp="+connect+" (disconnect="+disconnect+")");
 			if (disconnect != null) {
 				if (disconnect.longValue() < connect) {
 					this.connectTimestamps.put(peer.getId(), msg.getTimestamp());
@@ -1258,8 +1163,6 @@ public class SolipsisProtocol implements EDProtocol {
 				this.mainVirtualEntity.addNeighbor(peer);
 				this.maintainKnowledgeZone();
 			}
-//			this.sendHelloMsg(peer, 1);
-//		} 
 	}
 	
 	private void sendDetectMsg(NeighborProxy interestedEntity, NeighborProxy changingEntity) {
@@ -1300,73 +1203,23 @@ public class SolipsisProtocol implements EDProtocol {
 			processDetectMsg(msg);
 		}
 	}
-	
-	
-//	private void prospectAwaitingRequests() {
-//		Iterator it = this.queuedConnectingNeighbors.entrySet().iterator();
-//		long timestamp;
-//		NeighborProxy current;
-//		
-//		while(it.hasNext()) {
-//			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
-//			timestamp = this.queuedConnectingTime.get(current.getId());
-//			if (CommonState.getTime() - timestamp > 500) {
-//				this.sendConnectMessage(current);
-//			}
-//		}
-//		
-//		it = this.queuedDisconnectingNeighbors.entrySet().iterator();
-//		while(it.hasNext()) {
-//			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
-//			timestamp = this.queuedDisconnectingTime.get(current.getId());
-//			if (CommonState.getTime() - timestamp > 500) {
-//				this.sendDisconnectMessage(current);
-//			}
-//		}
-//	}
+
 
 	private void processDetectMsg(Message msg) {
 		NeighborProxy newEntity = (NeighborProxy)msg.getContent();
-//		NeighborProxy source, currentProxy;
-//		VirtualEntity fastDetection;
-//		long dist;
-//		int size;
-//		Long detectionTime;
 		Integer id = new Integer(newEntity.getId());
-//		LinkedList<Long> neighbors;
 		if (this.hasDetected(id)) {
-		    //detectionTime = this.detectionTime(id);
-		    //if (detectionTime != null && detectionTime == CommonState.getTime()) {
 				this.removeDetected(id);
-				//}
 		}
 		if (this.mainVirtualEntity.getId() != newEntity.getId() && !this.isNeighbor(newEntity)) {
-//			this.queueConnectingNeighbor(newEntity);//
 			this.mainVirtualEntity.addNeighbor(newEntity);
 			this.sendConnectMessage(newEntity);
 			if (this.type == SolipsisProtocol.SMALLWORLD && this.smallWorldModule.isWiring()) {
 				this.smallWorldModule.updateDistance();
 				if (this.smallWorldModule.chooseLongRangePeer()) {
 					this.smallWorldModule.sendLongRangeLink(newEntity);
-//					this.send
 				}
 			}
-//			source = this.proxies.get(msg.getSource());
-//			neighbors = this.getParticularNeighbors(NeighborProxy.REGULAR);//is.proxies.entrySet().iterator();
-//			size = neighbors.size();
-////			for (int i = 0; i < size; i++) {
-////				currentProxy = this.mainVirtualEntity.getNeighbor(neighbors.get(i));
-////				if (currentProxy != source && currentProxy.getQuality() == NeighborProxy.REGULAR) {
-////					dist = VirtualWorld.simpleDistance(this.subjectiveCoord(currentProxy.getId()), this.subjectiveCoord(newEntity.getCoord()));
-////					if (dist <= currentProxy.getRadius()) {
-////						this.sendDetectMsg(currentProxy, newEntity.clone());
-////					}
-////					
-////					if (dist <= newEntity.getRadius()) {
-////						this.sendDetectMsg(newEntity, currentProxy.clone());
-////					}
-////				}
-////			}
 		}
 	}
 	
@@ -1376,7 +1229,6 @@ public class SolipsisProtocol implements EDProtocol {
 		}
 		switch(msg.getType()) {
 		case Message.HELLO:
-//			processHelloMsg(msg);
 			break;
 		case Message.CONNECT:
 			processConnectMsg(msg);
@@ -1440,7 +1292,6 @@ public class SolipsisProtocol implements EDProtocol {
 		NeighborProxy src;
 		
 		src = (NeighborProxy)msg.getContent();
-//		src.setQuality(NeighborProxy.LONGRANGE);
 		this.addLocalView(src);
 	}
 
@@ -1456,19 +1307,16 @@ public class SolipsisProtocol implements EDProtocol {
 			size = around.size();
 			System.out.println(this.mainVirtualEntity.getId()+" (" + this.getPosition()[0] + "," + this.getPosition()[1] + "): joined with "+request.getHops()+" hops and has " + size + " neighbors.");
 			for (int i = 0; i < size; i++) {
-//				around.get(i).setQuality(NeighborProxy.LONGRANGE);
 				this.addLocalView(around.get(i));
 			}
 		} else {
 			size = request.getHops();
 			if (size < Network.size()) {
-				//				if (this.countNoLongRange() == 0) {
 				Globals.hops += request.getHops();
 				Globals.sqLookups += request.getHops() * request.getHops();
 				//			System.out.println(request.getHops());
 				Globals.lookupsAchieved++;
 				Globals.lookupsPending--;
-				//				}
 			} else {
 				System.err.println("lost lookup");
 				System.exit(1);
@@ -1516,7 +1364,6 @@ public class SolipsisProtocol implements EDProtocol {
 				this.sendLookupReplyMessage(request.getSource(), request);
 				this.warnNeighbors(around, request.getSource());
 			} else {
-//				request.incrementHops();
 				this.sendLookupReplyMessage(request.getSource(), request);
 			}
 			return;
@@ -1524,23 +1371,18 @@ public class SolipsisProtocol implements EDProtocol {
 
 		halfRound = request.getHalfRound();
 		global = request.getSupposedGlobalClosest();
-//		System.out.println(global+" "+destination);
 		supposedGlobalClosestReal = this.realRelativeCoord(global, destination);
 		currentClosestReal = this.realRelativeCoord(this.mainVirtualEntity.getCoord(), destination);
 		around = request.getAround();
 		around.add(this.createMyImage());
 		source = request.getSource();
-//		System.out.println(request.getSource().getId()+": "+request.getDirection());
 		closest = chooseClosestNeighborAround(destination, around, request.getDirection());
-		if (closest == null) {		
-//			System.out.println("!found"+around.size());
-//			System.out.println("null");
+		if (closest == null) {
 			if (request.getKind() == Lookup.JOIN) {
 				request.setAround(around);
 				this.sendLookupReplyMessage(source, request);
 				this.warnNeighbors(around, source);
 			} else {
-//				request.incrementHops();
 				this.sendLookupReplyMessage(source, request);
 			}
 		} else {
@@ -1551,20 +1393,13 @@ public class SolipsisProtocol implements EDProtocol {
 				this.lookup(request);
 			} else {
 				halfRound+=(halfRound(destination, supposedGlobalClosestReal,currentClosestReal,closestNeighborReal))?1:0;
-//				System.out.println("hr="+halfRound);
 				if(closest == around.get(0) || halfRound == 2) {
 					if (request.getKind() == Lookup.JOIN) {
 						request.setAround(around);
 						this.sendLookupReplyMessage(source, request);
 						this.warnNeighbors(around, source);
 					} else {
-//						request.incrementHops();
 						this.sendLookupReplyMessage(source, request);
-//						System.out.println(request.getAround().size());
-//						if (this.isIn(request.getCoordinates(),request.getAround())) {
-//							System.out.println("!found");
-////							System.exit(1);
-//						}
 					}
 
 				} else {
@@ -1576,27 +1411,6 @@ public class SolipsisProtocol implements EDProtocol {
 	}
 
 
-
-//	private boolean isIn(long[] coordinates, LinkedList<NeighborProxy> around) {
-//		int size = around.size();
-//		boolean answer = false;
-//		
-//		for (int i = 0; i < size; i++) {
-//			if (VirtualWorld.samePosition(coordinates, around.get(i).getCoord())) {
-//				answer = true;
-//				break;
-//			}
-//		}
-//		return answer;
-//	}
-
-//	private void sendLookupReplyMessage(NeighborProxy destination, LinkedList<NeighborProxy> around) {
-//		Message msg;
-//		
-//		msg = new Message(Message.LOOKUP_REPLY, this.peersimNodeId, this.mainVirtualEntity.getId(), destination.getId(), new Lookup(around));
-//		this.send(msg, destination);
-//	}
-	
 	private void sendLookupReplyMessage(NeighborProxy destination, Lookup request) {
 		Message msg;
 		
@@ -1625,7 +1439,6 @@ public class SolipsisProtocol implements EDProtocol {
 		
 		while (it.hasNext()) {
 			this.sendLongRangeLinkConfirmation((NeighborProxy)((Map.Entry)it.next()).getValue());
-//			this.smallWorldModule.addLongRangeLink((NeighborProxy)((Map.Entry)it.next()).getValue());
 		}
 	}
 	
@@ -1742,24 +1555,17 @@ public class SolipsisProtocol implements EDProtocol {
 		int insideKnowledgeZone = count();
 		int range,remover,size = ordered.size();
 		NeighborProxy current;
-//		Random rand = new Random();
 		int toRemove = size - this.exp - (int)(this.toleranceLevel * (double)this.exp);
-//		System.out.println(this.mainVirtualEntity.getId()+": has "+ this.proxies.size() + " neighbors "+this.knowledgeRay);
 		if (toRemove > 0) {
 			for (int  i = size-1; i >= insideKnowledgeZone ; i--) {
 				current = ordered.get(i);
-//				if(toRemove > 10 && this.insidePeerZone(current)) System.out.println(this.mainVirtualEntity.getId()+": testing: radius="+current.getRadius());
 				if (!this.insidePeerZone(current) && (!necessaryToEnvelope(current) && !constructingEnvelope(current))) {
-					//this.mainVirtualEntity.removeNeighbor(current.getId());
 					if(Globals.topologyIsReady) {
-//						if (this.type != SolipsisProtocol.SMALLWORLD) {
 							this.mainVirtualEntity.removeNeighbor(current.getId());
 							this.sendDisconnectMessage(current);
-//						}
 					} else {
 						this.mainVirtualEntity.removeNeighbor(current.getId());
 						this.neighborProxyToVirtualEntity(current).removeNeighbor(this.mainVirtualEntity.getId());
-//						System.out.println("removing");
 					}
 					toRemove--;
 					if (toRemove == 0) {
@@ -1784,7 +1590,6 @@ public class SolipsisProtocol implements EDProtocol {
 	public void sendDisconnectMessage(NeighborProxy entity) {
 		Message msg = new Message(Message.CLOSE, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), entity.getId(), null);
 		msg.setTimestamp(CommonState.getTime());
-//		this.ban(entity.getId());
 		this.send(msg, entity);
 	}
 	
@@ -1795,31 +1600,21 @@ public class SolipsisProtocol implements EDProtocol {
 		int max = this.exp + tolerance; 
 		int neighborSize = this.getParticularNeighbors(NeighborProxy.REGULAR).size();
 		int count = this.count();
-//		int expected = this.exp - neighborSize + this.exp - tolerance;
-//		expected = (expected<0)?0:expected;
-		
 		if (count > max) {
-//			if (!Globals.topologyIsReady) {
 				this.knowledgeRay = dist(this.exp - 1);
-//			} else {
-//				this.knowledgeRay = dist(expected);
-//			}
 		}
 		
 		if (count < min) {
 			if (neighborSize > min) {
 				if (neighborSize > this.exp) {
-//					System.out.println("neighborSize > this.exp");
-					this.knowledgeRay = dist(this.exp - 1);//expected);
+					this.knowledgeRay = dist(this.exp - 1);
 				} else {
-//					System.out.println("neighborSize <= this.exp");
 					this.knowledgeRay = dist(neighborSize-1);
 				}
 			} else {
 				if (Globals.topologyIsReady) {
 					count = (count==0)?1:count;
 					this.knowledgeRay = (long)((double)this.knowledgeRay * Math.sqrt(this.exp/count));
-	//				System.out.println(this.knowledgeRay + " neighborsize= "+neighborSize+" count= "+count);
 				} else {
 					this.knowledgeRay = dist(neighborSize-1);
 				}
@@ -1835,9 +1630,6 @@ public class SolipsisProtocol implements EDProtocol {
 				this.knowledgeRay = dist(count-2);
 			}
 		}
-//		if (count > 20) {
-//			System.out.println("maintain "+this.knowledgeRay + " count= "+count);
-//		}
 	}
 	
 	public Iterator getNeighbors() {
@@ -1870,14 +1662,6 @@ public class SolipsisProtocol implements EDProtocol {
 	}
 	
 	public void finalizeKnowledgeZone() {
-//		int size = Network.size();
-//		VirtualEntity current;
-//		for (int i = 0; i < size; i++) {
-//			current = ((SolipsisProtocol)Network.get(i).getProtocol(this.protocolId)).getVirtualEntity();
-//			if (this.isInsideKnowledgeZone(current) && this.notIn(current, this.getNeighbors()) && current != this.mainVirtualEntity) {
-//				this.mainVirtualEntity.addNeighbor(current);
-//			}
-//		}
 		this.maintainKnowledgeZone();
 		Iterator it = this.proxies.entrySet().iterator();
 		LinkedList<NeighborProxy> neighbors = this.iteratorToList(it);
@@ -1899,17 +1683,6 @@ public class SolipsisProtocol implements EDProtocol {
 		
 		this.maintainKnowledgeZone();
 	}
-	
-//	private boolean isIn(NeighborProxy entity, LinkedList<NeighborProxy> set) {
-//		boolean in = false;
-//		for(int i = 0; i < set.size(); i++) {
-//			if (set.get(i).getId() == entity.getId()) {
-//				in = true;
-//				break;
-//			}
-//		}
-//		return in;
-//	}
 	
 	public long estimateRTT() {
 		return this.transportLayer.estimateRTT();
@@ -1974,7 +1747,6 @@ public class SolipsisProtocol implements EDProtocol {
 	}
 	
 	public void maintainTopology() {
-//		Iterator neighbors = this.proxies.entrySet().iterator();
 		LinkedList<Integer> prefetchedNeighbors;
 		int size;
 		this.convexEnvelope = this.findConvexEnvelope(this.idToProxyList(this.getParticularNeighbors(NeighborProxy.REGULAR)), this.mainVirtualEntity);
@@ -1988,9 +1760,6 @@ public class SolipsisProtocol implements EDProtocol {
 				prefetchedNeighbors = this.prefetchingModule.getPrefetchedNeighbors();
 				size = prefetchedNeighbors.size();
 				this.prefetchingModule.togglePrefetch(false);
-				//					for (int i = 0; i < size; i++) {
-				//						this.removeProxy(prefetchedNeighbors.get(i));
-				//					}
 			}
 		}
 		if(this.type == SolipsisProtocol.ENHANCED && this.prefetchingModule.hasPrefetched()) {
@@ -2080,7 +1849,6 @@ public class SolipsisProtocol implements EDProtocol {
 				}
 			}
 		}
-//		if(this.mainVirtualEntity.getOrder()==1) System.out.println("checking... sector is "+sector+" size="+size);
 		return sector;
 	}
 	
@@ -2099,7 +1867,7 @@ public class SolipsisProtocol implements EDProtocol {
 	
 	public boolean isNeighbor(int id) {
 		boolean is = false;
-		Iterator it = this.getNeighbors();//this.proxies.entrySet().iterator();
+		Iterator it = this.getNeighbors();
 		while(it.hasNext()) {
 			if (((NeighborProxy)((Map.Entry)it.next()).getValue()).getId() == id) {
 				is = true;
@@ -2129,9 +1897,6 @@ public class SolipsisProtocol implements EDProtocol {
 		return (LinkedList<NeighborProxy>)algorithm.findEnvelope();
 	}
 	
-//	private void generateNodeId() {
-//		this.nodeId = this.mainVirtualEntity.getId();
-//	}
 	
 	private void setStatus(String status) {
 		this.status = status;
@@ -2140,26 +1905,16 @@ public class SolipsisProtocol implements EDProtocol {
 	private String getStatus() {
 		return this.status;
 	}
-	
-//	private int angleSign(long [] a, long [] b, long [] c) {
-//		long [] ref = this.mainVirtualEntity.getCoord();
-//		return VirtualWorld.angleSign(a,b,c,ref);
-//	}
+
 	
 	private int simpleAngleSign(long [] a, long [] b, long [] c) {
 		return VirtualWorld.simpleAngleSign(a,b,c);
 	}
-	
-//	private boolean leftFromLine(long [] a, long [] b, long [] point) {
-//		return angleSign(a,b,point) > 0;
-//	}
+
 	private boolean simpleLeftFromLine(long [] a, long [] b, long [] point) {
 		return simpleAngleSign(a,b,point) > 0;
 	}
-	
-//	private boolean rightFromLine(long [] a, long [] b, long [] point) {
-//		return !leftFromLine(a,b,point);
-//	}
+
 	
 	private boolean simpleRightFromLine(long [] a, long [] b, long [] point) {
 		return simpleAngleSign(a,b,point) < 0;//!simpleLeftFromLine(a,b,point);
@@ -2176,9 +1931,7 @@ public class SolipsisProtocol implements EDProtocol {
 	}
 	
 	private boolean halfRound(long [] a, long [] b, long [] x1, long [] x2) {
-		boolean ok = simpleAngleSign(a,b,x1)*simpleAngleSign(a,b,x2) <0;//(!leftOfLine(a, b, x1) && leftOfLine(a, b, x2)) || (leftOfLine(a, b, x1) && !leftOfLine(a, b, x2));
-		//System.out.println(a[0]+","+a[1] +" "+b[0]+","+b[1]+" "+x1[0]+","+x1[1]+" "+x2[0]+","+x2[1]);
-//		System.out.println("halfRound"+a[0]+","+a[1]+";"+b[0]+","+b[1]+";"+x1[0]+","+x1[1]+";"+x2[0]+","+x2[1]+";");
+		boolean ok = simpleAngleSign(a,b,x1)*simpleAngleSign(a,b,x2) <0;
 		return ok;
 	}
 	
@@ -2315,18 +2068,10 @@ public class SolipsisProtocol implements EDProtocol {
 			wantedPosition = this.mainVirtualEntity.getCoord();
 			currentClosestReal = this.realRelativeCoord(currentClosest.getVirtualEntity());
 		}
-//		if (!currentClosest.checkEnvelopeState()) {
-////			System.err.println("envelope "+currentClosest.checkEnvelopeState());
-//			Globals.envelope++;
-//		}
 		
 		if (!lookup) {
 			closestNeighbor = this.findClosest(currentClosest.proxies, wantedPosition, currentClosestReal, direction, around, lookup, lookupId);
-			if(closestNeighbor == null) {						
-//				if (currentClosest.checkEnvelopeState()) {
-//					System.err.println("Gros Probleme au lancement");
-//					System.exit(20);
-//				}
+			if(closestNeighbor == null) {
 				this.mainVirtualEntity.setNeighbors(around);
 				this.warnNeighbors();
 				return hops;
@@ -2339,15 +2084,9 @@ public class SolipsisProtocol implements EDProtocol {
 			}
 			closestNeighbor = this.findClosest(set, wantedPosition, currentClosestReal, direction, around, lookup, lookupId);
 			if (closestNeighbor == null) {
-//				System.err.println("bug"+hops);
-//				if (currentClosest.checkEnvelopeState()) {
-//					System.err.println("Gros Probleme");
-//					System.exit(20);
-//				}
 				return -1;
 			}
 			if (closestNeighbor.getId() == lookupId) {
-//				System.out.println("ici"+hops);
 				return hops;
 			}
 		}
@@ -2361,7 +2100,6 @@ public class SolipsisProtocol implements EDProtocol {
 			closestNeighborReal = this.realRelativeCoord(closestNeighbor, supposedGlobalClosestReal);
 		}
 		 
-//		long [] originReal = this.realRelativeCoord(around.get(0).getVirtualEntity());
 		double distanceFromGlobalClosestNode = VirtualWorld.simpleDistance(supposedGlobalClosestReal, wantedPosition);
 		double minDistanceFromCurrentNeigbors = VirtualWorld.simpleDistance(closestNeighborReal, wantedPosition);
 		if (distanceFromGlobalClosestNode > minDistanceFromCurrentNeigbors && notIn(closestNeighbor,around)) {
@@ -2373,25 +2111,7 @@ public class SolipsisProtocol implements EDProtocol {
 					this.mainVirtualEntity.setNeighbors(around);
 					this.warnNeighbors();
 				} else {
-//					Iterator it;
-//					NeighborProxy current;
-//					for (int i = 0; i < around.size(); i++) {
-//						it = around.get(i).getNeighbors();
-//						while (it.hasNext()) {
-//							current = (NeighborProxy)((Map.Entry)it.next()).getValue();
-//							if (this.neighborProxyToVirtualEntity(current).getProtocol().isNeighbor(lookupId)) {
-//								return hops;
-//							}
-//						}
-//					}
-//					System.err.println("Lookup Failed searching "+ goal[0]+","+goal[1]);
-//					for (int i = 0; i < around.size(); i++) {
-//						System.err.println(around.get(i).getPosition()[0]+","+around.get(i).getPosition()[1]);
-//					}
-//					System.err.println("next would have been "+closestNeighborReal[0] + "," + closestNeighborReal[1]);
-//					System.exit(1);
 					hops = -1;
-//					System.exit(12);
 				}
 			} else {
 				hops = surroundingPositionConnectionAlgorithm(closestNeighbor.getProtocol(), supposedGlobalClosest, around, direction,halfRound, lookup, 1 + hops, goal, lookupId, useLongRange);
@@ -2435,7 +2155,6 @@ public class SolipsisProtocol implements EDProtocol {
 			}
 		} else {
 			if (closest.getId() == lookupId) {
-//				System.err.println("la"+hops);
 				return hops;
 			} 
 		}
@@ -2452,7 +2171,6 @@ public class SolipsisProtocol implements EDProtocol {
 		if (distanceFromCurrentNode <= minDistanceFromCurrentNeigbors) {
 			around = new LinkedList<SolipsisProtocol>();
 			around.addFirst(bootstrap);
-//			System.err.println("dans jump"+currentPosition[0]+currentPosition[1]+" "+wantedPosition[0]+wantedPosition[1]+" "+closestReal[0]+closestReal[1]);
 			if(this.simpleLeftFromLine(wantedPosition, currentPosition, closestReal)) {
 				hops = surroundingPositionConnectionAlgorithm(closest.getProtocol(), bootstrap, around, VirtualWorld.LEFT,0, lookup, 1 + hops, goal, lookupId, useLongRange);
 			} else  {
@@ -2559,9 +2277,7 @@ public class SolipsisProtocol implements EDProtocol {
 		long [] currentCoord = null;
 		boolean sameDirection;
 		Iterator entitySet;
-//		sameDirection = false
 		entitySet = neighbors.entrySet().iterator();
-//		System.err.println("begin findClosest "+entitySet.hasNext());
 		while(entitySet.hasNext()) {
 			current = (NeighborProxy)((Map.Entry)entitySet.next()).getValue();
 			if (lookup) {
@@ -2574,9 +2290,6 @@ public class SolipsisProtocol implements EDProtocol {
 //				System.err.println("exact match");
 				break;
 			}
-//			sameDirection = ((direction == VirtualWorld.RIGHT) && this.simpleRightFromLine(start, position, currentCoord)) ||
-//			((direction == VirtualWorld.LEFT)  && this.simpleLeftFromLine(start, position, currentCoord));
-//			if(!VirtualWorld.samePosition(start, currentCoord)) {
 				sameDirection = ((direction == VirtualWorld.RIGHT) && this.simpleRightFromLine(position, start, currentCoord)) ||
 				((direction == VirtualWorld.LEFT)  && this.simpleLeftFromLine(position, start, currentCoord));
 				if(sameDirection && notIn(current,around)) {
@@ -2587,46 +2300,9 @@ public class SolipsisProtocol implements EDProtocol {
 					}
 				}			
 				
-//			} 				
-//			System.err.println(sameDirection+" "+notIn(current,around)+"  "+position[0]+position[1]+" "+start[0]+start[1]+" "+currentCoord[0]+currentCoord[1]+" d="+direction);
 		}
 		
-//		if (nearest == null) {
-//			entitySet = neighbors.entrySet().iterator();
-////			System.err.println("begin findClosest "+entitySet.hasNext());
-//			while(entitySet.hasNext()) {
-//				current = (NeighborProxy)((Map.Entry)entitySet.next()).getValue();
-//
-//				currentCoord = this.realRelativeCoord(this.neighborProxyToVirtualEntity(current), start);
-//
-//				if (VirtualWorld.samePosition(position, currentCoord)) {
-//					nearest = current;
-////					System.err.println("exact match");
-//					break;
-//				}
-////				sameDirection = ((direction == VirtualWorld.RIGHT) && this.simpleRightFromLine(start, position, currentCoord)) ||
-////				((direction == VirtualWorld.LEFT)  && this.simpleLeftFromLine(start, position, currentCoord));
-//				if(!VirtualWorld.samePosition(start, currentCoord)) {
-//					sameDirection = ((direction == VirtualWorld.RIGHT) && this.simpleRightFromLine(start, position, currentCoord)) ||
-//					((direction == VirtualWorld.LEFT)  && this.simpleLeftFromLine(start, position, currentCoord));
-//					if(sameDirection) {
-//						if (!notIn(current, around)) {
-////							System.out.println(around);
-//							around = new LinkedList<SolipsisProtocol>();
-//							around.addFirst(this.neighborProxyToVirtualEntity(current).getProtocol());
-//						}
-//						currentDist = VirtualWorld.simpleDistance(position,currentCoord);
-//						if (currentDist < min) {
-//							min = currentDist;
-//							nearest = current;
-//						}
-//					}			
-//					
-//				} 				
-//				System.err.println(sameDirection+" "+notIn(current,around)+"  "+position[0]+position[1]+" "+start[0]+start[1]+" "+currentCoord[0]+currentCoord[1]+" d="+direction);
-//			}
-//		}
-//		System.err.println("endof findClosest "+nearest);
+
 		return (nearest != null)?this.neighborProxyToVirtualEntity(nearest):null;
 	}
 
@@ -2642,16 +2318,5 @@ public class SolipsisProtocol implements EDProtocol {
 		}
 		
 	}
-
-
-//	public void addPointingAtMe(NeighborProxy proxy) {
-//		this.smallWorldModule.addPointingAtMe(proxy);
-//		
-//	}
-//
-//	public void removePointingAtMe(NeighborProxy proxy) {
-//		this.smallWorldModule.removePointingAtMe(proxy);
-//		
-//	}
 	
 }

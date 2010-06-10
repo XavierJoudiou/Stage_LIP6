@@ -52,7 +52,6 @@ public class PrefetchingModule {
 		boolean stillTravelling = this.protocol.getState() == MobilityStateMachine.TRAVELLING;
 		boolean interRequestTimeExpired = ((getTime() - this.timeSinceLastRequest) >= 100 + this.protocol.estimateMaxRTT()*2);
 		boolean runningOutOfAheadNeighbors = this.currentRequest == null || distanceToFarestNeighbor() < this.protocol.getKnowledgeRay() + 2*this.protocol.estimateMaxRTT()*this.currentRequest.getSpeed()/1000;
-//		System.out.println(stillTravelling +" "+ interRequestTimeExpired +" "+ runningOutOfAheadNeighbors);
 		return stillTravelling && interRequestTimeExpired && runningOutOfAheadNeighbors;
 	}
 	
@@ -207,7 +206,6 @@ public class PrefetchingModule {
 		double[] distances;
 		long securityDistance = this.currentRequest.getSpeed() * (100 + this.currentRequest.getAverageRTT()) * 2 / 1000;
 		
-//		securityDistance = (securityDistance <= this.protocol.getKnowledgeRay())?this.protocol.getKnowledgeRay():securityDistance;
 		if (!yes) {
 			distances = this.calculatePrefetchProbabilityDistances(entity, this.currentRequest);
 			if (distances != null && distances[0] <= this.protocol.getKnowledgeRay() && distances[1] - this.protocol.getKnowledgeRay()  <= securityDistance) {
@@ -228,11 +226,7 @@ public class PrefetchingModule {
 		for (int i = 0; i < size; i++) {
 			current = this.proxies.get(prefetched.get(i));
 			if (this.importantToKnowledgeZone(current) || this.protocol.constructingEnvelope(current)) {
-//				System.out.println(this.protocol.isInsideKnowledgeZone(current) +" "+ this.protocol.helpfulToEnvelope(current) +" "+ this.protocol.constructingEnvelope(current));
 				current.setQuality(NeighborProxy.REGULAR);
-//				this.protocol.setConnectionTime(current.getId());
-//				this.protocol.removeProxy(current.getId());
-//				this.protocol.queueConnectingNeighbor(current);
 				this.protocol.sendConnectMessage(current);
 				counter++;
 			} else  if(this.protocol.helpfulToEnvelope(current)) {
@@ -243,35 +237,17 @@ public class PrefetchingModule {
 				}
 			} else
 				if (leftAside(current)) {
-//					System.out.println("oco");
 					this.protocol.getVirtualEntity().removeNeighbor(current.getId());
-//					this.protocol.sendDisconnectMessage(current);
 				}		
 			}
 		if (closest != null) {
 			counter++;
 			closest.setQuality(NeighborProxy.REGULAR);
-//			this.protocol.setConnectionTime(closest.getId());
-//			this.protocol.removeProxy(closest.getId());
-//			this.protocol.queueConnectingNeighbor(closest);
 			this.protocol.sendConnectMessage(closest);
 		}
-//		prefetched = this.protocol.getParticularNeighbors(NeighborProxy.REGULAR);
-//		size = prefetched.size();
-//		for (int i = 0; i < size && counter > 0; i++) {
-//			current = this.proxies.get(prefetched.get(i));
-//			if (!this.protocol.isInsideKnowledgeZone(current) && !this.protocol.insidePeerZone(current) && !this.protocol.necessaryToEnvelope(current) && !this.protocol.constructingEnvelope(current) && leftAside(current)) {
-////				this.protocol.queueDisconnectingNeighbor(current);//
-//				this.protocol.getVirtualEntity().removeNeighbor(current.getId());
-//				this.protocol.sendDisconnectMessage(current);
-//				counter--;
-//			}
-//		}
-		
 		if (this.needToPropagateRequest()) {
 			this.propagatePrefetchRequest();
 		}
-//		}
 	}
 	
 	public void togglePrefetch(boolean prefetch) {
@@ -281,7 +257,6 @@ public class PrefetchingModule {
 			
 			for (int i = 0; i < size; i++) {
 				this.protocol.getVirtualEntity().removeNeighbor(prefetched.get(i));
-//				this.protocol.sendDisconnectMessage(this.protocol.getVirtualEntity().getNeighbor(prefetched.get(i)));
 			}
 		}
 	}
@@ -309,7 +284,6 @@ public class PrefetchingModule {
 
 			h = new double[2];
 			h[0] = parametricCoefficient * normalVector[0] + point[0];
-//			System.out.println((h[0] - (double)origin[0]) / (double)colinearVector[0]);
 			aside = (h[0] - (double)origin[0]) / (double)colinearVector[0] < 0;
 		}
 		
@@ -379,9 +353,6 @@ public class PrefetchingModule {
 		boolean choice = false;
 		
 		coef = 5;
-//		if (this.prefetchAlgorithm == PrefetchingModule.EXPANDED) {
-//			coef *= this.expandCoefficient;
-//		}
 		if (tan < 1) {
 			intTan = 1;
 		} else if ((long)tan > (long)Integer.MAX_VALUE){
@@ -389,7 +360,6 @@ public class PrefetchingModule {
 		} else {
 			intTan = (int)tan;
 		}
-//		System.out.println("tan = " + tan);
 		if (coef >= intTan) {
 			choice = true;
 		} else {
@@ -468,28 +438,7 @@ public class PrefetchingModule {
 				movingSize--;			
 				sorted.add(chosen.remove(min));
 			}
-//			break;
-//		case PrefetchingModule.EXPANDED:
-//			size = chosen.size();
-//			movingSize = size;
-//			min = 0;
-//			long distance, mindist;
-//			for (int i = 0; i < size; i++) {
-//				mindist = Long.MAX_VALUE;
-//				for (int j = 0; j < movingSize; j++) {
-//					distance = VirtualWorld.simpleDistance(this.protocol.subjectiveCoord(chosen.get(j)), this.protocol.subjectiveCoord(prefetchRequest.getOrigin()));
-//					if (mindist > distance) {
-//						mindist = distance;
-//						min = j;
-//					}
-//				}
-//				movingSize--;			
-//				sorted.add(chosen.remove(min));
-//			}
-//			break;
-//		default:	
-//			break;
-//		}	
+
 		if (sorted.size() == 0) {
 			if (backup != null) {
 				sorted.add(backup.getId());
@@ -508,17 +457,7 @@ public class PrefetchingModule {
 		msg = this.protocol.createFoundMsg(me, dest.getId());
 		this.protocol.send(msg, dest);
 	}
-	
-//	private boolean tooFar(GeometricRegion cone) {
-//		long maxDistance = cone.getMaxDistanceFromOrigin();
-//		long[] origin = this.subjectiveCoord(cone.getOrigin());
-//		
-//		return VirtualWorld.simpleDistance(origin, this.getPosition()) > maxDistance;
-//	}
-	
-//	private void sendPrefetchRequest(Message msg, long id) {
-//		
-//	}
+
 	
 	public int countPrefetched() {
 		return this.getPrefetchedNeighbors().size();

@@ -219,6 +219,7 @@ La propagation va se faire selon différentes techniques, nous allons voir pour 
 	\renewcommand{\labelitemi}{$\bullet$} 
 	\item \textit{SHARP:} Si la liste des destinations n'est pas vide, on envoie un message de prefetch au premier de la liste et on modifie le ttl.
 	\item \textit{EXPANDED:} Si la liste des destinations n'est pas vide, on envoie aléatoirement un message de prefetch à chaque nœud de la liste et on modifie le ttl.
+
 \end{itemize}
 
 \subsection{La fonction: \textit{choosePrefetchDestination}}
@@ -227,6 +228,22 @@ On boucle sur la liste des voisins, pour chaque itération on récupère le nœu
 \section{Le fichier: \textit{VirtualEntity}}
 Nous allons voir le fichier \textit{VirtualEntity} qui est la représentation d'un avatar. Nous allons voir qu'un avatar a un certain nombre de propriétés. Un avatar peut avoir plusieurs propriétés: des coordonnées, un id, une accélération, un temps de départ, des coordonnées d'origine, un comportement, une activité (vraie ou fausse), une vitesse maximale, une direction, une destination et une liste d'ajout en mouvement (?).
 \par Nous pouvons avoir accès à des fonctions sur les voisins (NeighborProxy et SolipsisProtocol), des fonctions pour effectuer un déplacement, pour définir une nouvelle destination, des fonctions pour les coordonnées ...
+
+\section{Le fichier: \textit{MobilityStateMachine}}
+Nous allons regarder le fonctionnement général de ce fichier pour mieux comprendre les différents états possibles et les passages des uns aux autres. Un état a plusieurs propriétés: son état ( Halted, Wandering, Travelling), une entité à laquelle on affecte l'état, des contraintes, une zone d'intérêt, une vitesse de T et une de W et des probabilités des transition entre les états. 
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[scale=0.35]{images/automate.png} 
+    \caption{\textit{\small Automate décrivant les mouvements d'un
+        avatar. \textbf{En gras}: le nom de la transition, en \textit{italique} sa sémantique}}
+    \label{fig:automate}
+  \end{center}
+\end{figure}
+\par Nous pouvons trouver des fonctions pour faire des traitements sur les transitions, pour savoir si l'on est dans un \textit{Hotspot}, pour regarder autour, pour savoir si l'on est loin de la destination, etc. 
+\par La fonction \textit{nextStep} va être étudier un petit peu plus profondément. La fonction de décompose en fonction de l'état dans lequel nous nous trouvons. Dans chaque état, des calculs (avec les probabilités définies dans le fichier de configuration) sont fait pour savoir si l'on reste dans l'état actuel ou si l'on va dans un autre état (voir figure~\ref{fig:automate}).
+
+\section{Le fichier: \textit{GiftWrapping}}
+
 
 \newpage
 \bibliographystyle{plain}

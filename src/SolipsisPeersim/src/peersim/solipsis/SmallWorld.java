@@ -48,14 +48,7 @@ public class SmallWorld {
 		me = new NeighborProxy(this.thisEntity.getCoord(), this.thisEntity.getKnowledgeRay(), this.thisEntity.getId(), this.thisEntity.getProtocol().getPeersimNodeId());
 		if (this.chooseLongRangePeer()) {
 			this.sendLongRangeLink(me);
-//			for (int i = 0; i < clients.length; i++) {
-//				clients[i].setQuality(NeighborProxy.LONGRANGE);
-//				this.addLongRangeLink(clients[i]);
-//			}
 		}
-//			ELSE {
-//			THIS.DISCONNECT();
-//		}
 		this.reset();
 	}
 	
@@ -65,13 +58,13 @@ public class SmallWorld {
 		
 		probability = this.determineChoiceProbability();
 		
-//		System.out.println(probability);
+		System.out.println(probability);
 		if (probability == 0) {
 			answer = true;
 		} else {
 			answer = rand.nextInt(probability) == 1;
 		}
-//		System.out.println("proba="+probability);
+		System.out.println("proba="+probability);
 		return answer;
 	}
 	
@@ -130,10 +123,6 @@ public class SmallWorld {
 		SolipsisProtocol protocol;
 		
 		protocol = this.thisEntity.getProtocol();
-//		int rand = (new Random()).nextInt(this.clients.length);
-//		
-//		msg = this.createSmallWorldMessage(peer, this.clients[rand].getId());
-//		protocol.send(msg, this.clients[rand]);
 		for (int i = 0; i < this.clients.length; i++) {
 			msg = this.createSmallWorldMessage(peer, this.clients[i].getId());
 			protocol.send(msg, this.clients[i]);
@@ -151,15 +140,6 @@ public class SmallWorld {
 		
 		return result;
 	}
-	
-//	private void disconnect() {
-//		SolipsisProtocol me;
-//		
-//		me = this.thisEntity.getProtocol();
-//		for (int i = 0; i < this.clients.length; i++) {
-//			me.sendDisconnectMessage(this.clients[i]);
-//		}
-//	}
 	
 	private NeighborProxy[] copyClients (HashMap<Integer, NeighborProxy> src) {
 		NeighborProxy[] destination;
@@ -200,19 +180,5 @@ public class SmallWorld {
 		this.links.getLinks().remove(new Integer(peerToForget));
 	}
 
-//	public void addPointingAtMe(NeighborProxy proxy) {
-//		this.pointingAtMe.add(proxy);
-//	}
-//	
-//	public LinkedList<NeighborProxy> getPointingAtMe() {
-//		return this.pointingAtMe;
-//	}
-//
-//	public void removePointingAtMe(NeighborProxy proxy) {
-//		System.err.println("SmallWorld:addPointingAtMe size="+this.pointingAtMe.size());
-//		this.pointingAtMe.remove(proxy);
-//		
-//	}
-	
 	
 }
