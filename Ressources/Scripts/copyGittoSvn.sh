@@ -1,6 +1,7 @@
 #§/bin/sh
-cp -R /home/xavier/Stage_LIP6/Vocabulaire ~/LIP6_SVN_Stage/VirtualMobility/AMAM/xjoudiou
-cp -R /home/xavier/Stage_LIP6/Fiches_Lectures ~/LIP6_SVN_Stage/VirtualMobility/AMAM/xjoudiou
-cp -R /home/xavier/Stage_LIP6/src ~/LIP6_SVN_Stage/VirtualMobility/AMAM/xjoudiou
-cp -R /home/xavier/Stage_LIP6/Ressources ~/LIP6_SVN_Stage/VirtualMobility/AMAM/xjoudiou
-cp /home/xavier/Stage_LIP6/README ~/LIP6_SVN_Stage/VirtualMobility/AMAM/xjoudiou
+cp -R /home/xavier/Git_Lip6/Stage_LIP6/Vocabulaire ~/SVN_Stage_Lip6/VirtualMobility/AMAM/xjoudiou
+cp -R /home/xavier/Git_Lip6/Stage_LIP6/Fiches_Lectures ~/SVN_Stage_Lip6/VirtualMobility/AMAM/xjoudiou
+cp -R /home/xavier/Git_Lip6/Stage_LIP6/src ~/SVN_Stage_Lip6/VirtualMobility/AMAM/xjoudiou
+cp -R /home/xavier/Git_Lip6/Stage_LIP6/Ressources ~/SVN_Stage_Lip6/VirtualMobility/AMAM/xjoudiou
+cp -R /home/xavier/Git_Lip6/Stage_LIP6/Movements ~/SVN_Stage_Lip6/VirtualMobility/AMAM/xjoudiou
+cp /home/xavier/Git_Lip6/Stage_LIP6/README ~/SVN_Stage_Lip6/VirtualMobility/AMAM/xjoudiou
