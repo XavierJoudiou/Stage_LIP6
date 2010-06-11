@@ -46,6 +46,23 @@ World Of Warcraft encourage les joueurs à former des groupes en utilisant deux 
 \par Un des facteur important, pour essayer de réaliser un modèle de mobilité, est d'étudier la taille des guildes. La moyenne de personne dans une guilde est de 14,5\% (16,8\% si l'on exclut du calcul les guildes de une personne). Le median est de 6 (9 si l'on exclut du calcul les guildes de une personne). 
 
 \subsection{Social Networks} 
+Les auteurs ont mis en place un réseau social pour évaluer au mieux les guildes. Ils ont mis en place ce réseau selon deux méthodes différentes:
+\begin{itemize}
+	\renewcommand{\labelitemi}{$\bullet$}
+	\item Une pour évaluer \textit{le potentiel de sociabilité des guildes:}\\
+	Les joueurs sont connectés chacun aux autres (si en ligne au même moment),et cela sans tenir compte de leur localisation dans le jeu. Le réseau résultant reflète le spectre des opportunités des interactions sociales dans une guilde. Il va crée des liens entre les joueurs qui pourraient utiliser le "guild channel" et ceux qui font parti de la même guilde.
+	\item Une pour quantifier \textit{les activités communes:}\\
+	Les joueurs qui sont dans la même zone vont se connecter ensemble, sauf dans les grandes villes (Hotspots). Cette méthode permet de mettre en évidence les joueurs qui passent du temps ensemble, et qui se groupent en guilde pour exécuter des quêtes. Ces liens sont forts, car ils reflètent un intérêt mutuel. 
+\end{itemize}
+
+\par Les résultats montrent que les joueurs ne connaissent pas tous les joueurs du même guilde, et cela est d'autant plus vrai que le nombre de personne, dans la guilde, est important. Des sous groupes peuvent aussi apparaître dans les guildes, surtout pour les guildes avec un nombre de joueurs important. 
+\par Dans la figure~\ref{co-location}, il est possible de voir à quoi ressemble les liens entre les différents joueurs d'une même guilde de 41 membres. Tout d'abord 17 membres de la guilde n'ont jamais été observé dans la même zone qu'un autre membre. Un noyau central se distingue, il est composé de 8 joueurs qui jouent souvent ensemble, 3 autres joueurs forment un trio central où les liens épais montrent qu'ils passent beaucoup de temps ensemble. Les autres joueurs jouent avec 2 (ou moins) membres de la guilde.
+	 \begin{figure}[!h]
+        \centering
+        \includegraphics[scale=0.95]{./images/co-location.png}
+        \caption{Co-location network dans une guilde de taille moyenne}
+        \label{co-location}
+        \end{figure}
 \newpage
 \section{The changing Dynamic of Social Interaction in World of Warcraft}
 
@@ -59,4 +76,3 @@ World Of Warcraft encourage les joueurs à former des groupes en utilisant deux 
  
 
 \end{document}
-
