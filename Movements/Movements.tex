@@ -1,59 +1,58 @@
-\documentclass[11pt,a4paper]{article}
-%\documentclass[10pt,twocolumn]{article}
+%\documentclass[11pt,a4paper]{article}
+\documentclass[10pt,twocolumn]{article}
 
 \usepackage{Movements} %% cibler doc/modules/
 \setlength{\columnsep}{1cm}
 
 
-%\onecolumn
+\onecolumn
 \begin{document}
   \fairetitre{Amélioration de la réactivité des réseaux pair à pair pour les MMOGs}{Étude bibliographique sur les déplacements en groupe dans les MMOG}{Xavier Joudiou}{Sergey Legtchenko \& Sébastien Monnet}{10/06/10}
 
 \newpage
-%\onecolumn
+\onecolumn
 \tableofcontents
 \newpage
-%\twocolumn
+\twocolumn
 
 \input{abstract}
 
 \section{Introduction}
-Dans ce document, nous allons étudier les déplacements en groupe des avatars dans les MMOG. Nous pourrons voir, grâce à cette étude rapide, si l'utilisation des déplacements en groupe est une piste intéressante dans l'amélioration du travail Blue Banana~\cite{191}. Le jeux en groupe (guilde et communauté) est un part importante de l'expérience que le joueur recherche en jouant à des MMOG~\cite{1501834,1255052}. La coopération est un facteur essentiel pour avoir le plus de succès dans les différentes missions proposées par le jeu. Un groupe permet de retrouver des personnes différentes et complémentaires, ce qui rend le groupe plus fort. Certains comparent même le fonctionnent des guildes au fonctionnement d'une "famille de la mafia"~\cite{Jakobsson03thesopranos}.
+Dans ce document, nous allons étudier les déplacements, en groupe, des avatars dans les MMOG. Nous pourrons voir, grâce à cette étude rapide, si l'utilisation des déplacements en groupe est une piste intéressante dans l'amélioration du travail Blue Banana~\cite{191}. Le jeux en groupe (guilde et communauté) est une part importante de l'expérience que le joueur recherche en jouant à des MMOG~\cite{1501834,1255052}. Sans rentrer dans des détails sur la vie sociale "réelle" des joueurs, nous allons étudier les comportements sociaux des joueurs. Ceci nous permettra de définir si la définition d'un modèle de mobilité et des améliorations de la réactivité sont possibles. Des études ont déjà démontrées que des mouvement groupés existaient dans World of Warcraft~\cite{15141312}. La coopération est un facteur essentiel pour avoir le plus de réussite  dans les différentes missions proposées par le jeu. Un groupe de joueur permet de retrouver des personnes différentes et complémentaires, ce qui rend le groupe plus fort. Certains comparent même le fonctionnent des guildes au fonctionnement d'une \textit{"famille de la mafia"}~\cite{Jakobsson03thesopranos}.
 
 
-\newpage
+%\newpage
 \section{Étude des habitudes des joueurs de MMOG}
-Nous allons étudier les différentes habitudes des joueurs de MMOG, et nous nous concentrerons sur les aspects sociaux, et avant tout sur les dynamiques de groupe. Nous allons donner des conclusions de deux études~\cite{1255052,StudyEQ}.
+Nous allons étudier les différentes habitudes des joueurs de MMOG, et nous nous concentrerons sur les aspects sociaux du jeu, et avant tout sur les dynamiques de groupe présentes. Nous allons donner les points importants de deux études~\cite{1255052,StudyEQ}.
 
 \subsection{Understanding Social Interaction in World of Warcraft}
 
-Griffiths, Davies et Chappell~\cite{BreakingSteretype} ont trouvé que l'aspect favori de 41\% des joueurs, est les interactions sociales. De même Yee~\cite{1159988} a trouvé que 39,4\% des hommes et 53,3\% des femmes pensent que leurs amis, dans le jeu, sont comparables que leurs amis dans la "vie réelle".
+Griffiths, Davies et Chappell~\cite{BreakingSteretype} ont trouvé que l'aspect favori de 41\% des joueurs, est les interactions sociales. De même Yee~\cite{1159988} a trouvé que 39,4\% des hommes et 53,3\% des femmes pensent que leurs amis "dans le jeu" sont comparables que leurs amis dans la "vie réelle".
 \par Certaines études~\cite{1124834,1031667} nous expliquent que les joueurs préfèrent en général jouer seul, d'autres~\cite{1159988,Jakobsson03thesopranos} insistent sur l'aspect "social" que les joueurs recherchent dans ce genre de jeu vidéo. Nous pouvons donc dire que tous sont d'accord sur le fait que les interactions sociales sont courantes, et sont donc un facteur important des MMOG.
-\par Les liens sociaux entre les joueurs ressemblent à des interactions dans le monde "réel", avec des comportements d'adhésion que l'on peut comparer aux mariages, des échanges commerciaux et même des "services d'église". Des règles sont aussi présentes en plus des règles mise en place par l'éditeur, des normes sociales font aussi parties du jeu (jargons, abréviations, émoticones, etc).
+\par Les liens sociaux entre les joueurs ressemblent à des interactions dans le monde "réel", avec des comportements d'adhésion que l'on peut comparer aux mariages, avec des échanges commerciaux et même des "services d'église". Des règles sont aussi présentes en plus des règles mises en place par l'éditeur, des normes sociales font aussi parties du jeu (jargons, abréviations, émoticones, etc).
 
 \section{The Norrathian Scrolls: A Study of EverQuest}
 Dans~\cite{StudyEQ}, l'auteur a réalisé un étude sur les habitudes des joueurs de EverQuest. Environ 85\%, des personnes interrogées, nous disent qu'elles prennent plaisir à avoir des relations sociales dans le jeu. A la question: "en quoi il retirent le plus de satisfaction?", la réponse "se faire des amis" arrive dans le trio de tête ou aux portes de celui-ci (en fonction des hommes ou des femmes) de très peu derrière gagner un niveau, réussir une quête et pillage d'un objet rare.
 \par De plus, les personnes interrogées pensent à 50\% que leur amis de EverQuest sont comparables à ceux de leur vie "réelle". Lorsque les joueurs jouent en groupe, ils le font la majorité du temps avec des gens qu'il connaissent déjà (moins de 10\% avec des inconnus). Plus de 50\% de sondés sont très content d'être dans leur guilde. Nous pouvons voir sur la figure~\ref{guildpres}, la participation des joueurs aux évènements de la guilde.
         \begin{figure}[!h]
         \centering
-        \includegraphics[scale=0.75]{./images/studypres.png}
+        \includegraphics[scale=0.45]{./images/studypres.png}
         \caption{Participation des joueurs aux évènements de la guilde}
         \label{guildpres}
         \end{figure}
 \subsection{Breaking the stereotype: The case of Online Gaming}
-Une autre étude~\cite{BreakingSteretype} trouve des résultats similaires. Lorsque l'on demande au joueur quel est leur aspect préféré du jeu, l'aspect sociale se retrouve en deuxième position avec 23\% (26\% pour passer des niveaux et faire évoluer son avatar) et même en première place, avec plus d'un tiers des suffrages, si l'on ajoute l'activité de chat et le \textit{role-playing} (23 + 10 + 5 = 38). L'article distingue trois types de joueurs: ceux qui se groupent pour jouer (34\%), ceux qui jouent pour se retrouve en groupe (55\%) et ceux qui ne se groupent pas (12\%).
+Cette étude donne des résultats qui sont en grande majorité similaires à l'étude précédente. Lorsque l'on demande au joueur quel est leur aspect préféré du jeu, l'aspect sociale se retrouve en deuxième position avec 23\% (1° place: 26\% pour passer des niveaux et faire évoluer son avatar) et même en première place, avec plus d'un tiers des suffrages, si l'on ajoute l'activité de chat et le \textit{role-playing} (23 + 10 + 5 = 38). L'article distingue trois types de joueurs: ceux qui se groupent pour jouer (34\%), ceux qui jouent pour se retrouver en groupe (55\%) et ceux qui ne se groupent pas (12\%).
 
 
 
 \section{Les MMOG, des jeux socialisant?}
-Sans rentrer dans des détails sur la vie sociale "réelle" des joueurs, nous allons étudier les comportements sociaux des joueurs. Ceci nous permettra de définir si un modèle de mobilité et des améliorations de la réactivité sont possibles. Des études ont déjà démontrées que des mouvement groupés existaient dans World of Warcraft~\cite{15141312}.
 \subsection{Différences en fonction du niveau du joueur}
-Dans~\cite{1124834}, les auteurs se sont intéressés aux dynamiques sociales dans les MMOG, et particulièrement dans le jeu World Of Warcraft~\cite{wow}. Unes des premières observations et que les joueurs vont jouer différemment en fonction de leur niveau. Par exemple, les joueurs vont passés moins de temps au niveau 39, car à partir du niveau 40 les joueurs pourront se déplacer plus rapidement dans le monde virtuel (60\%). Dans World Of Warcraft, 15\% des avatars sont au niveau 60.
+Dans~\cite{1124834}, les auteurs se sont intéressés aux dynamiques sociales dans les MMOG, et particulièrement dans le jeu World Of Warcraft~\cite{wow}. Unes des premières observations est que les joueurs vont jouer différemment en fonction de leur niveau. Par exemple, les joueurs vont passés moins de temps au niveau 39, car à partir du niveau 40 les joueurs pourront se déplacer plus rapidement dans le monde virtuel (60\%). Dans World Of Warcraft, 15\% des avatars sont au niveau 60, c'est à dire au niveau maximum.
 
-\par Nous pouvons voir que le temps passé en groupe évolue en fonction du niveau du joueur (voir figure~\ref{timespentgroup} ). Nous pouvons voir que le pourcentage de temps passé en groupe évolue pour se stabiliser à environ 40\%, et à partir du niveau 59 les joueurs passent plus de 50\% du temps en groupe. Les auteurs nous disent que les joueurs, qui ne font pas parti d'un groupe, vont évoluer de niveau plus rapidement. Ces joueurs rejoignent la plupart du temps des groupes lorsqu'ils ont atteint le niveau 55. 
+\par Nous pouvons voir que le temps passé en groupe évolue en fonction du niveau du joueur (voir figure~\ref{timespentgroup} ). Nous pouvons voir que le pourcentage de temps passé en groupe évolue en même que le niveau du joueur, pour se stabiliser à environ 40\%, et à partir du niveau 59 les joueurs passent plus de 50\% du temps en groupe. Les auteurs nous disent que les joueurs, qui ne font pas parti d'un groupe, vont évoluer de niveau plus rapidement. Ces joueurs rejoignent la plupart du temps des groupes lorsqu'ils ont atteint le niveau 55. 
 	\begin{figure}[!h]
         \centering
-        \includegraphics[scale=0.95]{./images/timespentgroup.png}
+        \includegraphics[scale=0.75]{./images/timespentgroup.png}
         \caption{Temps moyen passé en groupe, par classe}
         \label{timespentgroup}
         \end{figure}
@@ -83,11 +82,11 @@ Les auteurs ont mis en place un réseau social pour évaluer au mieux les guilde
 \par Dans la figure~\ref{co-location}, il est possible de voir à quoi ressemble les liens entre les différents joueurs d'une même guilde de 41 membres. Tout d'abord 17 membres de la guilde n'ont jamais été observé dans la même zone qu'un autre membre. Un noyau central se distingue, il est composé de 8 joueurs qui jouent souvent ensemble, 3 autres joueurs forment un trio central où les liens épais montrent qu'ils passent beaucoup de temps ensemble. Les autres joueurs jouent avec 2 (ou moins) membres de la guilde.
 	 \begin{figure}[!h]
         \centering
-        \includegraphics[scale=0.95]{./images/co-location.png}
+        \includegraphics[scale=0.85]{./images/co-location.png}
         \caption{Co-location network dans une guilde de taille moyenne}
         \label{co-location}
         \end{figure}
-\newpage
+%\newpage
 
 %\section{The Sopranos Meets EverQuest}
 %La coopération est un facteur essentiel pour avoir le plus de succès dans les différentes missions proposées par le jeu. Un groupe permet de retrouver des personnes différentes et complémentaires, ce qui rend le groupe plus fort. Certains comparent même le fonctionnent des guildes au fonctionnement d'une "famille de la mafia"~\cite{Jakobsson03thesopranos}.
@@ -96,7 +95,7 @@ Les auteurs ont mis en place un réseau social pour évaluer au mieux les guilde
 Nous avons pu remarquer que l'aspect communautaires des MMOG était un des points les plus importants pour les joueurs. De plus, les majorité des études nous disent que la plupart des joueurs joue en groupe pendant un temps non négligeable. Ces mouvements de groupe pourraient nous permettre de faire évoluer le module de prefetching, en formant des groupes où seulement certaines entités feraient du prefecting et les voisins des entités pourraient rester les mêmes.
 \par Cette solution engendrerait de refaire le système de mobilité pour simuler des mouvements de groupe. Il faut aussi savoir que ces études sur les mouvements de groupe sont réalisées sur certains jeux~\cite{wow,everquest}, et que ces mouvements de groupe n'existent pas ou sont moins perceptibles dans d'autres jeux~\cite{sl}. Il faudrait aussi mettre un place un système d'équilibrage des requêtes lors de mouvements de groupe, car sinon les mêmes travailleront toujours pour les autres.
 
-\newpage
+%\newpage
 \bibliographystyle{plain}
 \bibliography{Biblio}
 
