@@ -58,7 +58,7 @@ Dans~\cite{1124834}, les auteurs se sont intéressés aux dynamiques sociales da
         \end{figure}
 
 \subsection{Jouer en guilde}
-World Of Warcraft encourage les joueurs à former des groupes en utilisant deux mécanismes. Premièrement, pour qu'une complémentarité entre les habilitées des joueurs se crée. Deuxièmement, beaucoup de quêtes dans le jeu sont difficiles à réaliser tout seul. Nous pouvons aussi voir que des différences se dégagent entre le temps passé en groupe en fonction de chaque espèce (voir figure~\ref{tabltimegroup}.
+World Of Warcraft encourage les joueurs à former des groupes en utilisant deux mécanismes. Premièrement, pour qu'une complémentarité entre les habilitées des joueurs se crée. Deuxièmement, beaucoup de quêtes dans le jeu sont difficiles à réaliser tout seul. Nous pouvons aussi voir que des différences se dégagent entre le temps passé en groupe en fonction de chaque espèce (voir figure~\ref{tabltimegroup}).
 \par Ces groupes sont appelés des guildes, elles sont un des aspects de la popularité de ce type de jeu. Dans World Of Warcraft, 66\% des avatars appartiennent à une guilde et ce chiffre atteint 90\% si l'on tient compte des joueurs ayant au moins le niveau 43. Les joueurs appartenant à une guilde joue en moyenne plus souvent qu'un joueur sans guilde. 
 	\begin{figure}[!h]
         \centering
@@ -66,7 +66,7 @@ World Of Warcraft encourage les joueurs à former des groupes en utilisant deux 
         \caption{Temps moyen passé en groupe, par classe}
         \label{tabltimegroup}
         \end{figure}
-\par Un des facteurs important, pour essayer de réaliser un modèle de mobilité, est d'étudier la taille des guildes. La moyenne de personne dans une guilde est de 14,5\% (16,8\% si l'on exclut du calcul les guildes d'une personne). Le median est de 6 (9 si l'on exclut du calcul les guildes d'une personne). 
+\par Un des facteurs important, pour essayer de réaliser un modèle de mobilité, est d'étudier la taille des guildes. La moyenne de personne dans une guilde est de 14,5 (16,8 si l'on exclut du calcul les guildes d'une personne). Le median est de 6 (9 si l'on exclut du calcul les guildes d'une personne). 
 
 \subsection{Réseaux sociaux dans World Of Warcraft} 
 Les auteurs ont mis en place un réseau social pour évaluer au mieux les guildes. Ils ont mis en place ce réseau selon deux méthodes différentes:
@@ -90,12 +90,20 @@ Les auteurs ont mis en place un réseau social pour évaluer au mieux les guilde
 
 %\section{The Sopranos Meets EverQuest}
 %La coopération est un facteur essentiel pour avoir le plus de succès dans les différentes missions proposées par le jeu. Un groupe permet de retrouver des personnes différentes et complémentaires, ce qui rend le groupe plus fort. Certains comparent même le fonctionnent des guildes au fonctionnement d'une "famille de la mafia"~\cite{Jakobsson03thesopranos}.
-
+\newpage
 \section{Conclusion}
-Nous avons pu remarquer que l'aspect communautaires des MMOG est un des points les plus importants pour les joueurs. De plus, la majorité des études nous disent que la plupart des joueurs jouent en groupe pendant un temps non négligeable. Ces mouvements de groupe pourraient nous permettre de faire évoluer le module de prefetching, en formant des groupes où seulement certaines entités feraient du prefecting et les voisins des entités pourraient rester les mêmes.
+Nous avons pu remarquer que l'aspect communautaires des MMOG est un des points les plus importants pour les joueurs (voir figure~\ref{recapstat}). De plus, la majorité des études nous disent que la plupart des joueurs jouent en groupe pendant un temps non négligeable. Ces mouvements de groupe pourraient nous permettre de faire évoluer le module de prefetching, en formant des groupes où seulement certaines entités feraient du prefecting et les voisins des entités pourraient rester les mêmes.
 \par Cette solution engendrerait de refaire le système de mobilité pour simuler des mouvements de groupe. Il faut aussi savoir que ces études sur les mouvements de groupe sont réalisées sur certains jeux~\cite{wow,everquest}. Ces mouvements de groupe n'existent pas ou sont moins perceptibles dans d'autres jeux~\cite{sl}. Il faudrait aussi mettre un place un système d'équilibrage des requêtes lors de mouvements de groupe, sinon certains travailleront toujours pour les autres.
 
-%\newpage
+	\vspace{5cm}
+	\begin{figure}[!h]
+        \centering
+        \includegraphics[scale=0.65]{./images/recapstat.png}
+        \caption{Schéma récapitulatif des activités de groupe}
+        \label{recapstat}
+        \end{figure}
+
+\newpage
 \bibliographystyle{plain}
 \bibliography{Biblio}
 
