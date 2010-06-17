@@ -3,5 +3,5 @@ cp -R /home/xavier/Git_Lip6/Stage_LIP6/Vocabulaire ~/SVN_Stage_Lip6/VirtualMobil
 cp -R /home/xavier/Git_Lip6/Stage_LIP6/Fiches_Lectures ~/SVN_Stage_Lip6/VirtualMobility/AMAM/xjoudiou
 #cp -R /home/xavier/Git_Lip6/Stage_LIP6/src ~/SVN_Stage_Lip6/VirtualMobility/AMAM/xjoudiou
 cp -R /home/xavier/Git_Lip6/Stage_LIP6/Ressources ~/SVN_Stage_Lip6/VirtualMobility/AMAM/xjoudiou
-cp -R /home/xavier/Git_Lip6/Stage_LIP6/Movements ~/SVN_Stage_Lip6/VirtualMobility/AMAM/xjoudiou
+cp -R /home/xavier/Git_Lip6/Stage_LIP6/Evolutions ~/SVN_Stage_Lip6/VirtualMobility/AMAM/xjoudiou
 cp /home/xavier/Git_Lip6/Stage_LIP6/README ~/SVN_Stage_Lip6/VirtualMobility/AMAM/xjoudiou
