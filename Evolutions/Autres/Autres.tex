@@ -35,7 +35,7 @@ La mise en place d'un cache pour les zones peuplées permettrait d'améliorer la
 \par Cette solution pourrait économiser des messages de découverte des voisins dans le cas de changements de direction fréquents. Mais l'efficacité de cette méthode n'est pas sure. 
  
 \section{Mécanismes de connaissance des routes entre les Hotspots}
-Dans cette solution, nous voudrions permettre que les avatars suivent des routes pour par exemple simuler le contournement d'un obstacle. Il faudrait donc modifier le modèle pour ajouter des obstacles. Il faudrait alors définir des chemins et les conserver dans l'environnement. Cette solution permettrait de simuler un comportement réel, et ainsi d'essayer d'améliorer cette situation.
+Dans cette solution, nous voudrions permettre aux avatars de suivre des routes, pour le contournement d'un obstacle par exemple. Il faudrait modifier le modèle pour ajouter des obstacles dans l'environnement. Il faudrait alors définir des chemins et les conserver dans l'environnement. Cette solution permettrait de simuler un comportement réel, et ainsi d'essayer d'améliorer cette situation.
 \par Les modification sur le modèle ne seront peut être pas très simple, il faudrait aléatoirement, comme il a été fait pour les Hotspots, définir des zones où les avatars ne pourraient pas passer ou seraient ralenti. Sur la figure~\ref{trajobstacle}, nous pouvons voir des trajectoires permettant d'éviter l'obstacle. Il faut définir si ces trajectoires se font par apprentissage ou si elles sont données avec l'initialisation de la carte.
 	\begin{figure}[!h]
         \centering
