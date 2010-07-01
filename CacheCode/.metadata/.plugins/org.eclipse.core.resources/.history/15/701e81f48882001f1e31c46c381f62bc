@@ -1,0 +1,44 @@
+/**
+ * 
+ */
+package peersim.solipsis;
+
+import java.util.HashMap;
+
+import peersim.config.Configuration;
+
+/**
+ * @author xavier
+ *
+ */
+public class CacheModule {
+	
+	/* pour le cache */
+	private final static String CACHE_SIZE		= "cacheSize";
+	private final static int FIFO	=  0;
+	
+
+	/* Variables pour la mise en place du cache */ 
+	private HashMap<Integer,NeighborProxy> cache;
+	private HashMap<Integer,CacheData> cacheInfo;
+	private int cacheSize;
+	private int strategieCache;
+	
+
+	public CacheModule(HashMap<Integer, NeighborProxy> cache, HashMap<Integer, CacheData> cacheInfo, int cacheSize,
+			int strategieCache) {
+		super();
+
+		/* Initialisation des variables pour le cache*/
+		this.cacheSize = Configuration.getInt(prefix+"."+CACHE_SIZE);
+		this.cache = new HashMap<Integer,NeighborProxy>();
+		this.cacheInfo = new HashMap<Integer, CacheData>();
+		this.strategieCache = 0;
+//		System.out.println("----------------------");
+//		System.out.println("----------------------");
+//		System.out.println("Taille du cache: " + cacheSize);
+//		System.out.println("----------------------");
+//		System.out.println("----------------------");
+	}
+	
+}

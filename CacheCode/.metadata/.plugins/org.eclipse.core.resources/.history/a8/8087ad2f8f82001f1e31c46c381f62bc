@@ -1,0 +1,14 @@
+/**
+ * 
+ */
+package Tests;
+
+import junit.framework.TestCase;
+
+/**
+ * @author xavier
+ *
+ */
+public class TestCacheModule extends TestCase {
+
+}

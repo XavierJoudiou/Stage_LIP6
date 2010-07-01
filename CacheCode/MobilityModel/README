@@ -1,0 +1,40 @@
+******README******
+This program generates realistic traces of MMOG-avatars
+according to the model desribed in the file RR-Inria.pdf.
+Please see the doc directory for the project javadoc.
+
+All model parameters are set through the configuration file
+"model.cfg". 
+These parameters are:
+densityZoneSize : The size of a density zone
+avatarNb        : The number of avatars 
+tickInterval    : The time interval between two trace steps
+mapSize         : The size of the edge of the map (the map is square)
+randomSeed      : The random seed used for all probabilistic operations
+densityZoneNb   : The number of density zones
+zoneDistributionLaw : The avatar distribution law inside hotspots (may be ZIPF or GAUSSIAN)
+maxTravelSpeed : The maximum speed while travelling
+maxExploreSpeed : The maximum speed while exploring
+acceleration : The acceleration
+avatarsInDesertZones : The number of avatars located in desert zones
+simulationEndtime : The end time of the simulation
+
+### Behavioral State Machine transition probabilities ###
+There are three states in the State Machine: Halt, Travel and Wander
+The transition are named as follows: (InitialState)2(DestinationState)
+ie., a transition from state Halt to state Travel is called h2t.
+The transition probabilities are given as a number N between 0 and 10000,
+and the real probabilities will be computed as N/10000.
+Ten transition probabilities have to be assigned.
+They are:
+
+h2h
+h2t
+h2w
+w2h
+w2t
+w2w
+cwd
+t2h
+t2w
+t2t
