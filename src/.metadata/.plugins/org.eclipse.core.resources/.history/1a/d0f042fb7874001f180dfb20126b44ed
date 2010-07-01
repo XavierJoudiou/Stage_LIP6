@@ -1,0 +1,9 @@
+package peersim.solipsis;
+
+public class TestAlgo {
+
+	public TestAlgo() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

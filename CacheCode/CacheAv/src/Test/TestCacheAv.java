@@ -5,7 +5,7 @@ package Test;
 
 import java.util.HashMap;
 
-import Cache.CacheAv;
+import Cache.CacheModule;
 import Cache.CacheData;
 import Cache.NeighborProxy;
 import junit.framework.TestCase;
@@ -17,7 +17,7 @@ import junit.framework.TestCase;
 public class TestCacheAv extends TestCase {
 	
 	NeighborProxy n1,n2,n3,n4,n5,n6,n7;
-	CacheAv testfifo;
+	CacheModule testfifo;
 	
 	int cacheSize = 5;
 	private long[] proxyCoord = new long[3];
@@ -29,7 +29,7 @@ public class TestCacheAv extends TestCase {
 		System.out.println("Test: " + this);
 		System.out.println("---------------------------");
 		
-		testfifo = new CacheAv(null, null, cacheSize);
+		testfifo = new CacheModule(null, null, cacheSize);
 		System.out.println("Taille cache		:" + testfifo.getCache().size() + "/" + cacheSize);
 		System.out.println("Taille cacheInfo	:" + testfifo.getCacheInfo().size() + "/" + cacheSize);
 		assertEquals(testfifo.getCache().size(),testfifo.getCacheInfo().size());
@@ -41,7 +41,7 @@ public class TestCacheAv extends TestCase {
 		System.out.println("---------------------------");
 		System.out.println("Test: " + this);
 		System.out.println("---------------------------");
-		testfifo = new CacheAv(null, null, cacheSize);
+		testfifo = new CacheModule(null, null, cacheSize);
 		assertEquals(testfifo.getCache().size(),testfifo.getCacheInfo().size());
 		assertEquals(testfifo.getCache().size(),0);
 		
@@ -79,7 +79,7 @@ public class TestCacheAv extends TestCase {
 		System.out.println("---------------------------");
 		System.out.println("Test: " + this);
 		System.out.println("---------------------------");
-		testfifo = new CacheAv(null, null, cacheSize);
+		testfifo = new CacheModule(null, null, cacheSize);
 		assertEquals(testfifo.getCache().size(),testfifo.getCacheInfo().size());
 		assertEquals(testfifo.getCache().size(),0);
 		
@@ -108,7 +108,7 @@ public class TestCacheAv extends TestCase {
 		System.out.println("Test: " + this);
 		System.out.println("---------------------------");
 		
-		testfifo = new CacheAv(null, null, cacheSize);
+		testfifo = new CacheModule(null, null, cacheSize);
 		assertEquals(testfifo.getCache().size(),testfifo.getCacheInfo().size());
 		assertEquals(testfifo.getCache().size(),0);
 		
@@ -150,7 +150,7 @@ public class TestCacheAv extends TestCase {
 		System.out.println("Test: " + this);
 		System.out.println("---------------------------");
 		
-		testfifo = new CacheAv(null, null, cacheSize);
+		testfifo = new CacheModule(null, null, cacheSize);
 		assertEquals(testfifo.getCache().size(),testfifo.getCacheInfo().size());
 		assertEquals(testfifo.getCache().size(),0);
 		
@@ -294,7 +294,7 @@ public class TestCacheAv extends TestCase {
 		System.out.println("Test: " + this);
 		System.out.println("---------------------------");
 		
-		testfifo = new CacheAv(null, null, cacheSize);
+		testfifo = new CacheModule(null, null, cacheSize);
 		assertEquals(testfifo.getCache().size(),testfifo.getCacheInfo().size());
 		assertEquals(testfifo.getCache().size(),0);
 		
@@ -326,7 +326,7 @@ public class TestCacheAv extends TestCase {
 		System.out.println("Test: " + this);
 		System.out.println("---------------------------");
 		
-		testfifo = new CacheAv(null, null, cacheSize);
+		testfifo = new CacheModule(null, null, cacheSize);
 		assertEquals(testfifo.getCache().size(),testfifo.getCacheInfo().size());
 		assertEquals(testfifo.getCache().size(),0);
 		
@@ -358,7 +358,7 @@ public class TestCacheAv extends TestCase {
 		System.out.println("Test: " + this);
 		System.out.println("---------------------------");
 		
-		testfifo = new CacheAv(null, null, cacheSize);
+		testfifo = new CacheModule(null, null, cacheSize);
 		assertEquals(testfifo.getCache().size(),testfifo.getCacheInfo().size());
 		assertEquals(testfifo.getCache().size(),0);
 		
@@ -373,7 +373,7 @@ public class TestCacheAv extends TestCase {
 		System.out.println("Test: " + this);
 		System.out.println("---------------------------");
 		
-		testfifo = new CacheAv(null, null, cacheSize);
+		testfifo = new CacheModule(null, null, cacheSize);
 		assertEquals(testfifo.getCache().size(),testfifo.getCacheInfo().size());
 		assertEquals(testfifo.getCache().size(),0);
 		
@@ -390,7 +390,7 @@ public class TestCacheAv extends TestCase {
 		long[] proxyCoord2 = {2,2,3};
 		NeighborProxy res;
 		
-		testfifo = new CacheAv(null, null, cacheSize);
+		testfifo = new CacheModule(null, null, cacheSize);
 		assertEquals(testfifo.getCache().size(),testfifo.getCacheInfo().size());
 		assertEquals(testfifo.getCache().size(),0);
 		
@@ -441,7 +441,7 @@ public class TestCacheAv extends TestCase {
 		n5 = new NeighborProxy(proxyCoord5, proxyRadius, 5, 5);
 		n6 = new NeighborProxy(proxyCoord6, proxyRadius, 6, 6);
 		
-		testfifo = new CacheAv(null, null, cacheSize);
+		testfifo = new CacheModule(null, null, cacheSize);
 		assertEquals(testfifo.getCache().size(),testfifo.getCacheInfo().size());
 		assertEquals(testfifo.getCache().size(),0);
 		

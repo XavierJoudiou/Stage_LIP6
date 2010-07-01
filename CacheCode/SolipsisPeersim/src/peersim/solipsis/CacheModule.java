@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-
 import peersim.config.Configuration;
 
 /**
@@ -215,6 +214,55 @@ public class CacheModule {
 		return nearest;
 	}
 	
+	
+	public NeighborProxy searchCacheNeighbor(long[] destination,HashMap<Integer, NeighborProxy> voisin){
+		NeighborProxy current;
+		NeighborProxy best = null;
+		NeighborProxy farNeigh;
+		
+		double farNeighDist,currentDist,bestDist;
+		
+		
+//		HashMap<Integer, NeighborProxy> cach = this.cache;
+		Iterator it,it_voisin;
+		it = this.cache.entrySet().iterator();
+		it_voisin = voisin.entrySet().iterator();
+		
+		
+		farNeigh = (NeighborProxy)((Map.Entry)it_voisin.next()).getValue();
+		farNeighDist = VirtualWorld.simpleDistance(destination, farNeigh.getCoord());
+		
+		while(it_voisin.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it_voisin.next()).getValue();
+			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
+			if( farNeighDist < currentDist){
+				farNeigh = current;
+				farNeighDist = currentDist;
+				System.out.println("Changement de farNeigh, distance = " + farNeighDist);
+			}			
+		}
+		System.out.println("Le voisin le plus loin est :" + farNeigh.getId() + ", distance = " + farNeighDist);
+		
+		
+		
+		while(it.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
+			if( farNeighDist > currentDist){
+				best = current;
+				bestDist = currentDist;		
+				System.out.println("On a un plus proche, le nœud: " + best.getId() + ", distance = " + bestDist);
+			}
+			
+			//((SolipsisProtocol)n.getProtocol(me.getPeersimNodeId())).getVirtualEntity();
+		}
+		if(best != null){
+			System.out.println("On a trouvé un meilleur dans le cache ");
+		}else{
+			System.out.println("Pas de meilleur dans le cache");
+		}
+		return best;
+	}
 	
 	
 	/* ********************************************************************* */
