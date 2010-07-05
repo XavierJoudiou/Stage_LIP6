@@ -5,6 +5,15 @@
 ##	http://github.com/XavierJoudiou/Stage_LIP6
 
 
+/repertoire: ./CacheCode
+	
+	./CacheAv: Fichiers pour le cache avec tests junit et couverture
+
+	./SolipsisPeerSim: Projet Eclipse avec ajout du cache
+
+	./*: Autres projets Eclipse
+
+
 /Repertoire: ./Fiches_Lectures
 
 	*.tex: Fiche de lecture pour l'article correspondant 
