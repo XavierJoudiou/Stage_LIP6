@@ -72,12 +72,12 @@ public class CacheModule {
 			this.cache.put(boor.getId(), boor);
 			cacheData = new CacheData(1, 0);
 			this.cacheInfo.put(boor.getId(), cacheData);
-			System.out.println("Ajout du nœud " + boor.getId() + " dans le cache réussi");
-			System.out.println(boor.toString());
+//			System.out.println("Ajout du nœud " + boor.getId() + " dans le cache réussi");
+//			System.out.println(boor.toString());
 			
 		}else{
-			System.out.println("Problème d'ajout d'un nœud dans le cache: " + boor.getId() + " déjà présent.");
-			System.out.println(boor.toString());
+//			System.out.println("Problème d'ajout d'un nœud dans le cache: " + boor.getId() + " déjà présent.");
+//			System.out.println(boor.toString());
 		}
 		
 		
@@ -115,9 +115,9 @@ public class CacheModule {
 			}
 			this.cache.remove(boor.getId());
 			this.cacheInfo.remove(boor.getId());
-			System.out.println("Le nœud " + boor.getId() + " a été supprimé");
+//			System.out.println("Le nœud " + boor.getId() + " a été supprimé");
 		}else{
-			System.out.println("Le nœud " + boor.getId() + " n'est pas dans la liste, alors il va être difficile de le supprimer");
+//			System.out.println("Le nœud " + boor.getId() + " n'est pas dans la liste, alors il va être difficile de le supprimer");
 
 		}
 	}
@@ -146,7 +146,7 @@ public class CacheModule {
 						supprInfo = currentInfo;
 					}
 				}
-				System.out.println("FIFO: Le noeud choisi est " + suppr.getId());
+//				System.out.println("FIFO: Le noeud choisi est " + suppr.getId());
 			break;
 		}			
 				
@@ -220,7 +220,7 @@ public class CacheModule {
 		NeighborProxy best = null;
 		NeighborProxy farNeigh;
 		
-		double farNeighDist,currentDist,bestDist;
+		double farNeighDist,currentDist,bestDist = 0;
 		
 		
 //		HashMap<Integer, NeighborProxy> cach = this.cache;
@@ -230,6 +230,7 @@ public class CacheModule {
 		
 		
 		farNeigh = (NeighborProxy)((Map.Entry)it_voisin.next()).getValue();
+//		System.out.println("destination: " + destination + ", farneigh: " + farNeigh.getCoord());
 		farNeighDist = VirtualWorld.simpleDistance(destination, farNeigh.getCoord());
 		
 		while(it_voisin.hasNext()){
@@ -238,7 +239,7 @@ public class CacheModule {
 			if( farNeighDist < currentDist){
 				farNeigh = current;
 				farNeighDist = currentDist;
-				System.out.println("Changement de farNeigh, distance = " + farNeighDist);
+//				System.out.println("Changement de farNeigh, distance = " + farNeighDist);
 			}			
 		}
 		System.out.println("Le voisin le plus loin est :" + farNeigh.getId() + ", distance = " + farNeighDist);
@@ -251,13 +252,13 @@ public class CacheModule {
 			if( farNeighDist > currentDist){
 				best = current;
 				bestDist = currentDist;		
-				System.out.println("On a un plus proche, le nœud: " + best.getId() + ", distance = " + bestDist);
+//				System.out.println("On a un plus proche, le nœud: " + best.getId() + ", distance = " + bestDist);
 			}
 			
 			//((SolipsisProtocol)n.getProtocol(me.getPeersimNodeId())).getVirtualEntity();
 		}
 		if(best != null){
-			System.out.println("On a trouvé un meilleur dans le cache ");
+			System.out.println("On a trouvé un meilleur dans le cache ,le nœud: " + best.getId() + ", distance = " + bestDist);
 		}else{
 			System.out.println("Pas de meilleur dans le cache");
 		}

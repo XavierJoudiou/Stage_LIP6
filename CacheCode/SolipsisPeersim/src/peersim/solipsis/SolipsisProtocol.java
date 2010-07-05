@@ -36,6 +36,8 @@ public class SolipsisProtocol implements EDProtocol {
 	private final static String CACHE_SIZE		= "cacheSize";
 	private final static String CACHE_STRATEGIE = "cachestrategie";
 	private final static int FIFO	=  0;
+	private final static int LRU	=  1;
+	private final static int OFF	=  2;
 	
 	public final static int BASIC      = 0;
 	public final static int ENHANCED   = 1;
@@ -861,50 +863,70 @@ public class SolipsisProtocol implements EDProtocol {
 	private void processSearchMsg(Message msg) {
 		GeometricRegion line = (GeometricRegion)msg.getContent();
 		int srcId = msg.getSource();
-		NeighborProxy neighbor;
+		NeighborProxy neighbor = null;
 		NeighborProxy source = this.proxies.get(msg.getSource());
 		Message response = null;
 		VirtualEntity stranger;
 		long [] origin;
 		Node n;
 		
+		/* Recherche dans le cache */
+		/* Mettre condition pour si cache est activé */
+		if (this.strategieCache == SolipsisProtocol.FIFO) {
 		
-		neighbor = searchForAppropriateNeighbor(line);
-		if (neighbor != null) {
-			response = createFoundMsg(neighbor, msg.getSource());
-			if (source == null) {
-				n = Network.get(msg.getOriginAddress());
-				if (n != null) {
-					stranger = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity();
-					this.send(response, stranger);
-				}
-			} else {
-				this.send(response, source);
+			n = Network.get(this.getPeersimNodeId());
+	//		System.out.println("test :::: " + n.getID());
+			long[] destination = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getDestination();
+			if (destination != null){
+				neighbor = cache.searchCacheNeighbor(destination, cache.getCache());
 			}
+		
+			if (neighbor != null){
+				System.out.println("----------------------------------------");
+				System.out.println("----On a trouvé un nœud dans le cache: " + neighbor.getId() + "---");
+				System.out.println("----------------------------------------");
+			
+			}else{
+			
+				System.out.println("----------------------------------------");
+				System.out.println("----On n'a pas trouvé un nœud dans le cache---");
+				System.out.println("----------------------------------------");
+				neighbor = searchForAppropriateNeighbor(line);
+				if (neighbor != null) {
+					response = createFoundMsg(neighbor, msg.getSource());
+					if (source == null) {
+						n = Network.get(msg.getOriginAddress());
+						if (n != null) {
+							stranger = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity();
+							this.send(response, stranger);
+						}
+					} else {
+						this.send(response, source);
+					}
+				}
+			}
+		}else{
+			neighbor = searchForAppropriateNeighbor(line);
+			if (neighbor != null) {
+				response = createFoundMsg(neighbor, msg.getSource());
+				if (source == null) {
+					n = Network.get(msg.getOriginAddress());
+					if (n != null) {
+						stranger = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity();
+						this.send(response, stranger);
+					}
+				} else {
+					this.send(response, source);
+				}
+			}
+			
 		}
 	}
 	
 	
 	
 	
-	public NeighborProxy searchCacheNeighbor(NeighborProxy me){
-		NeighborProxy current;
-		NeighborProxy best = null;
-		HashMap<Integer, NeighborProxy> cach = this.cache.getCache();
-		Iterator it;
-		it = cach.entrySet().iterator();
-		
-		while(it.hasNext()){
-			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
-			
-			//((SolipsisProtocol)n.getProtocol(me.getPeersimNodeId())).getVirtualEntity();
-			
-		
-		}
-		
-		return best;
-	}
-	
+
 	private void processFoundMsg(Message msg) {
 		NeighborProxy peer = (NeighborProxy)msg.getContent();
 		GeometricRegion line;
@@ -1105,8 +1127,10 @@ public class SolipsisProtocol implements EDProtocol {
 	/* A modifier pour mettre dans le cache */
 	public void removeProxy(int neighbor) {
 		NeighborProxy rm = this.proxies.get(neighbor);
-		this.cache.AddCache(this.proxies.get(neighbor));
-		this.cache.ShowCache();
+		if (this.strategieCache == SolipsisProtocol.FIFO) {
+			this.cache.AddCache(this.proxies.get(neighbor));
+	//		this.cache.ShowCache();
+		}
 		this.proxies.remove(neighbor);
 		/* regarder reste */
 		this.clearConnectionTime(neighbor);
