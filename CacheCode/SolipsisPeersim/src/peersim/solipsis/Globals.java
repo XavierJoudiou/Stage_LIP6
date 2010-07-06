@@ -7,6 +7,7 @@ public class Globals {
 	public static VirtualWorldMonitor monitor;
 	public static VirtualWorldRecorder recorder;
 	public static StatisticsGatherer evaluator;
+	public static CacheStatistics cacheEvaluator;
 	
 	public static long mapSize;
 	public static int zoneNb;
@@ -22,9 +23,10 @@ public class Globals {
 	public final static boolean debug = false;
 	public final static boolean drawTopology = false;
 	public final static boolean HQRendering = false;//!drawTopology;
-	public final static boolean realTime = true;
+	public final static boolean realTime = false;
 	public final static int offset = 11;
 	public final static int law = VirtualWorldDistribution.ZIPF;
+	public final static boolean cacheStat = true;
 	
 	public static int traceType = peersim.tracePlayer.TraceReader.EXTENDEDSOLIPSIS;
 	public static long[][] zoneCoords;

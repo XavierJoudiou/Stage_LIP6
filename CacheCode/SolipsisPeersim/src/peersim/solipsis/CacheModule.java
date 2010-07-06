@@ -26,6 +26,7 @@ public class CacheModule {
 	private HashMap<Integer,CacheData> cacheInfo;
 	private int cacheSize;
 	private int strategieCache;
+	private int limite = 10000;
 
 	public CacheModule(HashMap<Integer, NeighborProxy> cache, HashMap<Integer, CacheData> cacheInfo, int cacheSize,
 			int strategieCache) {
@@ -261,6 +262,11 @@ public class CacheModule {
 			System.out.println("On a trouvé un meilleur dans le cache ,le nœud: " + best.getId() + ", distance = " + bestDist);
 		}else{
 			System.out.println("Pas de meilleur dans le cache");
+		}
+		
+		if (bestDist > limite){
+			best = null;
+			System.out.println("trop éloigné");
 		}
 		return best;
 	}

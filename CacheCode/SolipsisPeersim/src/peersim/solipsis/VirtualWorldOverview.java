@@ -18,6 +18,7 @@ public class VirtualWorldOverview implements Control {
     	VirtualWorldMonitor monitor;
     	VirtualWorldRecorder recorder;
     	StatisticsGatherer eval;
+		CacheStatistics evalCache;
     	percent++;
     	if (Globals.topologyIsReady) {
     		if (Globals.realTime) {
@@ -27,9 +28,17 @@ public class VirtualWorldOverview implements Control {
     			recorder = Globals.recorder;
     			recorder.record();
     		} else {
-    			eval = Globals.evaluator;
-    			eval.printStatistics();
+    			if (Globals.cacheStat) {
+//        			System.out.println(this + " cache stat");
+            		evalCache = Globals.cacheEvaluator;
+            		evalCache.printStatistics();
+            	}
+//    			eval = Globals.evaluator;
+//    			eval.printStatistics();
     		}
+    		
+       		
+    		
     	}
     	return false;
     }

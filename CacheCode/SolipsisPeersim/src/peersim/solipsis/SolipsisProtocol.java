@@ -5,6 +5,7 @@ import peersim.core.*;
 import peersim.edsim.*;
 import peersim.solipsis.VirtualEntity;
 import peersim.tracePlayer.VirtualEntityShell;
+import peersim.solipsis.CacheStatistics;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -885,9 +886,31 @@ public class SolipsisProtocol implements EDProtocol {
 				System.out.println("----------------------------------------");
 				System.out.println("----On a trouvé un nœud dans le cache: " + neighbor.getId() + "---");
 				System.out.println("----------------------------------------");
+				
+				
+//				System.out.println("----Contacter le nœud-----");
+				cache.RmCache(neighbor);
+				addLocalView(neighbor);
+				boolean envOK = checkEnvelopeState();
+				if (envOK){
+					System.out.println("envelope OK");
+					
+				}else{
+					System.out.println("envelope NOT OK");
+					/* regarder dans processFoundMsg, pour refaire l'envelope */ 
+					GeometricRegion lin;
+					Message recoverMsg;
+					NeighborProxy peer = (NeighborProxy)msg.getContent();
+					lin  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(peer.getId()));
+					recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), line);
+					this.send(recoverMsg, peer);
+					
+				}
+				Globals.cacheEvaluator.incCacheHitGLob();
 			
 			}else{
-			
+				Globals.cacheEvaluator.incCacheMissGlob();
+
 				System.out.println("----------------------------------------");
 				System.out.println("----On n'a pas trouvé un nœud dans le cache---");
 				System.out.println("----------------------------------------");

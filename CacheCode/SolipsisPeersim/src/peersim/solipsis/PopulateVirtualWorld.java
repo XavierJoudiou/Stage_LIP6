@@ -185,6 +185,7 @@ public class PopulateVirtualWorld implements peersim.core.Control {
     		Globals.recorder = new VirtualWorldRecorder(); 
     	} else {
     		Globals.evaluator = new StatisticsGatherer();
+    		Globals.cacheEvaluator = new CacheStatistics();
     	}
 		
 	}
@@ -266,6 +267,7 @@ public class PopulateVirtualWorld implements peersim.core.Control {
     		Globals.recorder = new VirtualWorldRecorder(); 
     	} else {
     		Globals.evaluator = new StatisticsGatherer();
+    		Globals.cacheEvaluator = new CacheStatistics();
     	}
 
 	} 
