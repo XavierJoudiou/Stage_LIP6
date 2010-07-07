@@ -14,6 +14,10 @@ public class NeighborProxy {
 	private int peersimId;
 	private int quality;
 	
+	/* pour dater les nœuds, pour le cache */
+	private long time;
+	
+	
 	private PrefetchRequest prefetchData;
 	
 	NeighborProxy() {
@@ -21,6 +25,7 @@ public class NeighborProxy {
 		proxyRadius = 0;
 		this.quality = REGULAR;
 		this.prefetchData = null;
+		this.time = -1;
 	}
 	
 	public	NeighborProxy(long[] proxyCoord, double proxyRadius, int id, int peersimId) {
@@ -30,6 +35,8 @@ public class NeighborProxy {
 		this.proxyRadius = proxyRadius;
 		this.id = id;
 		this.peersimId = peersimId;
+		this.time = -1;
+
 	}
 	
 	NeighborProxy(long[] proxyCoord, double proxyRadius, int id, int peersimId, int quality) {
@@ -101,6 +108,14 @@ public class NeighborProxy {
 				+ ", prefetchData=" + prefetchData + ", proxyCoord="
 				+ Arrays.toString(proxyCoord) + ", proxyRadius=" + proxyRadius
 				+ ", quality=" + quality + "]";
+	}
+
+	public void setTime(long time) {
+		this.time = time;
+	}
+
+	public long getTime() {
+		return time;
 	}
 	
 	

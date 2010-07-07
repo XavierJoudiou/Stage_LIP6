@@ -12,11 +12,13 @@ public class CacheStatistics {
 	
 	private int nbCaheMissGlob;
 	private int nbCaheHitGlob;
+	private int nbCacheMitClob;
 	
 	
 	CacheStatistics() {
 		this.nbCaheMissGlob = 0;
 		this.nbCaheHitGlob = 0;
+		this.nbCacheMitClob = 0;
 	}
 	
 	
@@ -28,11 +30,15 @@ public class CacheStatistics {
 		this.nbCaheHitGlob ++;
 	}
 	
+	public void incCacheMitGLob(){
+		this.nbCacheMitClob ++;
+	}
+	
 
 	public void printStatistics() {
 		// TODO Auto-generated method stub
 //		System.out.println("test");
-		System.out.println(" " + this.nbCaheHitGlob +":" + this.nbCaheMissGlob + ", ");
+		System.out.println(" " + this.nbCaheHitGlob +":" + this.nbCacheMitClob +":"+ this.nbCaheMissGlob + ", ");
 		
 	}
 	
@@ -55,6 +61,16 @@ public class CacheStatistics {
 
 	public void setNbCaheHitGlob(int nbCaheHitGlob) {
 		this.nbCaheHitGlob = nbCaheHitGlob;
+	}
+
+
+	public void setNbCacheMitClob(int nbCacheMitClob) {
+		this.nbCacheMitClob = nbCacheMitClob;
+	}
+
+
+	public int getNbCacheMitClob() {
+		return nbCacheMitClob;
 	}
 
 

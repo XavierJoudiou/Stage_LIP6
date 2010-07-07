@@ -23,7 +23,8 @@ public class Message {
 	public static final int LONG_RANGE_ACK = 17;
 	public static final int LONG_RANGE_REQ = 18;
 	
-	public final static int CACHE_UPD = 21;
+	public final static int CACHE_UPD 		= 21;
+	public final static int CACHE_UPD_REP 	= 22;
 	
 	private int messageType;
 	private int from;

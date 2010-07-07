@@ -26,6 +26,7 @@ public class CacheModule {
 	private HashMap<Integer,CacheData> cacheInfo;
 	private int cacheSize;
 	private int strategieCache;
+	/* mettre dans fichier de conf */
 	private int limite = 10000;
 
 	public CacheModule(HashMap<Integer, NeighborProxy> cache, HashMap<Integer, CacheData> cacheInfo, int cacheSize,
@@ -313,6 +314,16 @@ public class CacheModule {
 
 	public void setStrategieCache(int strategieCache) {
 		this.strategieCache = strategieCache;
+	}
+
+
+	public int getLimite() {
+		return limite;
+	}
+
+
+	public void setLimite(int limite) {
+		this.limite = limite;
 	}
 	
 	
