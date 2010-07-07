@@ -889,65 +889,98 @@ public class SolipsisProtocol implements EDProtocol {
 				
 				
 //				System.out.println("----Contacter le nœud-----");
-				cache.RmCache(neighbor);
-				addLocalView(neighbor);
-				boolean envOK = checkEnvelopeState();
-				if (envOK){
-					System.out.println("envelope OK");
-					
-				}else{
-					System.out.println("envelope NOT OK");
-					/* regarder dans processFoundMsg, pour refaire l'envelope */ 
-					GeometricRegion lin;
-					Message recoverMsg;
-					NeighborProxy peer = (NeighborProxy)msg.getContent();
-					lin  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(peer.getId()));
-					recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), line);
-					this.send(recoverMsg, peer);
-					
-				}
-				Globals.cacheEvaluator.incCacheHitGLob();
-			
-			}else{
-				Globals.cacheEvaluator.incCacheMissGlob();
-
-				System.out.println("----------------------------------------");
-				System.out.println("----On n'a pas trouvé un nœud dans le cache---");
-				System.out.println("----------------------------------------");
-				neighbor = searchForAppropriateNeighbor(line);
-				if (neighbor != null) {
-					response = createFoundMsg(neighbor, msg.getSource());
-					if (source == null) {
-						n = Network.get(msg.getOriginAddress());
-						if (n != null) {
-							stranger = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity();
-							this.send(response, stranger);
-						}
-					} else {
-						this.send(response, source);
-					}
-				}
-			}
-		}else{
-			neighbor = searchForAppropriateNeighbor(line);
-			if (neighbor != null) {
-				response = createFoundMsg(neighbor, msg.getSource());
-				if (source == null) {
-					n = Network.get(msg.getOriginAddress());
-					if (n != null) {
-						stranger = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity();
-						this.send(response, stranger);
-					}
-				} else {
-					this.send(response, source);
-				}
+				Message cache_test;
+				CacheRequest cache_request;
+				cache_request = new CacheRequest(neighbor);
+				cache_test = new Message(Message.CACHE_UPD, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), neighbor.getId(), cache_request);
+	
+				this.send(cache_test,source);
+	
+				System.out.println("Envoie Message CACHE REQUEST");
+				System.out.println("source: " +  this.mainVirtualEntity.getId() + ", dest: " + neighbor.getId());
+				
+//				boolean envOK = checkEnvelopeState();
+//				if (envOK){
+//					System.out.println("envelope OK");
+//					cache.RmCache(neighbor);
+//					addLocalView(neighbor);
+//				}else{
+//					System.out.println("envelope NOT OK");
+//					/* regarder dans processFoundMsg, pour refaire l'envelope */ 
+//					GeometricRegion lin;
+//					Message recoverMsg;
+//					NeighborProxy peer = (NeighborProxy)msg.getContent();
+//					lin  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(peer.getId()));
+//					recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), lin);
+//					this.send(recoverMsg, peer);
+//					
+//				}
+//				Globals.cacheEvaluator.incCacheHitGLob();
+//			
+//			}else{
+//				Globals.cacheEvaluator.incCacheMissGlob();
+//
+//				System.out.println("----------------------------------------");
+//				System.out.println("----On n'a pas trouvé un nœud dans le cache---");
+//				System.out.println("----------------------------------------");
+//				neighbor = searchForAppropriateNeighbor(line);
+//				if (neighbor != null) {
+//					response = createFoundMsg(neighbor, msg.getSource());
+//					if (source == null) {
+//						n = Network.get(msg.getOriginAddress());
+//						if (n != null) {
+//							stranger = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity();
+//							this.send(response, stranger);
+//						}
+//					} else {
+//						this.send(response, source);
+//					}
+//				}
+//			}
+//		}else{
+//			neighbor = searchForAppropriateNeighbor(line);
+//			if (neighbor != null) {
+//				response = createFoundMsg(neighbor, msg.getSource());
+//				if (source == null) {
+//					n = Network.get(msg.getOriginAddress());
+//					if (n != null) {
+//						stranger = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity();
+//						this.send(response, stranger);
+//					}
+//				} else {
+//					this.send(response, source);
+//				}
 			}
 			
 		}
 	}
 	
 	
+
+	private void processCacheUpd(Message msg){
+		
+		System.out.println(this + " test cache ");
+		Node n = Network.get(msg.getOriginAddress());
+		
+		if (compareNeighborProxy((CacheRequest)msg.getContent(), ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity() )){
+			System.out.println(" ok comparaison ");
+		}else{
+			System.out.println("comparaison pas ok");
+		}
+		
+	}
 	
+	private boolean compareNeighborProxy(CacheRequest old,VirtualEntity act){
+		boolean resultat;
+		resultat = false;
+		
+		if ( act.getCoord() == old.getOldData().getCoord()){
+			resultat = true;
+		}
+				
+		return resultat;
+		
+	}
 	
 
 	private void processFoundMsg(Message msg) {
@@ -1312,6 +1345,12 @@ public class SolipsisProtocol implements EDProtocol {
 			break;
 		case Message.LONG_RANGE_REQ:
 			this.processSmallWorldConfirmation(msg);
+			break;
+		case Message.CACHE_UPD:
+			System.out.println("Message reçu de type: " + msg.getType());
+			System.out.println("Message Source: " + msg.getSource() );
+			System.out.println("Message Destination: " + msg.getDestination() );
+			this.processCacheUpd(msg);
 			break;
 		default:
 			break;
