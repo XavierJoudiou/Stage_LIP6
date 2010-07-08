@@ -168,6 +168,7 @@ public class SolipsisProtocol implements EDProtocol {
 	
 	public void lookup(Lookup request) {
 		Globals.totalUse++;
+		System.out.println("*********+++++++++++totalUse: " + Globals.totalUse);
 		NeighborProxy localClosest;
 		long[] neighborCoord, myPosition, destination;
 		double currentDistance, neighborMinDistance;
@@ -876,24 +877,28 @@ public class SolipsisProtocol implements EDProtocol {
 		long [] origin;
 		Node n;
 		
-		/* Recherche dans le cache */
-		/* Mettre condition pour si cache est activé */
-		if (this.strategieCache == SolipsisProtocol.FIFO) {
+		
+		/*
+		 * Si le la stratégie de cache est Fifo 
+		 */
+		if (this.strategieCache == SolipsisProtocol.FIFO && this.mainVirtualEntity.getStateMachine().getState() == 2 ) {
 		
 			n = Network.get(this.getPeersimNodeId());
 	//		System.out.println("test :::: " + n.getID());
 			long[] destination = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getDestination();
+			
+			/* Recherche dans le cache */
 			if (destination != null){
 				neighbor = cache.searchCacheNeighbor(destination, cache.getCache());
 			}
 		
+			/* On vérifie que le nœud ne soit pas nul */
 			if (neighbor != null){
 				System.out.println("----------------------------------------");
-				System.out.println("----On a trouvé un nœud dans le cache: " + neighbor.getId() + "---");
+				System.out.println("--- On a trouvé un nœud dans le cache: " + neighbor.getId() + " ---");
 				System.out.println("----------------------------------------");
 				
 				
-				System.out.println("----Contacter le nœud-----");
 				Message cache_test;
 				CacheRequest cache_request;
 				cache_request = new CacheRequest(neighbor);
@@ -901,35 +906,19 @@ public class SolipsisProtocol implements EDProtocol {
 	
 				if (source != null){
 					this.send(cache_test,source);
-		
-					System.out.println("Envoie Message CACHE REQUEST");
-					System.out.println("source: " +  this.mainVirtualEntity.getId() + ", dest: " + neighbor.getId());
-				
-//				boolean envOK = checkEnvelopeState();
-//				if (envOK){
-//					System.out.println("envelope OK");
-//					cache.RmCache(neighbor);
-//					addLocalView(neighbor);
-//				}else{
-//					System.out.println("envelope NOT OK");
-//					/* regarder dans processFoundMsg, pour refaire l'envelope */ 
-//					GeometricRegion lin;
-//					Message recoverMsg;
-//					NeighborProxy peer = (NeighborProxy)msg.getContent();
-//					lin  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(peer.getId()));
-//					recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), lin);
-//					this.send(recoverMsg, peer);
-//					
-//				}
-//				Globals.cacheEvaluator.incCacheHitGLob();
+					System.out.println("<" + cache_test.getType() + ", " +  this.mainVirtualEntity.getId() + ", " + neighbor.getId() + ", " + source.getId() + ">");
 				}
-			
+			/*
+			 * Si pas de nœud satisfaisant dans le cache 
+			 * On incémente le compteur des MISS de cache 
+			 * On fait le traitement de base comme si pas de cache 
+			 */	
 			}else{
 				Globals.cacheEvaluator.incCacheMissGlob();
 
-				System.out.println("----------------------------------------");
-				System.out.println("----On n'a pas trouvé un nœud dans le cache---");
-				System.out.println("----------------------------------------");
+				System.out.println("-----------------------------------------------");
+				System.out.println("--- On n'a pas trouvé un nœud dans le cache ---");
+				System.out.println("-----------------------------------------------");
 				neighbor = searchForAppropriateNeighbor(line);
 				if (neighbor != null) {
 					response = createFoundMsg(neighbor, msg.getSource());
@@ -944,6 +933,9 @@ public class SolipsisProtocol implements EDProtocol {
 					}
 				}
 			}
+		/*
+		 * Si pas de stratégie de cache mise en place
+		 */
 		}else{
 			neighbor = searchForAppropriateNeighbor(line);
 			if (neighbor != null) {
@@ -966,29 +958,37 @@ public class SolipsisProtocol implements EDProtocol {
 
 	private void processCacheUpd(Message msg){
 		
-		System.out.println(this + " test cache ");
 		Node n = Network.get(msg.getOriginAddress());
 		NeighborProxy source = this.proxies.get(msg.getSource());
-
+		
+		
 		
 		if (compareNeighborProxy((CacheRequest)msg.getContent(), ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity() )){
-			System.out.println(" ok comparaison ");
-			/*Envoyer un message pour faire un hit de cache */
+			System.out.println("--- La comparaison est réussie ---");
+			System.out.println("-- old coord: " + ((CacheRequest)msg.getContent()).getOldData().getCoord() );
 			
-			System.out.println("--- Répondre au nœud-----");
+			/* Faire la Mis A Jour du Noeud */
+			NeighborProxy responseProx = ((CacheRequest)msg.getContent()).getOldData();
+			responseProx.setCoord(((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord());
+			CacheRequest response = new CacheRequest(responseProx);
+		
+		/* TODO probleme maj valeur */
+			this.MajNeighborProxy(((CacheRequest)msg.getContent()).getOldData(), ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity());
+			System.out.println("-- realcoord: " + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord() );
+			System.out.println("-- new coord: " + response.getOldData().getCoord() );
+
+			/*Envoyer un message pour faire un hit de cache */
 			Message cache_rep;
 			cache_rep = new Message(Message.CACHE_UPD_REP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), msg.getSource(), (CacheRequest)msg.getContent());
 
 			if (source != null){
 				this.send(cache_rep,source);
 	
-				System.out.println("Envoie Message CACHE RESPONSE");
-				System.out.println("source: " +  this.mainVirtualEntity.getId() + ", dest: " + msg.getSource());
-
+				System.out.println("<" + cache_rep.getType() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + ", " + source.getId() + ">");
 			}
 			
 		}else{
-			System.out.println("comparaison pas ok");
+			System.out.println("--- La comparaison a échoué ---");
 			Globals.cacheEvaluator.incCacheMitGLob();
 			/*Envoyer un message pour pas faire un hit de cache */
 
@@ -1007,33 +1007,45 @@ public class SolipsisProtocol implements EDProtocol {
 //		long [] origin;
 //		Node n;
 		
-		System.out.println("source: " +  this.mainVirtualEntity.getId() );
+		System.out.println("--- Source: " +  this.mainVirtualEntity.getId() + " ---");
 		CacheRequest neig = (CacheRequest) msg.getContent();
 		NeighborProxy neighbor = neig.getOldData();
-		System.out.println("nœud sup cache: " + neighbor.getId());
-		cache.ShowCache();
+		System.out.println("--- Nœud supprimé du cache: " + neighbor.getId() + " ---");
+//		cache.ShowCache();
+		System.out.println("taille  cache: " + cache.getCache().size());
+		System.out.println("taille voisin: " + proxies.size());
 		cache.RmCache(neighbor);
+		System.out.println("taille cache: " + cache.getCache().size());
+		System.out.println("taille voisin: " + proxies.size());
 		addLocalView(neighbor);
-		cache.ShowCache();
+		System.out.println("taille cache: " + cache.getCache().size());
+		System.out.println("taille voisin: " + proxies.size());
+		//		cache.ShowCache();
 		/* regarder la taille du cache */
 		
-//		boolean envOK = checkEnvelopeState();
-//		if (envOK){
-//			System.out.println("envelope OK");
-//			cache.RmCache(neighbor);
-//			addLocalView(neighbor);
-//		}else{
-//			System.out.println("envelope NOT OK");
-//			/* regarder dans processFoundMsg, pour refaire l'envelope */ 
-//			GeometricRegion lin;
-//			Message recoverMsg;
-//			NeighborProxy peer = (NeighborProxy)msg.getContent();
-//			lin  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(peer.getId()));
-//			recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), lin);
-//			this.send(recoverMsg, peer);
-//			
-//		}
+		boolean envOK = checkEnvelopeState();
+		if (envOK){
+			System.out.println("envelope OK");
+			cache.RmCache(neighbor);
+			addLocalView(neighbor);
+		}else{
+			System.out.println("envelope NOT OK");
+			/* regarder dans processFoundMsg, pour refaire l'envelope */ 
+			GeometricRegion lin;
+			Message recoverMsg;
+			NeighborProxy peer = ((CacheRequest)msg.getContent()).getOldData();
+			lin  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(peer.getId()));
+			recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), lin);
+			this.send(recoverMsg, peer);
+			
+		}
 		Globals.cacheEvaluator.incCacheHitGLob();
+		
+	}
+	
+	private void MajNeighborProxy(NeighborProxy old, VirtualEntity nouv){
+		
+		old.setCoord(nouv.getCoord());
 		
 	}
 	
@@ -1424,15 +1436,15 @@ public class SolipsisProtocol implements EDProtocol {
 			this.processSmallWorldConfirmation(msg);
 			break;
 		case Message.CACHE_UPD:
-			System.out.println("Message reçu de type: " + msg.getType());
-			System.out.println("Message Source: " + msg.getSource() );
-			System.out.println("Message Destination: " + msg.getDestination() );
+//			System.out.println("Message reçu de type: " + msg.getType());
+//			System.out.println("Message Source: " + msg.getSource() );
+//			System.out.println("Message Destination: " + msg.getDestination() );
 			this.processCacheUpd(msg);
 			break;
 		case Message.CACHE_UPD_REP:
-			System.out.println("Message reçu de type: " + msg.getType());
-			System.out.println("Message Source: " + msg.getSource() );
-			System.out.println("Message Destination: " + msg.getDestination() );
+//			System.out.println("Message reçu de type: " + msg.getType());
+//			System.out.println("Message Source: " + msg.getSource() );
+//			System.out.println("Message Destination: " + msg.getDestination() );
 			this.processCacheUpdResponse(msg);
 			break;
 		default:

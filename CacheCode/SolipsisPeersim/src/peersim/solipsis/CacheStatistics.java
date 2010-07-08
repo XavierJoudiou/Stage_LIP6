@@ -42,6 +42,13 @@ public class CacheStatistics {
 		
 	}
 	
+	public String printStatistics2() {
+		// TODO Auto-generated method stub
+//		System.out.println("test");
+		String res;
+		res = " " + this.nbCaheHitGlob +":" + this.nbCacheMitClob +":"+ this.nbCaheMissGlob + ", ";
+		return res;
+	}
 
 
 	public int getNbCaheMissGlob() {

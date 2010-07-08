@@ -212,7 +212,7 @@ public class CacheModule {
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 		}
 		
-		System.out.println("Le nœud le plus proche est: " + nearest.getId() + ", avec une distance de " + nearestDist);
+//		System.out.println("Le nœud le plus proche est: " + nearest.getId() + ", avec une distance de " + nearestDist);
 		return nearest;
 	}
 	
@@ -244,7 +244,7 @@ public class CacheModule {
 //				System.out.println("Changement de farNeigh, distance = " + farNeighDist);
 			}			
 		}
-		System.out.println("Le voisin le plus loin est :" + farNeigh.getId() + ", distance = " + farNeighDist);
+//		System.out.println("Le voisin le plus loin est :" + farNeigh.getId() + ", distance = " + farNeighDist);
 		
 		
 		
@@ -260,14 +260,14 @@ public class CacheModule {
 			//((SolipsisProtocol)n.getProtocol(me.getPeersimNodeId())).getVirtualEntity();
 		}
 		if(best != null){
-			System.out.println("On a trouvé un meilleur dans le cache ,le nœud: " + best.getId() + ", distance = " + bestDist);
+//			System.out.println("On a trouvé un meilleur dans le cache ,le nœud: " + best.getId() + ", distance = " + bestDist);
 		}else{
-			System.out.println("Pas de meilleur dans le cache");
+//			System.out.println("Pas de meilleur dans le cache");
 		}
 		
 		if (bestDist > limite){
 			best = null;
-			System.out.println("trop éloigné");
+//			System.out.println("trop éloigné");
 		}
 		return best;
 	}
