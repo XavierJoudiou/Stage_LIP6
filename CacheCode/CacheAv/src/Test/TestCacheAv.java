@@ -418,6 +418,51 @@ public class TestCacheAv extends TestCase {
 		
 	}
 	
+	
+	public void testsearchCacheNeighborLimit(){
+		System.out.println("---------------------------");
+		System.out.println("Test: " + this);
+		System.out.println("---------------------------");
+		
+		
+		long[] proxyCoord1 = {3,3,3};
+		long[] proxyCoord2 = {2,2,3};
+		long[] proxyCoord3 = {1,1,2};
+		long[] proxyCoord4 = {5,5,5};
+		long[] proxyCoord5 = {0,0,0};
+		long[] proxyCoord6 = {4,5,4};
+		NeighborProxy res;
+		
+		n1 = new NeighborProxy(proxyCoord1, proxyRadius, 1, 1);
+		n2 = new NeighborProxy(proxyCoord2, proxyRadius, 2, 2);
+		n3 = new NeighborProxy(proxyCoord3, proxyRadius, 3, 3);
+		n4 = new NeighborProxy(proxyCoord4, proxyRadius, 4, 4);
+		n5 = new NeighborProxy(proxyCoord5, proxyRadius, 5, 5);
+		n6 = new NeighborProxy(proxyCoord6, proxyRadius, 6, 6);
+		
+		testfifo = new CacheModule(null, null, cacheSize);
+		assertEquals(testfifo.getCache().size(),testfifo.getCacheInfo().size());
+		assertEquals(testfifo.getCache().size(),0);
+				
+		
+		testfifo.AddCache(n4);
+
+		NeighborProxy resultat = testfifo.searchCacheNeighborLimit(proxyCoord);
+		assertEquals(resultat, null);
+
+		
+		testfifo.AddCache(n2);
+		testfifo.AddCache(n3);
+		
+		resultat = testfifo.searchCacheNeighborLimit(proxyCoord5);
+		assertEquals(resultat, n3);
+		assertEquals(testfifo.getCache().size(),testfifo.getCacheInfo().size());
+		assertEquals(testfifo.getCache().size(),3);
+		
+		
+		
+	}
+	
 	public void testsearchCacheNeighbor(){
 		System.out.println("---------------------------");
 		System.out.println("Test: " + this);

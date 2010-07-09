@@ -9,6 +9,7 @@ import java.util.Map;
 
 
 
+
 /**
  * @author Xavier Joudiou
  *
@@ -199,6 +200,36 @@ public class CacheModule {
 		System.out.println("Le nœud le plus proche est: " + nearest.getId() + ", avec une distance de " + nearestDist);
 		return nearest;
 	}
+	
+	public NeighborProxy searchCacheNeighborLimit(long[] destination){
+		NeighborProxy current;
+		NeighborProxy best = null;
+		
+		double currentDist,bestDist = -1;
+		int limit = 3;
+		
+//		HashMap<Integer, NeighborProxy> cach = this.cache;
+		Iterator it;
+		it = this.cache.entrySet().iterator();
+				
+		while(it.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			currentDist = Outils.simpleDistance(destination, current.getCoord());
+			if ( bestDist == -1){
+				bestDist = currentDist;
+			}
+			System.out.println("Current Dist: " + currentDist);
+			if (currentDist < limit && currentDist < bestDist){
+				best = current;
+				bestDist = currentDist;
+			}
+		}
+		System.out.println("le Minimum est: " +  bestDist );
+		
+		return best;
+	
+	}
+	
 	
 	
 	//long[] origin,
