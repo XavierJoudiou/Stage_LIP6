@@ -254,7 +254,7 @@ public class LinkList implements LinkSet {
 		size = this.links.size();
 		
 		for (int i = 0; i < size; i++) {
-			current = ((Link)this.links.get(i)).link;
+			current = (this.links.get(i)).link;
 			if (current.getId() == id) {
 				return current;
 			}

@@ -151,7 +151,7 @@ public class StatisticsGatherer {
 		if (this.stepCount == 0) {
 			return "0";
 		}
-		return ""+(this.aheadCounter/(double)this.stepCount);
+		return ""+(this.aheadCounter/this.stepCount);
 	}
 	
 	private double getAheadNeighborCount() {
@@ -222,12 +222,12 @@ public class StatisticsGatherer {
 	
 	private String getCumulatedOverallTopologyCoherence () {
 		this.topologyCoherenceCounter += this.getOverallTopologyCoherence();
-		return ""+((double)this.topologyCoherenceCounter/(double)this.stepCount);
+		return ""+(this.topologyCoherenceCounter/this.stepCount);
 	}
 	
 	private String getCumulatedMovingTopologyCoherence () {
 		this.topologyCoherenceCounter += this.getMovingTopologyCoherence();//(this.topologyCoherenceCounter * (double)(this.stepCount - 1) + (double)getMovingTopologyCoherence() ) / (double)this.stepCount;
-		return ""+((double)this.topologyCoherenceCounter/(double)this.stepCount);
+		return ""+(this.topologyCoherenceCounter/this.stepCount);
 	}
 	
 	private String getCumulatedMovingEntities () {
@@ -288,7 +288,7 @@ public class StatisticsGatherer {
 	
 	
 	private String getCumulatedAverageViewDivergence () {
-		this.viewDivergence += (double)getAverageViewDivergence();
+		this.viewDivergence += getAverageViewDivergence();
 		
 		return (this.stepCount == 0)?"0":""+(this.viewDivergence / this.stepCount);
 

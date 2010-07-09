@@ -131,7 +131,7 @@ public class VirtualWorld {
 		double norm;
 		
 		speed = (speed>maxSpeed)?maxSpeed:speed;
-		norm = (double)(speed * (sITime / 2));
+		norm = (speed * (sITime / 2));
 		coords[0] = new Double(norm * Math.cos(angle)).longValue();
 		coords[1] = new Double(norm * Math.sin(angle)).longValue();
 		coords[2] = 0;

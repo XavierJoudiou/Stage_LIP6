@@ -3,9 +3,7 @@ package peersim.tracePlayer;
 import java.io.FileInputStream;
 import peersim.solipsis.*;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Map;
 import java.io.IOException;
 import java.lang.InterruptedException;
 
@@ -204,7 +202,7 @@ public class TraceReader {
 				coord[1] = new Double(dcoord1).longValue();
 				idlong = new Integer(iid).intValue();
 				VirtualEntityShell shell = new VirtualEntityShell(idlong,coord);
-				distribution.addToDistribution((VirtualEntityInterface)shell);
+				distribution.addToDistribution(shell);
 			}
 		}
 		this.thirdThread.organize(distribution);	
@@ -315,7 +313,7 @@ public class TraceReader {
 				coord[1] = new Double(dcoord1).longValue();
 				idlong = new Integer(iid).intValue();
 				VirtualEntityShell shell = new VirtualEntityShell(idlong,coord);
-				distribution.addToDistribution((VirtualEntityInterface)shell);
+				distribution.addToDistribution(shell);
 			}
 		}
 		this.thirdThread.organize(distribution);	
@@ -410,7 +408,7 @@ public class TraceReader {
 				VirtualEntityShell shell = new VirtualEntityShell(idlong,coord,neighbors,qualities,Double.parseDouble(radius),stabilized);
 				precCoord = distribution.getFormerLocation(idlong);
 				shell.setMovement(precCoord == null || precCoord[0] != coord[0] || precCoord[1] != coord[1]);
-				distribution.addToDistribution((VirtualEntityInterface)shell);
+				distribution.addToDistribution(shell);
 			}
 		}
 		this.thirdThread.organize(distribution);	

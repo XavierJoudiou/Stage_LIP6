@@ -62,6 +62,7 @@ public class Message {
 		this.ttl = ttl;
 	}
 	
+	@Override
 	public Message clone() {
 		Message dolly = new Message(this.messageType,this.originAddress,this.from,this.to,this.ttl,this.body);
 		return dolly;

@@ -2,12 +2,7 @@ package peersim.solipsis;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Map;
-
-import peersim.tracePlayer.FillNeighborsThread;
-import peersim.tracePlayer.StepBuffer;
 import peersim.tracePlayer.VirtualEntityShell;
 import peersim.tracePlayer.VirtualWorldDistributionShell;
 
@@ -163,7 +158,7 @@ public class SecondLifeTraceDistribution {
 				coord[1] = new Double(dcoord1).longValue();
 				idlong = new Integer(iid).intValue();
 				VirtualEntityShell shell = new VirtualEntityShell(idlong,coord);
-				distribution.addToDistribution((VirtualEntityInterface)shell);
+				distribution.addToDistribution(shell);
 			}
 		}
 //		Iterator it = distribution.getDistribution().entrySet().iterator();

@@ -1,7 +1,5 @@
 package peersim.solipsis;
 
-import javax.swing.*;
-
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -13,7 +11,6 @@ import peersim.tracePlayer.VirtualEntityShell;
 import peersim.tracePlayer.VirtualWorldDistributionShell;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class PopulateVirtualWorld implements peersim.core.Control {

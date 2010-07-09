@@ -39,6 +39,7 @@ public class FillNeighborsThread extends Thread {
 		}
 	}
 	
+	@Override
 	public void run() {
 		HashMap<Integer,VirtualEntityInterface> distrib;
 		while(!finish) {

@@ -2,7 +2,6 @@ package peersim.solipsis;
 
 import java.util.LinkedList;
 
-import peersim.solipsis.Globals;
 import peersim.solipsis.NeighborProxy;
 import peersim.solipsis.VirtualEntityInterface;
 import peersim.solipsis.VirtualWorld;

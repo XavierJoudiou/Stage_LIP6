@@ -60,6 +60,7 @@ public class NeighborProxy {
 		}
 	}
 	
+	@Override
 	public NeighborProxy clone() {
 		NeighborProxy dolly = new NeighborProxy(this.proxyCoord,this.proxyRadius,this.id,this.peersimId,this.quality);
 		return dolly;

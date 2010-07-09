@@ -3,11 +3,8 @@ package peersim.tracePlayer;
 import java.util.LinkedList;
 
 import peersim.solipsis.Globals;
-import peersim.solipsis.NeighborProxy;
-import peersim.solipsis.VirtualEntity;
 import peersim.solipsis.VirtualEntityInterface;
 import peersim.solipsis.GiftWrapping;
-import peersim.solipsis.VirtualWorld;
 import java.util.HashMap;
 
 public class VirtualEntityShell implements VirtualEntityInterface {
@@ -108,7 +105,7 @@ public class VirtualEntityShell implements VirtualEntityInterface {
 	}
 	
 	public LinkedList<VirtualEntityInterface> getConvexEnvelope() {
-			GiftWrapping algorithm = new GiftWrapping(this.neighbors, (VirtualEntityInterface)this);
+			GiftWrapping algorithm = new GiftWrapping(this.neighbors, this);
 			return algorithm.findEnvelope();
 	}
 	

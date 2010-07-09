@@ -305,12 +305,12 @@ public class PrefetchingModule {
 			lineCoefficients[1] = normalVector[1];
 			lineCoefficients[2] = -lineCoefficients[0] * origin[0] - lineCoefficients[1] * origin[1];
 
-			parametricCoefficient = ((double)(- lineCoefficients[2] - lineCoefficients[0] * point[0] - lineCoefficients[1] * point[1])) / ((double)(lineCoefficients[0]) * normalVector[0] + lineCoefficients[1] * normalVector[1]);
+			parametricCoefficient = ((- lineCoefficients[2] - lineCoefficients[0] * point[0] - lineCoefficients[1] * point[1])) / ((double)(lineCoefficients[0]) * normalVector[0] + lineCoefficients[1] * normalVector[1]);
 
 			h = new double[2];
 			h[0] = parametricCoefficient * normalVector[0] + point[0];
 //			System.out.println((h[0] - (double)origin[0]) / (double)colinearVector[0]);
-			aside = (h[0] - (double)origin[0]) / (double)colinearVector[0] < 0;
+			aside = (h[0] - origin[0]) / colinearVector[0] < 0;
 		}
 		
 		return aside;
@@ -351,20 +351,20 @@ public class PrefetchingModule {
 		lineCoefficients[1] = normalVector[1];
 		lineCoefficients[2] = -lineCoefficients[0] * origin[0] - lineCoefficients[1] * origin[1];
 		
-		parametricCoefficient = ((double)(- lineCoefficients[2] - lineCoefficients[0] * point[0] - lineCoefficients[1] * point[1])) / ((double)(lineCoefficients[0]) * normalVector[0] + lineCoefficients[1] * normalVector[1]);
+		parametricCoefficient = ((- lineCoefficients[2] - lineCoefficients[0] * point[0] - lineCoefficients[1] * point[1])) / ((double)(lineCoefficients[0]) * normalVector[0] + lineCoefficients[1] * normalVector[1]);
 		
 		h = new double[2];
 		h[0] = parametricCoefficient * normalVector[0] + point[0];
 		h[1] = parametricCoefficient * normalVector[1] + point[1];
 		
-		if ( (h[0] - (double)origin[0]) / (double)colinearVector[0] >= 0 ) {
+		if ( (h[0] - origin[0]) / colinearVector[0] >= 0 ) {
 			distances = new double[2];
 			doubleOrigin = new double[2];
 			doublePoint = new double[2];
-			doubleOrigin[0] = (double)origin[0];
-			doubleOrigin[1] = (double)origin[1];
-			doublePoint[0] = (double)point[0];
-			doublePoint[1] = (double)point[1];
+			doubleOrigin[0] = origin[0];
+			doubleOrigin[1] = origin[1];
+			doublePoint[0] = point[0];
+			doublePoint[1] = point[1];
 			distances[0] = VirtualWorld.distance(h, doublePoint);
 			distances[1] = VirtualWorld.distance(h, doubleOrigin);
 		}
@@ -384,7 +384,7 @@ public class PrefetchingModule {
 //		}
 		if (tan < 1) {
 			intTan = 1;
-		} else if ((long)tan > (long)Integer.MAX_VALUE){
+		} else if ((long)tan > Integer.MAX_VALUE){
 			intTan = Integer.MAX_VALUE;
 		} else {
 			intTan = (int)tan;

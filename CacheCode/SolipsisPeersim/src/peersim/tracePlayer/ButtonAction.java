@@ -22,6 +22,7 @@ public class ButtonAction extends BasicButtonListener {
 		this.player = player;
 	}
 	
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		switch(this.type) {
 		case PLAY:

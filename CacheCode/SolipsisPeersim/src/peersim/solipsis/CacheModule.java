@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import peersim.config.Configuration;
 
 /**
  * @author xavier
@@ -27,7 +26,7 @@ public class CacheModule {
 	private int cacheSize;
 	private int strategieCache;
 	/* mettre dans fichier de conf */
-	private int limite = 10000;
+	private int limit = 10000;
 
 	public CacheModule(HashMap<Integer, NeighborProxy> cache, HashMap<Integer, CacheData> cacheInfo, int cacheSize,
 			int strategieCache) {
@@ -217,6 +216,44 @@ public class CacheModule {
 	}
 	
 	
+	public NeighborProxy searchCacheNeighborLimit(long[] destination){
+		NeighborProxy current;
+		NeighborProxy best = null;
+		
+		double currentDist,bestDist = -1;
+		
+		
+//		HashMap<Integer, NeighborProxy> cach = this.cache;
+		Iterator it;
+		it = this.cache.entrySet().iterator();
+				
+		while(it.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
+			
+//			System.out.println("Current Dist: " + currentDist);
+//			System.out.println("Best Dist   : " + bestDist);
+//			System.out.println("Limit       : " + limit);
+
+			if (currentDist < limit){
+				if ( bestDist == -1){
+					bestDist = currentDist;
+					best = current;
+				}else{
+					if(currentDist < bestDist){
+						best = current;
+						bestDist = currentDist;
+					}
+				}
+			}
+		}
+//		System.out.println("le Minimum est: " +  bestDist );
+		
+		return best;
+	
+	}
+	
+	
 	public NeighborProxy searchCacheNeighbor(long[] destination,HashMap<Integer, NeighborProxy> voisin){
 		NeighborProxy current;
 		NeighborProxy best = null;
@@ -265,7 +302,7 @@ public class CacheModule {
 //			System.out.println("Pas de meilleur dans le cache");
 		}
 		
-		if (bestDist > limite){
+		if (bestDist > limit){
 			best = null;
 //			System.out.println("trop éloigné");
 		}
@@ -318,12 +355,12 @@ public class CacheModule {
 
 
 	public int getLimite() {
-		return limite;
+		return limit;
 	}
 
 
 	public void setLimite(int limite) {
-		this.limite = limite;
+		this.limit = limite;
 	}
 	
 	

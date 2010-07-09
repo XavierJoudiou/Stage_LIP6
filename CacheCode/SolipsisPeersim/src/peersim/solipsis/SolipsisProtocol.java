@@ -4,16 +4,13 @@ import peersim.config.*;
 import peersim.core.*;
 import peersim.edsim.*;
 import peersim.solipsis.VirtualEntity;
-import peersim.tracePlayer.VirtualEntityShell;
-import peersim.solipsis.CacheStatistics;
-import sun.java2d.pipe.SpanShapeRenderer.Simple;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
-import java.util.Map.Entry;
+
+import javax.naming.LimitExceededException;
 
 
 
@@ -366,7 +363,7 @@ public class SolipsisProtocol implements EDProtocol {
 			min = Double.MAX_VALUE;
 			neighbors = this.getNeighbors();//this.proxies.entrySet().iterator();
 			while(neighbors.hasNext()) {
-				current = (NeighborProxy)((Map.Entry<Integer, NeighborProxy>)neighbors.next()).getValue();
+				current = ((Map.Entry<Integer, NeighborProxy>)neighbors.next()).getValue();
 				currentCoord = this.realRelativeCoord(current.getCoord(), position);
 
 				currentDist = VirtualWorld.simpleDistance(currentCoord,position);
@@ -479,6 +476,7 @@ public class SolipsisProtocol implements EDProtocol {
 	 * that is linked from all the nodes. This is because this protocol has no
 	 * node specific state.
 	 */
+	@Override
 	public Object clone()
 	{
 		SolipsisProtocol dolly = new SolipsisProtocol(this.prefix);
@@ -604,6 +602,7 @@ public class SolipsisProtocol implements EDProtocol {
 		}
 	}
 	
+	@Override
 	public String toString() {
 		String msg = "Solipsis Protocol";
 		
@@ -846,6 +845,7 @@ public class SolipsisProtocol implements EDProtocol {
 		LinkedList<NeighborProxy> choices = new LinkedList<NeighborProxy>();
 		Random rand = new Random();
 		int size = neighbors.size();
+
 		
 		for (int i = 0; i < size; i++) {
 			current = this.proxies.get(neighbors.get(i));//(NeighborProxy)((Map.Entry)it.next()).getValue();
@@ -876,7 +876,7 @@ public class SolipsisProtocol implements EDProtocol {
 		VirtualEntity stranger;
 		long [] origin;
 		Node n;
-		
+		Globals.cacheEvaluator.incnbCachePassClob();
 		
 		/*
 		 * Si le la stratégie de cache est Fifo 
@@ -889,14 +889,16 @@ public class SolipsisProtocol implements EDProtocol {
 			
 			/* Recherche dans le cache */
 			if (destination != null){
-				neighbor = cache.searchCacheNeighbor(destination, cache.getCache());
+//				neighbor = cache.searchCacheNeighbor(destination, cache.getCache());
+				neighbor = cache.searchCacheNeighborLimit(destination);
+
 			}
 		
 			/* On vérifie que le nœud ne soit pas nul */
 			if (neighbor != null){
-				System.out.println("----------------------------------------");
-				System.out.println("--- On a trouvé un nœud dans le cache: " + neighbor.getId() + " ---");
-				System.out.println("----------------------------------------");
+//				System.out.println("----------------------------------------");
+//				System.out.println("--- On a trouvé un nœud dans le cache: " + neighbor.getId() + " ---");
+//				System.out.println("----------------------------------------");
 				
 				
 				Message cache_test;
@@ -916,9 +918,9 @@ public class SolipsisProtocol implements EDProtocol {
 			}else{
 				Globals.cacheEvaluator.incCacheMissGlob();
 
-				System.out.println("-----------------------------------------------");
-				System.out.println("--- On n'a pas trouvé un nœud dans le cache ---");
-				System.out.println("-----------------------------------------------");
+//				System.out.println("-----------------------------------------------");
+//				System.out.println("--- On n'a pas trouvé un nœud dans le cache ---");
+//				System.out.println("-----------------------------------------------");
 				neighbor = searchForAppropriateNeighbor(line);
 				if (neighbor != null) {
 					response = createFoundMsg(neighbor, msg.getSource());
@@ -964,9 +966,9 @@ public class SolipsisProtocol implements EDProtocol {
 		
 		
 		if (compareNeighborProxy((CacheRequest)msg.getContent(), ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity() )){
-			System.out.println("--- La comparaison est réussie ---");
-			System.out.println("-- old coord: " + ((CacheRequest)msg.getContent()).getOldData().getCoord() );
-			
+//			System.out.println("--- La comparaison est réussie ---");
+//			System.out.println("-- old coord: " + ((CacheRequest)msg.getContent()).getOldData().getCoord() );
+//			
 			/* Faire la Mis A Jour du Noeud */
 			NeighborProxy responseProx = ((CacheRequest)msg.getContent()).getOldData();
 			responseProx.setCoord(((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord());
@@ -974,12 +976,12 @@ public class SolipsisProtocol implements EDProtocol {
 		
 		/* TODO probleme maj valeur */
 			this.MajNeighborProxy(((CacheRequest)msg.getContent()).getOldData(), ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity());
-			System.out.println("-- realcoord: " + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord() );
-			System.out.println("-- new coord: " + response.getOldData().getCoord() );
+//			System.out.println("-- realcoord: " + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord() );
+//			System.out.println("-- new coord: " + response.getOldData().getCoord() );
 
 			/*Envoyer un message pour faire un hit de cache */
 			Message cache_rep;
-			cache_rep = new Message(Message.CACHE_UPD_REP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), msg.getSource(), (CacheRequest)msg.getContent());
+			cache_rep = new Message(Message.CACHE_UPD_REP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), msg.getSource(), msg.getContent());
 
 			if (source != null){
 				this.send(cache_rep,source);
@@ -988,7 +990,7 @@ public class SolipsisProtocol implements EDProtocol {
 			}
 			
 		}else{
-			System.out.println("--- La comparaison a échoué ---");
+//			System.out.println("--- La comparaison a échoué ---");
 			Globals.cacheEvaluator.incCacheMitGLob();
 			/*Envoyer un message pour pas faire un hit de cache */
 
@@ -1007,29 +1009,29 @@ public class SolipsisProtocol implements EDProtocol {
 //		long [] origin;
 //		Node n;
 		
-		System.out.println("--- Source: " +  this.mainVirtualEntity.getId() + " ---");
+//		System.out.println("--- Source: " +  this.mainVirtualEntity.getId() + " ---");
 		CacheRequest neig = (CacheRequest) msg.getContent();
 		NeighborProxy neighbor = neig.getOldData();
-		System.out.println("--- Nœud supprimé du cache: " + neighbor.getId() + " ---");
+//		System.out.println("--- Nœud supprimé du cache: " + neighbor.getId() + " ---");
 //		cache.ShowCache();
-		System.out.println("taille  cache: " + cache.getCache().size());
-		System.out.println("taille voisin: " + proxies.size());
+//		System.out.println("taille  cache: " + cache.getCache().size());
+//		System.out.println("taille voisin: " + proxies.size());
 		cache.RmCache(neighbor);
-		System.out.println("taille cache: " + cache.getCache().size());
-		System.out.println("taille voisin: " + proxies.size());
+//		System.out.println("taille cache: " + cache.getCache().size());
+//		System.out.println("taille voisin: " + proxies.size());
 		addLocalView(neighbor);
-		System.out.println("taille cache: " + cache.getCache().size());
-		System.out.println("taille voisin: " + proxies.size());
+//		System.out.println("taille cache: " + cache.getCache().size());
+//		System.out.println("taille voisin: " + proxies.size());
 		//		cache.ShowCache();
 		/* regarder la taille du cache */
 		
 		boolean envOK = checkEnvelopeState();
 		if (envOK){
-			System.out.println("envelope OK");
+//			System.out.println("envelope OK");
 			cache.RmCache(neighbor);
 			addLocalView(neighbor);
 		}else{
-			System.out.println("envelope NOT OK");
+//			System.out.println("envelope NOT OK");
 			/* regarder dans processFoundMsg, pour refaire l'envelope */ 
 			GeometricRegion lin;
 			Message recoverMsg;
@@ -1284,7 +1286,7 @@ public class SolipsisProtocol implements EDProtocol {
 	}
 	
 	private boolean tooMuchNeighbors() {
-		int toRemove = this.proxies.size() - this.exp - (int)(this.toleranceLevel * (double)this.exp);
+		int toRemove = this.proxies.size() - this.exp - (int)(this.toleranceLevel * this.exp);
 		return toRemove > 0;
 	}
 	
@@ -1726,7 +1728,7 @@ public class SolipsisProtocol implements EDProtocol {
 		int insideKnowledgeZone = count();
 		int range,remover,size = ordered.size();
 		NeighborProxy current;
-		int toRemove = size - this.exp - (int)(this.toleranceLevel * (double)this.exp);
+		int toRemove = size - this.exp - (int)(this.toleranceLevel * this.exp);
 		if (toRemove > 0) {
 			for (int  i = size-1; i >= insideKnowledgeZone ; i--) {
 				current = ordered.get(i);
@@ -1766,7 +1768,7 @@ public class SolipsisProtocol implements EDProtocol {
 	
 
 	public void maintainKnowledgeZone() {
-		int tolerance = (int)(this.toleranceLevel * (double)this.exp);
+		int tolerance = (int)(this.toleranceLevel * this.exp);
 		int min = this.exp - tolerance;
 		int max = this.exp + tolerance; 
 		int neighborSize = this.getParticularNeighbors(NeighborProxy.REGULAR).size();
@@ -1785,7 +1787,7 @@ public class SolipsisProtocol implements EDProtocol {
 			} else {
 				if (Globals.topologyIsReady) {
 					count = (count==0)?1:count;
-					this.knowledgeRay = (long)((double)this.knowledgeRay * Math.sqrt(this.exp/count));
+					this.knowledgeRay = (long)(this.knowledgeRay * Math.sqrt(this.exp/count));
 				} else {
 					this.knowledgeRay = dist(neighborSize-1);
 				}
@@ -2059,13 +2061,13 @@ public class SolipsisProtocol implements EDProtocol {
 	
 	private LinkedList<NeighborProxy> findConvexEnvelope(Iterator it, VirtualEntity main) {
 		LinkedList<NeighborProxy> set = this.iteratorToList(it);
-		GiftWrapping algorithm = new GiftWrapping(set, (VirtualEntityInterface)main);
-		return (LinkedList<NeighborProxy>)algorithm.findEnvelope();
+		GiftWrapping algorithm = new GiftWrapping(set, main);
+		return algorithm.findEnvelope();
 	}
 	
 	private LinkedList<NeighborProxy> findConvexEnvelope(LinkedList<NeighborProxy> set, VirtualEntity main) {
-		GiftWrapping algorithm = new GiftWrapping(set, (VirtualEntityInterface)main);
-		return (LinkedList<NeighborProxy>)algorithm.findEnvelope();
+		GiftWrapping algorithm = new GiftWrapping(set, main);
+		return algorithm.findEnvelope();
 	}
 	private void setStatus(String status) {
 		this.status = status;

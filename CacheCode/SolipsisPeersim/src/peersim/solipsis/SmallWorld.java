@@ -2,12 +2,10 @@ package peersim.solipsis;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
 import java.util.Map.Entry;
 
-import peersim.core.CommonState;
 import peersim.solipsis.SolipsisProtocol;
 import peersim.solipsis.VirtualEntity;
 
@@ -91,7 +89,7 @@ public class SmallWorld {
 	private double calculateSteps(double d, double q) {
 		int steps;
 		
-		steps = (int)(Math.sqrt(2.0 / (double)this.thisEntity.getAcceleration() * d)) * 10;
+		steps = (int)(Math.sqrt(2.0 / this.thisEntity.getAcceleration() * d)) * 10;
 //		System.out.println(steps+" "+CommonState.getTime());
 		return steps;
 	}
@@ -167,7 +165,7 @@ public class SmallWorld {
 
 		destination = new NeighborProxy[src.size()];
 		for (int i = 0; i < destination.length; i++) {
-			destination[i] = (NeighborProxy)((Map.Entry<Integer, NeighborProxy>)it.next()).getValue();
+			destination[i] = (it.next()).getValue();
 		}
 		
 		return destination;

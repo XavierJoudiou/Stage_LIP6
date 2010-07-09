@@ -4,11 +4,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.LinkedList;
-import peersim.config.*;
 import peersim.core.*;
 import peersim.solipsis.SolipsisProtocol;
 import peersim.solipsis.VirtualEntity;
-import peersim.tracePlayer.VirtualEntityShell;
 
 public class VirtualEntity implements VirtualEntityInterface {
 	
@@ -107,6 +105,7 @@ public class VirtualEntity implements VirtualEntityInterface {
 		return this.protocol.getKnowledgeRay();
 	}
 	
+	@Override
 	public String toString() {
 		return "Entity " + id + ": (" + coord[0] + "," + coord[1] + "," + coord[2] + ")";
 	}
@@ -313,7 +312,7 @@ public class VirtualEntity implements VirtualEntityInterface {
 	}
 	
 	public long[] relativeCoord(VirtualEntityInterface entity) {
-		return this.protocol.realRelativeCoord((VirtualEntity)entity);
+		return this.protocol.realRelativeCoord(entity);
 	}
 	
 	public long[] relativeCoord(long[] position) {

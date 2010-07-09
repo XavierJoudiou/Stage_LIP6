@@ -1,6 +1,5 @@
 package peersim.tracePlayer;
 
-import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import peersim.solipsis.*;
@@ -18,6 +17,7 @@ public class InteractiveInterface extends MouseAdapter {
 		this.monitor = monitor;
 	}
 	
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		HashMap<Integer,VirtualEntityInterface> distribution = monitor.getDistribution().getDistribution();
 		Iterator it = distribution.entrySet().iterator();

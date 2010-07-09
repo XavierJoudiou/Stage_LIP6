@@ -48,6 +48,7 @@ public class SmallWorldEvaluation implements Control {
 			return node;
 		}
 		
+		@Override
 		public String toString() {
 			return node.getVirtualEntity().getId() + ", " + this.distance;
 		}

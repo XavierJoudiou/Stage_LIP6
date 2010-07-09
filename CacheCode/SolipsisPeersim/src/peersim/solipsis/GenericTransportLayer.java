@@ -82,6 +82,7 @@ public class GenericTransportLayer implements Protocol {
 	 * that is linked from all the nodes. This is because this protocol has no
 	 * node specific state.
 	 */
+	@Override
 	public Object clone()
 	{
 		return this;

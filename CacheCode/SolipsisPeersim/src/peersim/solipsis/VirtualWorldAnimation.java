@@ -2,11 +2,7 @@ package peersim.solipsis;
 
 import peersim.core.CommonState;
 import peersim.core.Control;
-import peersim.core.Network;
 import peersim.solipsis.Globals;
-import peersim.edsim.EDSimulator;
-
-import java.lang.*;
 import java.util.Calendar;
 
 public class VirtualWorldAnimation implements Control {

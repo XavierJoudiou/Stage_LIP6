@@ -2,7 +2,6 @@ package peersim.solipsis;
 
 import java.io.FileOutputStream;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.IOException;
@@ -10,7 +9,6 @@ import java.io.IOException;
 import peersim.solipsis.Globals;
 import peersim.solipsis.NeighborProxy;
 import peersim.solipsis.VirtualEntity;
-import peersim.solipsis.VirtualWorld;
 import peersim.solipsis.VirtualWorldDistribution;
 
 public class VirtualWorldRecorder {

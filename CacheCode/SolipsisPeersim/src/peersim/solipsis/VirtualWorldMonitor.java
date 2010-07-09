@@ -1,8 +1,6 @@
 package peersim.solipsis;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicButtonListener;
-
 import java.awt.*;
 
 import peersim.solipsis.Globals;
@@ -12,7 +10,6 @@ import peersim.solipsis.VirtualEntityInterface;
 import java.util.*;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.util.LinkedList;
 import peersim.tracePlayer.ButtonAction;
 import peersim.tracePlayer.TraceDisplayer;
@@ -385,7 +382,7 @@ public class VirtualWorldMonitor extends JFrame {
 //	}
 
 	private void drawTopology(VirtualEntityInterface entity) {
-		LinkedList<VirtualEntityInterface> neighbors = (LinkedList<VirtualEntityInterface>)entity.getNeighbors();
+		LinkedList<VirtualEntityInterface> neighbors = entity.getNeighbors();
 		int  [] entityCoord = virtualCoordToScreenCoord(entity.getCoord());
 		long [] currentCoord;
 		int  [] screenCurrentCoord, reverseCoord;
@@ -552,6 +549,7 @@ public class VirtualWorldMonitor extends JFrame {
 		
 	}
 
+	@Override
 	public void paint(Graphics g) {
 		this.updateVirtualWorld();
 	}
