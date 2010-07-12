@@ -3,6 +3,11 @@
  */
 package peersim.solipsis;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
+import peersim.core.CommonState;
+
 /**
  * @author xavier
  *
@@ -51,8 +56,11 @@ public class CacheStatistics {
 		// TODO Auto-generated method stub
 //		System.out.println("test");
 		String res;
-		res = " " + this.nbCaheHitGlob +":" + this.nbCacheMitClob +":"+ this.nbCaheMissGlob + ", ";
+		res = "" + this.nbCaheHitGlob + " " + this.nbCacheMitClob + " " + this.nbCaheMissGlob + " " + this.nbCachePassClob + " " + CommonState.getTime() + "\n";
+//		res = "" + this.nbCaheHitGlob + " " + CommonState.getTime() + "\n";
+
 		return res;
+		
 	}
 
 

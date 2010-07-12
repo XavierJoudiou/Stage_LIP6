@@ -1,5 +1,10 @@
 package peersim.solipsis;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import peersim.core.CommonState;
 import peersim.core.Control;
 import peersim.solipsis.Globals;
 import peersim.solipsis.VirtualWorldMonitor;
@@ -8,10 +13,17 @@ public class VirtualWorldOverview implements Control {
 	
 	private String prefix;
 	private int percent;
+	private File fichier;
+	private FileWriter fw;
 	
-	public VirtualWorldOverview(String prefix) {
+	public VirtualWorldOverview(String prefix) throws IOException {
 		this.prefix = prefix;
 		this.percent = 0;
+		
+		fichier = new File("RES.txt");
+	    fichier.createNewFile();
+	    fw = new FileWriter("RES.txt",true);
+		
 	}
 	
     public boolean execute() {
@@ -32,12 +44,27 @@ public class VirtualWorldOverview implements Control {
 //        			System.out.println(this + " cache stat");
             		evalCache = Globals.cacheEvaluator;
             		evalCache.printStatistics();
-            	}
-//    			eval = Globals.evaluator;
-//    			eval.printStatistics();
+            	
+		    		try {
+		    			String res;
+		    			res = evalCache.printStatistics2();
+		    			fw.write(res);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				if (CommonState.getTime() == 29900 ){
+//					System.err.println("Valeur Finale: ");
+//					evalCache.printStatistics();
+					try {
+						fw.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
     		}
-    		
-       		
     		
     	}
     	return false;
