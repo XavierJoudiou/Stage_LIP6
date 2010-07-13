@@ -44,8 +44,9 @@ public class VirtualWorldOverview implements Control {
 //        			System.out.println(this + " cache stat");
             		evalCache = Globals.cacheEvaluator;
             		evalCache.printStatistics();
-            	
-		    		try {
+//            		evalCache.printNbMessages();
+		    		try {;
+		    		
 		    			String res;
 		    			res = evalCache.printStatistics2();
 		    			fw.write(res);
