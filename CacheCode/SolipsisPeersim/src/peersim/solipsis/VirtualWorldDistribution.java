@@ -212,7 +212,7 @@ public class VirtualWorldDistribution implements VirtualWorldDistributionInterfa
 		Iterator it = coords.entrySet().iterator();
 		VirtualEntity entity = null;
 		int size;
-
+		
 		if (Globals.generated || (!Globals.generated && Globals.stepCount < Globals.slTrace.getTrace().size())) {
 			while(it.hasNext()) {
 				entity = (VirtualEntity)((Map.Entry)it.next()).getValue();

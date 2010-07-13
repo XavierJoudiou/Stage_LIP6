@@ -45,12 +45,12 @@ public class CacheOverview implements Control {
     		} else {
     			eval = Globals.cacheEvaluator;
     			eval.printStatistics();
-    		
+    			eval.printNbMessages();
     		}
-    		if (CommonState.getTime() == ( 30000 - 1) ){
+    		if (CommonState.getTime() == CommonState.getEndTime() ){
     			System.out.println("Valeur Finale: ");
     			eval = Globals.cacheEvaluator;
-    			eval.printStatistics();
+    			eval.printNbMessages();
     			try {
 					fw.close();
 				} catch (IOException e) {

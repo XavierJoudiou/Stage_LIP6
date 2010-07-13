@@ -19,6 +19,7 @@ public class CacheStatistics {
 	private int nbCaheHitGlob;
 	private int nbCacheMitClob;
 	private int nbCachePassClob;
+	private int nbNombreMessages;
 	
 
 	CacheStatistics() {
@@ -26,6 +27,7 @@ public class CacheStatistics {
 		this.nbCaheHitGlob = 0;
 		this.nbCacheMitClob = 0;
 		this.nbCachePassClob = 0;
+		this.nbNombreMessages = 0;
 	}
 	
 	
@@ -43,6 +45,17 @@ public class CacheStatistics {
 	
 	public void incnbCachePassClob(){
 		this.nbCachePassClob ++;
+	}
+	
+
+	public void incnbNombreMessages(){
+		this.nbNombreMessages ++;
+	}
+	
+	
+	public void printNbMessages(){
+		
+		System.out.println("NbMessages: " + this.nbNombreMessages );
 	}
 	
 	public void printStatistics() {

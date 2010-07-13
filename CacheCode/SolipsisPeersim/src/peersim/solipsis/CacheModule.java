@@ -37,13 +37,13 @@ public class CacheModule {
 		this.strategieCache = strategieCache;
 		this.cache = new HashMap<Integer,NeighborProxy>();
 		this.cacheInfo = new HashMap<Integer, CacheData>();
-		System.out.println("----------------------");
-		System.out.println("----------------------");
-		System.out.println("Taille du cache: " + cacheSize);
-		System.out.println("----------------------");
-		System.out.println("Strategie: " + strategieCache);
-		System.out.println("----------------------");
-		System.out.println("----------------------");
+//		System.out.println("----------------------");
+//		System.out.println("----------------------");
+//		System.out.println("Taille du cache: " + cacheSize);
+//		System.out.println("----------------------");
+//		System.out.println("Strategie: " + strategieCache);
+//		System.out.println("----------------------");
+//		System.out.println("----------------------");
 	}
 	
 
