@@ -11,13 +11,13 @@ public class CacheRequest {
 
 	private NeighborProxy oldData;
 	
-//	private NeighborProxy source;
+	private NeighborProxy source;
 
 		
-	public CacheRequest(NeighborProxy oldData) {
+	public CacheRequest(NeighborProxy oldData,NeighborProxy source) {
 		super();
 		this.oldData = oldData;
-//		this.source = source;
+		this.source = source;
 	}
 
 
@@ -34,13 +34,13 @@ public class CacheRequest {
 		this.oldData = oldData;
 	}
 
-//	public NeighborProxy getSource() {
-//		return source;
-//	}
-//
-//	public void setSource(NeighborProxy source) {
-//		this.source = source;
-//	}
+	public NeighborProxy getSource() {
+		return source;
+	}
+
+	public void setSource(NeighborProxy source) {
+		this.source = source;
+	}
 	
 	
 	

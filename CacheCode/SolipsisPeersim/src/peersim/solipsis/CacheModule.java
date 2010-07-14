@@ -26,7 +26,7 @@ public class CacheModule {
 	private int cacheSize;
 	private int strategieCache;
 	/* mettre dans fichier de conf */
-	private int limit = 10000;
+	private int limit = 5000;
 
 	public CacheModule(HashMap<Integer, NeighborProxy> cache, HashMap<Integer, CacheData> cacheInfo, int cacheSize,
 			int strategieCache) {

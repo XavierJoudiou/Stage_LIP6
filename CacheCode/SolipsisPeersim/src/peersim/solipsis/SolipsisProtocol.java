@@ -889,16 +889,22 @@ public class SolipsisProtocol implements EDProtocol {
 					
 						/* On vérifie que le nœud ne soit pas nul */
 						if (neighbor != null){
-							System.out.println("----------------------------------------");
-							System.out.println("--- On a trouvé un nœud dans le cache: " + neighbor.getId() + " ---");
-							System.out.println("----------------------------------------");
+//							System.out.println("----------------------------------------");
+//							System.out.println("--- On a trouvé un nœud dans le cache: " + neighbor.getId() + " ---");
+//							System.out.println("----------------------------------------");
 							
 							
 							Message cache_test;
 							CacheRequest cache_request;
-							cache_request = new CacheRequest(neighbor);
+							NeighborProxy source = this.createMyImage();
+							if (source == null){
+								System.out.println("Null à l'envoi!!!!!!!!!");
+							}	
+							cache_request = new CacheRequest(neighbor,source);
 							cache_test = new Message(Message.CACHE_UPD, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), neighbor.getId(), cache_request);
 				
+							
+							
 							
 							this.send(cache_test,neighbor);
 							System.out.println("<" + cache_test.getType() + ", " +  this.mainVirtualEntity.getId() + ", " + neighbor.getId() + ">");
@@ -915,37 +921,6 @@ public class SolipsisProtocol implements EDProtocol {
 			}
 			
 		}
-		
-//		LinkedList<Integer> prefetchedNeighbors;
-//		int size;
-//		this.convexEnvelope = this.findConvexEnvelope(this.idToProxyList(this.getParticularNeighbors(NeighborProxy.REGULAR)), this.mainVirtualEntity);
-//		NeighborProxy [] sector = this.verifyEnvelope(convexEnvelope);
-//		if (this.type == ENHANCED) {
-//			if (this.mainVirtualEntity.getState() == MobilityStateMachine.TRAVELLING) {
-//				if (this.prefetchingModule.needToPropagateRequest()) {
-//					this.prefetchingModule.propagatePrefetchRequest();
-//				} 
-//			} else {
-//				prefetchedNeighbors = this.prefetchingModule.getPrefetchedNeighbors();
-//				size = prefetchedNeighbors.size();
-//				this.prefetchingModule.togglePrefetch(false);
-//			}
-//		}
-//		if(this.type == SolipsisProtocol.ENHANCED && this.prefetchingModule.hasPrefetched()) {
-//			this.prefetchingModule.prospectPrefetched();
-//			if (sector != null) {
-//				this.convexEnvelope = this.findConvexEnvelope(this.idToProxyList(this.getParticularNeighbors(NeighborProxy.REGULAR)), this.mainVirtualEntity);
-//				sector = this.verifyEnvelope(convexEnvelope);
-//			}
-//		}
-//
-//		if(sector != null) {
-//			this.stabilized = false;
-//			recoverTopology(sector);
-//		} else {
-//			this.stabilized = true;
-//		}
-
 	}
 	
 	
@@ -985,7 +960,7 @@ public class SolipsisProtocol implements EDProtocol {
 				
 				Message cache_test;
 				CacheRequest cache_request;
-				cache_request = new CacheRequest(neighbor);
+				cache_request = new CacheRequest(neighbor,this.mainVirtualEntity.getNeighbor( this.mainVirtualEntity.getId()));
 				cache_test = new Message(Message.CACHE_UPD, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), neighbor.getId(), cache_request);
 	
 				if (source != null){
@@ -1171,9 +1146,12 @@ public class SolipsisProtocol implements EDProtocol {
 	private void processCacheUpd(Message msg){
 		
 		Node n = Network.get(msg.getOriginAddress());
-		NeighborProxy source = this.proxies.get(msg.getSource());
-		
-		
+//		NeighborProxy source = this.proxies.get(msg.getSource());
+		NeighborProxy source = ((NeighborProxy)((CacheRequest)msg.getContent()).getSource());
+		System.out.println("Message reçu: " + msg.toString() );
+		System.out.println("oldata: " + ((CacheRequest)msg.getContent()).getOldData().toString());
+		System.out.println("source: " + ((CacheRequest)msg.getContent()).getSource().toString());
+
 		
 		if (compareNeighborProxy((CacheRequest)msg.getContent(), ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity() )){
 			System.out.println("--- La comparaison est réussie ---");
@@ -1182,7 +1160,7 @@ public class SolipsisProtocol implements EDProtocol {
 			/* Faire la Mis A Jour du Noeud */
 			NeighborProxy responseProx = ((CacheRequest)msg.getContent()).getOldData();
 			responseProx.setCoord(((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord());
-			CacheRequest response = new CacheRequest(responseProx);
+			CacheRequest response = new CacheRequest(responseProx,this.mainVirtualEntity.getNeighbor( this.mainVirtualEntity.getId()));
 		
 		/* TODO probleme maj valeur */
 			this.MajNeighborProxy(((CacheRequest)msg.getContent()).getOldData(), ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity());
@@ -1203,16 +1181,7 @@ public class SolipsisProtocol implements EDProtocol {
 			}else{
 				System.out.println("source est null");
 				
-				source = this.proxies.get(msg.getSource());
-				if (source != null){
-					this.send(cache_rep,source);
-					
-					System.out.println("<++" + cache_rep.getType() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + ", " + source.getId() + "++>");
-					
-				}else{
-				
-					System.out.println("<--" + cache_rep.getType() + ", " + msg.getOriginAddress() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + "-->");
-				}
+				System.out.println("<--" + cache_rep.getType() + ", " + msg.getOriginAddress() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + "-->");
 
 			}
 			

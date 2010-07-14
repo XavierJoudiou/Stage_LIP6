@@ -103,5 +103,15 @@ public class Message {
 	public Object setContent() {
 		return this.body;
 	}
+
+	@Override
+	public String toString() {
+		return "Message [body=" + body + ", from=" + from + ", messageType="
+				+ messageType + ", originAddress=" + originAddress
+				+ ", timestamp=" + timestamp + ", to=" + to + ", ttl=" + ttl
+				+ "]";
+	}
+	
+	
 	
 }
