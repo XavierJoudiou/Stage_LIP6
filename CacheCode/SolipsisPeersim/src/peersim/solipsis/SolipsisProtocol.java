@@ -817,7 +817,6 @@ public class SolipsisProtocol implements EDProtocol {
 	}
 		
 	private void solipsisRecoverTopology(NeighborProxy [] sector) {
-		Globals.cacheEvaluator.incnbNombreMessages();
 
 		GeometricRegion line;
 		int [][] moduloCoefs;
@@ -899,13 +898,15 @@ public class SolipsisProtocol implements EDProtocol {
 							Message cache_test;
 							CacheRequest cache_request;
 							NeighborProxy source = this.createMyImage();
+							
 							if (source == null){
 								System.out.println("Null à l'envoi!!!!!!!!!");
 							}	
 							cache_request = new CacheRequest(neighbor,source);
 							cache_test = new Message(Message.CACHE_UPD, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), neighbor.getId(), cache_request);
 				
-							
+							neighbor.setQuality(NeighborProxy.CACHED);
+
 							
 							
 							this.send(cache_test,neighbor);
@@ -1150,9 +1151,9 @@ public class SolipsisProtocol implements EDProtocol {
 		Node n = Network.get(msg.getOriginAddress());
 //		NeighborProxy source = this.proxies.get(msg.getSource());
 		NeighborProxy source = ((NeighborProxy)((CacheRequest)msg.getContent()).getSource());
-		System.out.println("Message reçu: " + msg.toString() );
-		System.out.println("oldata: " + ((CacheRequest)msg.getContent()).getOldData().toString());
-		System.out.println("source: " + ((CacheRequest)msg.getContent()).getSource().toString());
+//		System.out.println("Message reçu: " + msg.toString() );
+//		System.out.println("oldata: " + ((CacheRequest)msg.getContent()).getOldData().toString());
+//		System.out.println("source: " + ((CacheRequest)msg.getContent()).getSource().toString());
 
 		
 		if (compareNeighborProxy((CacheRequest)msg.getContent(), ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity() )){
@@ -1172,18 +1173,20 @@ public class SolipsisProtocol implements EDProtocol {
 			/*Envoyer un message pour faire un hit de cache */
 			Message cache_rep;
 			
+		
 			
 			cache_rep = new Message(Message.CACHE_UPD_REP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), msg.getSource(), msg.getContent());
 
 			if (source != null){
 				
 				this.send(cache_rep,source);
+
 	
 				System.out.println("<<<" + cache_rep.getType() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + ", " + source.getId() + ">>>");
 			}else{
-				System.out.println("source est null");
+//				System.out.println("source est null");
 				
-				System.out.println("<--" + cache_rep.getType() + ", " + msg.getOriginAddress() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + "-->");
+//				System.out.println("<--" + cache_rep.getType() + ", " + msg.getOriginAddress() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + "-->");
 
 			}
 			
@@ -1207,12 +1210,12 @@ public class SolipsisProtocol implements EDProtocol {
 //		long [] origin;
 //		Node n;
 
-		System.out.println("--- Source: " +  this.mainVirtualEntity.getId() + " ---");
+//		System.out.println("--- Source: " +  this.mainVirtualEntity.getId() + " ---");
 		CacheRequest neig = (CacheRequest) msg.getContent();
 		NeighborProxy neighbor = neig.getOldData();
 		System.out.println("<" + msg.getType() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + ">");
 
-		System.out.println("--- Nœud supprimé du cache: " + neighbor.getId() + " ---");
+//		System.out.println("--- Nœud supprimé du cache: " + neighbor.getId() + " ---");
 //		cache.ShowCache();
 //		System.out.println("taille  cache: " + cache.getCache().size());
 //		System.out.println("taille voisin: " + proxies.size());
@@ -1224,14 +1227,17 @@ public class SolipsisProtocol implements EDProtocol {
 //		System.out.println("taille voisin: " + proxies.size());
 		//		cache.ShowCache();
 		/* regarder la taille du cache */
+		neighbor.setQuality(NeighborProxy.REGULAR);
+
 		
 		boolean envOK = checkEnvelopeState();
 		if (envOK){
-//			System.out.println("envelope OK");
+			System.out.println("envelope OK");
 			cache.RmCache(neighbor);
 			addLocalView(neighbor);
 		}else{
-//			System.out.println("envelope NOT OK");
+			System.out.println("envelope NOT OK");
+			Globals.cacheEvaluator.incnbEnvelopNotOK();
 			/* regarder dans processFoundMsg, pour refaire l'envelope */ 
 			GeometricRegion lin;
 			Message recoverMsg;
@@ -1265,7 +1271,7 @@ public class SolipsisProtocol implements EDProtocol {
 //		System.out.println("- oldtime: " + old.getOldData().getTime());
 //		System.out.println("-- limite: " + cache.getLimite());
 //		System.out.println("-- samlim: " + (cache.getLimite()/2));
-		if (res < cache.getLimite()/2){
+		if (res < cache.getLimite()){
 			resultat = true;
 		}
 		
@@ -1333,7 +1339,14 @@ public class SolipsisProtocol implements EDProtocol {
 		LinkedList<NeighborProxy> longRange;
 		int size;
 		Iterator it;
+		
+		
 		if (Globals.topologyIsReady && stateUpdateTimerReady()) {
+			
+			if (this.strategieCache == SolipsisProtocol.FIFO && this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
+				maintainCacheTopology();
+			}else{
+			
 			neighbors = this.getParticularNeighbors(NeighborProxy.REGULAR);
 			size = neighbors.size();
 			time = CommonState.getTime();
@@ -1359,6 +1372,7 @@ public class SolipsisProtocol implements EDProtocol {
 				}
 			}
 			rearmStateUpdateTimer();
+			}
 		} 
 	}
 
@@ -1578,6 +1592,7 @@ public class SolipsisProtocol implements EDProtocol {
 	
 	public void receive(Message msg, SolipsisProtocol oneHopSourcePeer) {
 		/* environ 500 000 messages */
+		Globals.cacheEvaluator.incnbNombreMessages();
 
 		if (!Globals.realTime) {
 			Globals.evaluator.messageReceived();
@@ -1649,12 +1664,15 @@ public class SolipsisProtocol implements EDProtocol {
 			this.processSmallWorldConfirmation(msg);
 			break;
 		case Message.CACHE_UPD:
+			Globals.cacheEvaluator.incNbCacheRequest();
 //			System.out.println("Message reçu de type: " + msg.getType());
 //			System.out.println("Message Source: " + msg.getSource() );
 //			System.out.println("Message Destination: " + msg.getDestination() );
 			this.processCacheUpd(msg);
 			break;
 		case Message.CACHE_UPD_REP:
+			Globals.cacheEvaluator.incnbCacherResponse();
+
 //			System.out.println("Message reçu de type: " + msg.getType());
 //			System.out.println("Message Source: " + msg.getSource() );
 //			System.out.println("Message Destination: " + msg.getDestination() );

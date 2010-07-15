@@ -118,6 +118,8 @@ public class VirtualEntity implements VirtualEntityInterface {
 			this.addNeighbor(neighbor);
 		}
 	}
+
+	
 	
 	public void addNeighbor(SolipsisProtocol neighbor) {
 		if(neighbor != this.protocol && !this.protocol.hasNeighbor(neighbor.getVirtualEntity().getId())) {
@@ -302,7 +304,7 @@ public class VirtualEntity implements VirtualEntityInterface {
 		this.protocol.maintainTopology();
 //		System.out.println("end of keepTopo");
 //		System.out.println("start maintain Cache Topology");
-		this.protocol.maintainCacheTopology();
+//		this.protocol.maintainCacheTopology();
 //		System.out.println("end maintain Cache Topology");
 	}
 	

@@ -44,7 +44,8 @@ public class VirtualWorldOverview implements Control {
 //        			System.out.println(this + " cache stat");
             		evalCache = Globals.cacheEvaluator;
             		evalCache.printStatistics();
-//            		evalCache.printNbMessages();
+            		evalCache.printNbMessages();
+            		evalCache.printnbEnvelopNotOK();
 		    		try {;
 		    		
 		    			String res;
@@ -55,7 +56,7 @@ public class VirtualWorldOverview implements Control {
 						e.printStackTrace();
 					}
 				}
-				if (CommonState.getTime() == 29900 ){
+				if (CommonState.getTime() == CommonState.getEndTime() ){
 //					System.err.println("Valeur Finale: ");
 //					evalCache.printStatistics();
 					try {

@@ -280,14 +280,11 @@ public class CacheModule {
 		}
 		
 		System.out.println("Limite = " + limite);
+		this.setLimite((int)limite);
 		
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
-			
-//			System.out.println("Current Dist: " + currentDist);
-//			System.out.println("Best Dist   : " + bestDist);
-//			System.out.println("Limit       : " + limit);
 
 			if (currentDist < limite){
 				if ( bestDist == -1){
@@ -301,7 +298,6 @@ public class CacheModule {
 				}
 			}
 		}
-//		System.out.println("le Minimum est: " +  bestDist );
 		
 		return best;
 	

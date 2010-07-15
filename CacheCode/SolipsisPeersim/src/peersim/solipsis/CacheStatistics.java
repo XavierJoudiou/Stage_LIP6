@@ -20,7 +20,9 @@ public class CacheStatistics {
 	private int nbCacheMitClob;
 	private int nbCachePassClob;
 	private int nbNombreMessages;
-	
+	private int nbCacheRequest;
+	private int nbCacheResponse;
+	private int nbEnvelopNotOK;
 
 	CacheStatistics() {
 		this.nbCaheMissGlob = 0;
@@ -28,6 +30,8 @@ public class CacheStatistics {
 		this.nbCacheMitClob = 0;
 		this.nbCachePassClob = 0;
 		this.nbNombreMessages = 0;
+		this.nbCacheResponse = 0;
+		this.nbCacheRequest = 0;
 	}
 	
 	
@@ -52,16 +56,33 @@ public class CacheStatistics {
 		this.nbNombreMessages ++;
 	}
 	
+	public void incNbCacheRequest(){
+		this.nbCacheRequest ++;
+	}
+	
+	public void incnbCacherResponse(){
+		this.nbCacheResponse ++;
+	}
+	
+	public void incnbEnvelopNotOK(){
+		this.nbEnvelopNotOK ++;
+	}
+	
 	
 	public void printNbMessages(){
 		
 		System.out.println("NbMessages: " + this.nbNombreMessages );
 	}
+
+	public void printnbEnvelopNotOK(){
+		
+		System.out.println("nbEnvelopNotOK: " + this.nbEnvelopNotOK );
+	}
 	
 	public void printStatistics() {
 		// TODO Auto-generated method stub
 //		System.out.println("test");
-		System.out.println(" " + this.nbCaheHitGlob +":" + this.nbCacheMitClob +":" + this.nbCaheMissGlob + ":"+ this.nbCachePassClob + ", ");
+		System.out.println(" " + this.nbCaheHitGlob +":" + this.nbCacheMitClob +":" + this.nbCaheMissGlob + ":"+ this.nbCacheRequest + ", ");
 		
 	}
 	
@@ -69,7 +90,7 @@ public class CacheStatistics {
 		// TODO Auto-generated method stub
 //		System.out.println("test");
 		String res;
-		res = "" + this.nbCaheHitGlob + " " + this.nbCacheMitClob + " " + this.nbCaheMissGlob + " " + this.nbCachePassClob + " " + CommonState.getTime() + "\n";
+		res = "" + this.nbCaheHitGlob + " " + this.nbCacheMitClob + " " + this.nbCaheMissGlob + " " + this.nbCacheRequest + " " + this.nbCacheResponse + " " + CommonState.getTime() + "\n";
 //		res = "" + this.nbCaheHitGlob + " " + CommonState.getTime() + "\n";
 
 		return res;
