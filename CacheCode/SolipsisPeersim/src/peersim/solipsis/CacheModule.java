@@ -26,7 +26,7 @@ public class CacheModule {
 	private int cacheSize;
 	private int strategieCache;
 	/* mettre dans fichier de conf */
-	private int limit = 5000;
+	private int limit = 10000;
 
 	public CacheModule(HashMap<Integer, NeighborProxy> cache, HashMap<Integer, CacheData> cacheInfo, int cacheSize,
 			int strategieCache) {
@@ -253,6 +253,59 @@ public class CacheModule {
 	
 	}
 	
+	
+	public NeighborProxy searchCacheNeighborLimitNeighbor(long[] destination,HashMap<Integer, NeighborProxy> voisin){
+		NeighborProxy current;
+		NeighborProxy best = null;
+		
+		double currentDist,bestDist = -1;
+		double limite = -1;
+		
+//		HashMap<Integer, NeighborProxy> cach = this.cache;
+		Iterator it,it_voisin;
+		it = this.cache.entrySet().iterator();
+		it_voisin = voisin.entrySet().iterator();	
+		
+		
+		while(it_voisin.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it_voisin.next()).getValue();
+			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
+			if ( limite == -1){
+				limite = currentDist;
+			}else{
+				if(currentDist < limite){
+					bestDist = limite;
+				}
+			}	
+		}
+		
+		System.out.println("Limite = " + limite);
+		
+		while(it.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
+			
+//			System.out.println("Current Dist: " + currentDist);
+//			System.out.println("Best Dist   : " + bestDist);
+//			System.out.println("Limit       : " + limit);
+
+			if (currentDist < limite){
+				if ( bestDist == -1){
+					bestDist = currentDist;
+					best = current;
+				}else{
+					if(currentDist < bestDist){
+						best = current;
+						bestDist = currentDist;
+					}
+				}
+			}
+		}
+//		System.out.println("le Minimum est: " +  bestDist );
+		
+		return best;
+	
+	}
 	
 	public NeighborProxy searchCacheNeighbor(long[] destination,HashMap<Integer, NeighborProxy> voisin){
 		NeighborProxy current;

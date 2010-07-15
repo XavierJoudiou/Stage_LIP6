@@ -883,7 +883,9 @@ public class SolipsisProtocol implements EDProtocol {
 						
 						/* Recherche dans le cache */
 						if (destination != null){
-							neighbor = cache.searchCacheNeighborLimit(destination);
+//							neighbor = cache.searchCacheNeighborLimit(destination);
+							neighbor = cache.searchCacheNeighborLimitNeighbor(destination, this.cache.getCache());
+
 
 						}
 					
