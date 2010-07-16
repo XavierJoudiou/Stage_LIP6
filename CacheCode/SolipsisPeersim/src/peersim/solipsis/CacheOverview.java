@@ -44,7 +44,7 @@ public class CacheOverview implements Control {
     			recorder.record();
     		} else {
     			eval = Globals.cacheEvaluator;
-    			eval.printStatistics();
+    			eval.printStatisticsCacheMess();
     			eval.printNbMessages();
     		}
     		if (CommonState.getTime() == CommonState.getEndTime() ){

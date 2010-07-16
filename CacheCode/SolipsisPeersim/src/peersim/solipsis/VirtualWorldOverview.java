@@ -13,16 +13,20 @@ public class VirtualWorldOverview implements Control {
 	
 	private String prefix;
 	private int percent;
-	private File fichier;
-	private FileWriter fw;
+	private File fichier,fichier2;
+	private FileWriter fw,fw2;
 	
 	public VirtualWorldOverview(String prefix) throws IOException {
 		this.prefix = prefix;
 		this.percent = 0;
 		
-		fichier = new File("RES.txt");
+		fichier = new File("Résultats_CacheMess.txt");
 	    fichier.createNewFile();
-	    fw = new FileWriter("RES.txt",true);
+	    fw = new FileWriter("Résultats_CacheMess.txt",true);
+	    
+	    fichier2 = new File("Résultats_ActivitéMess.txt");
+	    fichier2.createNewFile();
+	    fw2 = new FileWriter("Résultats_ActivitéMess.txt",true);
 		
 	}
 	
@@ -41,28 +45,26 @@ public class VirtualWorldOverview implements Control {
     			recorder.record();
     		} else {
     			if (Globals.cacheStat) {
-//        			System.out.println(this + " cache stat");
             		evalCache = Globals.cacheEvaluator;
-            		evalCache.printStatistics();
-            		evalCache.printNbMessages();
-            		evalCache.printnbEnvelopNotOK();
+            		evalCache.printStatisticsCacheMess();
+            		evalCache.printStatisticsActiviteMess();
+            		System.out.println("+++++++++++++++++++++++++++++++++++");
 		    		try {;
 		    		
-		    			String res;
-		    			res = evalCache.printStatistics2();
-		    			fw.write(res);
+		    			String res1,res2;
+		    			res1 = evalCache.printStatisticsCacheMessString();
+		    			res2 = evalCache.printStatisticsActiviteMessString();
+		    			fw.write(res1);
+		    			fw2.write(res2);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 				if (CommonState.getTime() == CommonState.getEndTime() ){
-//					System.err.println("Valeur Finale: ");
-//					evalCache.printStatistics();
 					try {
 						fw.close();
+						fw2.close();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}

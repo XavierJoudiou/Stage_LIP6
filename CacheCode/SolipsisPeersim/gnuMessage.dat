@@ -1,0 +1,27 @@
+#définition de quelques variables
+ 
+#initialisation du terminal
+reset
+set term x11
+ 
+#options
+ 
+set title "Evolution du nombre des messages en fonction du temps"
+set xlabel "Temps de simulation"
+set ylabel "Nombre de messages"
+set grid
+ 
+#les axes
+ 
+#l'origine
+ 
+plot "Résultats_ActivitéMess.txt" using 6:1 title 'CacheRequest' with lines, "Résultats_ActivitéMess.txt" using 6:2 title 'Message SEARCH' with lines,"Résultats_ActivitéMess.txt" using 6:3 title 'Message DELTA' with lines, "Résultats_ActivitéMess.txt" using 6:4 title 'Envelope Non Ok ' with lines
+ 
+pause -1 "maintenant va créer un fichier au format png appuyer sur entrée"
+ 
+set term png
+set out "../../Résultats/MessageRecp.png"
+rep
+set out
+set term x11
+pause -1 "touche entrée pour sortir"

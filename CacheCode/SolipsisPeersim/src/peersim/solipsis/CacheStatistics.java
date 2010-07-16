@@ -23,6 +23,8 @@ public class CacheStatistics {
 	private int nbCacheRequest;
 	private int nbCacheResponse;
 	private int nbEnvelopNotOK;
+	private int nbMessSearch;
+	private int nbMessDelta;
 
 	CacheStatistics() {
 		this.nbCaheMissGlob = 0;
@@ -32,8 +34,14 @@ public class CacheStatistics {
 		this.nbNombreMessages = 0;
 		this.nbCacheResponse = 0;
 		this.nbCacheRequest = 0;
+		this.nbMessSearch = 0;
+		this.nbMessDelta = 0;
 	}
 	
+	
+	/* 
+	 * Fonctions Incrémentation 
+	 */
 	
 	public void incCacheMissGlob(){
 		this.nbCaheMissGlob ++;
@@ -68,6 +76,18 @@ public class CacheStatistics {
 		this.nbEnvelopNotOK ++;
 	}
 	
+	public void incnbMessSearch(){
+		this.nbMessSearch ++;
+	}
+	
+	public void incnbMessDelta(){
+		this.nbMessDelta ++;
+	}
+	
+	
+	/*
+	 *  Fonctions Affichage Statistiques 
+	 */
 	
 	public void printNbMessages(){
 		
@@ -79,22 +99,24 @@ public class CacheStatistics {
 		System.out.println("nbEnvelopNotOK: " + this.nbEnvelopNotOK );
 	}
 	
-	public void printStatistics() {
-		// TODO Auto-generated method stub
-//		System.out.println("test");
-		System.out.println(" " + this.nbCaheHitGlob +":" + this.nbCacheMitClob +":" + this.nbCaheMissGlob + ":"+ this.nbCacheRequest + ", ");
-		
+	public void printStatisticsCacheMess() {
+		System.out.println(this.nbCaheHitGlob + ":" + this.nbCacheMitClob + ":" + this.nbCaheMissGlob + ":" + this.nbCacheRequest + ":" + this.nbCacheResponse +  ":"+ CommonState.getTime()+ ", ");
 	}
 	
-	public String printStatistics2() {
-		// TODO Auto-generated method stub
-//		System.out.println("test");
+	public void printStatisticsActiviteMess() {
+		System.out.println(this.nbCacheRequest + "|" + this.nbMessSearch + "|" + this.nbMessDelta + "|" + this.nbEnvelopNotOK + "|" + this.nbNombreMessages +  "|"+ CommonState.getTime()+ ", ");
+	}
+	
+	public String printStatisticsCacheMessString() {
 		String res;
 		res = "" + this.nbCaheHitGlob + " " + this.nbCacheMitClob + " " + this.nbCaheMissGlob + " " + this.nbCacheRequest + " " + this.nbCacheResponse + " " + CommonState.getTime() + "\n";
-//		res = "" + this.nbCaheHitGlob + " " + CommonState.getTime() + "\n";
-
 		return res;
-		
+	}
+	
+	public String printStatisticsActiviteMessString() {
+		String res;
+		res = "" + this.nbCacheRequest + " " + this.nbMessSearch + " " + this.nbMessDelta + " " + this.nbEnvelopNotOK + " " + this.nbNombreMessages + " " + CommonState.getTime() + "\n";
+		return res;
 	}
 
 

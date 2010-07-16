@@ -96,6 +96,79 @@ public class Message {
 		return this.messageType;
 	}
 	
+	public String getTypeString(){
+		String res;
+		switch(this.messageType){
+		case 0:
+			res = "FIND_NEAREST";
+			break;
+		case 1:
+			res = "BEST";
+			break;
+		case 2:
+			res = "QUERYAROUND";
+			break;
+		case 3:
+			res = "AROUND";
+			break;
+		case 4:
+			res = "ALERT";
+			break;
+		case 5:
+			res = "HELLO";
+			break;
+		case 6:
+			res = "CONNECT";
+			break;
+		case 7:
+			res = "CLOSE";
+			break;
+		case 8:
+			res = "HEARTBEAT";
+			break;
+		case 9:
+			res = "DELTA";
+			break;
+		case 10:
+			res = "DETECT";
+			break;
+		case 11:
+			res = "SEARCH";
+			break;
+		case 12:
+			res = "FOUND";
+			break;
+		case 13:
+			res = "PREFETCH";
+			break;
+		case 14:
+			res = "SMALLWORLD";
+			break;
+		case 15:
+			res = "LOOKUP_REPLY";
+			break;
+		case 16:
+			res = "LOOKED_UP";
+			break;
+		case 17:
+			res = "LONG_RANGE_ACK";
+			break;
+		case 18:
+			res = "LONG_RANGE_REQ";
+			break;
+		case 21:
+			res = "CACHE_UPD";
+			break;
+		case 22:
+			res = "CACHE_UPD_REP";
+			break;
+		default:
+			res = "" + this.messageType;
+			break;
+		}
+		return res;
+	}
+	
 	public Object getContent() {
 		return this.body;
 	}

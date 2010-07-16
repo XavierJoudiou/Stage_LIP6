@@ -1,0 +1,27 @@
+#définition de quelques variables
+ 
+#initialisation du terminal
+reset
+set term x11
+ 
+#options
+ 
+set title "Calcul sur le cache  ajouter dans Blue Banana"
+set xlabel "Temps de simulation"
+set ylabel "Nombre"
+set grid
+ 
+#les axes
+ 
+#l'origine
+ 
+plot "Résultats_CacheMess.txt" using 6:1 title 'HIT' with lines, "Résultats_CacheMess.txt" using 6:2 title 'MIT' with lines,"Résultats_CacheMess.txt" using 6:3 title 'MISS' with lines
+ 
+pause -1 "maintenant va créer un fichier au format png appuyer sur entrée"
+ 
+set term png
+set out "../../Résultats/CacheCalcul.png"
+rep
+set out
+set term x11
+pause -1 "touche entrée pour sortir"

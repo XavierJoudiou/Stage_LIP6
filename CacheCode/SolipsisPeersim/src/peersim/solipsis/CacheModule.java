@@ -26,7 +26,7 @@ public class CacheModule {
 	private int cacheSize;
 	private int strategieCache;
 	/* mettre dans fichier de conf */
-	private int limit = 10000;
+	private int limit;
 
 	public CacheModule(HashMap<Integer, NeighborProxy> cache, HashMap<Integer, CacheData> cacheInfo, int cacheSize,
 			int strategieCache) {
@@ -216,7 +216,7 @@ public class CacheModule {
 	}
 	
 	
-	public NeighborProxy searchCacheNeighborLimit(long[] destination){
+	public NeighborProxy searchCacheNeighborLimit(long[] destination,int limite){
 		NeighborProxy current;
 		NeighborProxy best = null;
 		
@@ -226,6 +226,8 @@ public class CacheModule {
 //		HashMap<Integer, NeighborProxy> cach = this.cache;
 		Iterator it;
 		it = this.cache.entrySet().iterator();
+		this.setLimite((int)limite);
+
 				
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
@@ -233,9 +235,9 @@ public class CacheModule {
 			
 //			System.out.println("Current Dist: " + currentDist);
 //			System.out.println("Best Dist   : " + bestDist);
-//			System.out.println("Limit       : " + limit);
+//			System.out.println("Limite       : " + limite);
 
-			if (currentDist < limit){
+			if (currentDist < limite){
 				if ( bestDist == -1){
 					bestDist = currentDist;
 					best = current;
@@ -279,7 +281,7 @@ public class CacheModule {
 			}	
 		}
 		
-		System.out.println("Limite = " + limite);
+//		System.out.println("Limite = " + limite);
 		this.setLimite((int)limite);
 		
 		while(it.hasNext()){
@@ -303,7 +305,7 @@ public class CacheModule {
 	
 	}
 	
-	public NeighborProxy searchCacheNeighbor(long[] destination,HashMap<Integer, NeighborProxy> voisin){
+	public NeighborProxy searchCacheNeighbor(long[] destination,HashMap<Integer, NeighborProxy> voisin,int limite){
 		NeighborProxy current;
 		NeighborProxy best = null;
 		NeighborProxy farNeigh;
@@ -351,7 +353,7 @@ public class CacheModule {
 //			System.out.println("Pas de meilleur dans le cache");
 		}
 		
-		if (bestDist > limit){
+		if (bestDist > limite){
 			best = null;
 //			System.out.println("trop éloigné");
 		}

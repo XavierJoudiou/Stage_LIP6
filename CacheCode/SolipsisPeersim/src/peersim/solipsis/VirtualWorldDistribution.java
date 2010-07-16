@@ -83,18 +83,6 @@ public class VirtualWorldDistribution implements VirtualWorldDistributionInterfa
 		this(VirtualWorldDistribution.randomDistribution, userNb, 0, 0, mapSize, 0, 0, 0, layerId);
 	}
 	
-//	private long[] normalize(long [] coords) {
-//		for (int i=0; i < coords.length; i++) {
-//			if (coords[i] > this.mapSize) {
-//				coords[i] = this.mapSize;
-//			}
-//			if (coords[i] > this.mapSize) {
-//				coords[i] = this.mapSize;
-//			}
-//		}
-//		return coords;
-//	}
-	
 	private void makeDistribution(int distributionKind) {
 		
 		int zoneId;
