@@ -13,6 +13,7 @@ doc:
 
 run:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
+	play -q /home/xavier/Téléchargements/Sounds/Bart_gogole.wav
 
 play:
 	java -cp $(ALL) peersim/tracePlayer/TracePlayer defaultRecord.txt

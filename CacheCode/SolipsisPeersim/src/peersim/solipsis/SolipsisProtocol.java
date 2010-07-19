@@ -143,7 +143,7 @@ public class SolipsisProtocol implements EDProtocol {
 			this.limite = Configuration.getInt(prefix+"."+CACHE_LIMIT);
 			this.cacheDebug = Configuration.getInt(prefix+"."+CACHE_DEBUG);
 			this.strategieCache = Configuration.getInt(prefix+"."+CACHE_STRATEGIE);
-			this.cache = new CacheModule(null, null, this.cacheSize, this.strategieCache);
+			this.cache = new CacheModule(null, null, this.cacheSize, this.strategieCache,this);
 		}
 		
 	}
@@ -651,6 +651,11 @@ public class SolipsisProtocol implements EDProtocol {
 		this.proxies.put(view.getId(), view);
 		view.setTime(CommonState.getTime());
 	}
+	
+	public void addLocalViewNoCache(NeighborProxy entity) {
+		NeighborProxy view = entity.clone();
+		this.proxies.put(view.getId(), view);
+	}
 
 	private int count() {
 		LinkedList<Integer> regular = this.getParticularNeighbors(NeighborProxy.REGULAR);
@@ -821,10 +826,22 @@ public class SolipsisProtocol implements EDProtocol {
 		System.out.println("++++++++++ find:" + find);
 
 		if (find == 0){
+//			System.out.println("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
 			if (sector != null) {
 				if (sector[0] != null) {
 					sendTo = sector[0];
+					long [] a = this.mainVirtualEntity.getCoord();
+					long [] b = this.subjectiveCoord(sendTo.getId());
+//					System.out.println("a = " + a);
+//					System.out.println("b = " + b);
 					line  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(sendTo.getId()));
+					long [] c = this.subjectiveCoord(sector[0].getId());
+					long [] d = this.mainVirtualEntity.getCoord();
+					long [] e = this.subjectiveCoord(sector[1].getId());
+//					System.out.println("c = " + c);
+//					System.out.println("d = " + d);
+//					System.out.println("e = " + e);
+					
 					if (sector[1] != null && simpleAngleSign(this.subjectiveCoord(sector[0].getId()), this.mainVirtualEntity.getCoord(), this.subjectiveCoord(sector[1].getId())) < 0) {
 						line.setOri(VirtualWorld.LEFT);
 					} else {
@@ -933,7 +950,9 @@ public class SolipsisProtocol implements EDProtocol {
 								
 							default:
 								
-								neighbor = cache.searchCacheNeighborLimit(destination,limite);
+//								neighbor = cache.searchCacheNeighborLimit(destination,limite);
+								neighbor = cache.searchCacheNeighborEnvelop(destination);
+
 								break;
 								
 							}
@@ -952,7 +971,18 @@ public class SolipsisProtocol implements EDProtocol {
 								System.out.println("--- On a trouvé un nœud dans le cache: " + neighbor.getId() + " ---");
 								System.out.println("----------------------------------------");
 							}
-							
+
+							if ( neighbor.getTime() + 4000 > CommonState.getIntTime()){
+								cache.RmCache(neighbor);
+								addLocalView(neighbor);
+								neighbor.setQuality(NeighborProxy.REGULAR);
+								Globals.cacheEvaluator.incCacheHitGLob();
+								System.out.println("HIT DIRECT DANS TA FACE !!!");
+								return 1;
+								
+							}
+							System.out.println("====== TROP vieux neigtime: " + neighbor.getTime() +", time: " + CommonState.getIntTime());
+
 							Message cache_test;
 							CacheRequest cache_request;
 							NeighborProxy source = this.createMyImage();
@@ -1013,10 +1043,10 @@ public class SolipsisProtocol implements EDProtocol {
 		
 		if (compareNeighborProxy((CacheRequest)msg.getContent(), ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity() )){
 			
-			if ( cacheDebug == 1 || cacheDebug == 2 ){
+//			if ( cacheDebug == 1 || cacheDebug == 2 ){
 				System.out.println("... Comparaison OK: Old " + ((CacheRequest)msg.getContent()).getOldData().getCoord() +
 						", Real " + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord() + " ...");	
-			}
+//			}
 			
 
 			/* Faire la Mis A Jour du Noeud */
@@ -1026,8 +1056,8 @@ public class SolipsisProtocol implements EDProtocol {
 		
 		/* TODO probleme maj valeur */
 			this.MajNeighborProxy(((CacheRequest)msg.getContent()).getOldData(), ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity());
-//			System.out.println("-- realcoord: " + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord() );
-//			System.out.println("-- new coord: " + response.getOldData().getCoord() );
+			System.out.println("-- realcoord: " + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord() );
+			System.out.println("-- new coord: " + response.getOldData().getCoord() );
 
 			
 			/*Envoyer un message pour faire un hit de cache */
@@ -1148,7 +1178,7 @@ public class SolipsisProtocol implements EDProtocol {
 //		System.out.println("- oldtime: " + old.getOldData().getTime());
 //		System.out.println("-- limite: " + cache.getLimite());
 //		System.out.println("-- samlim: " + (cache.getLimite()/2));
-		if (res < cache.getLimite()){
+		if (res < this.limite){
 			resultat = true;
 		}
 		
@@ -1371,6 +1401,15 @@ public class SolipsisProtocol implements EDProtocol {
 		}
 		this.proxies.remove(neighbor);
 		/* regarder reste */
+		this.clearConnectionTime(neighbor);
+		this.updateTimestamps.remove(neighbor);
+		this.predictionVector.remove(neighbor);
+	}
+	
+	public void removeProxyNoCache(int neighbor) {
+		NeighborProxy rm = this.proxies.get(neighbor);
+		
+		this.proxies.remove(neighbor);
 		this.clearConnectionTime(neighbor);
 		this.updateTimestamps.remove(neighbor);
 		this.predictionVector.remove(neighbor);
@@ -1829,6 +1868,17 @@ public class SolipsisProtocol implements EDProtocol {
 		peer.setQuality(NeighborProxy.REGULAR);
 		boolean convexProperty = convexEnvelopeProperty();
 		peer.setQuality(quality);
+//		System.out.println("dans helpful "+convexProperty + " " + beforeAdding);
+		return convexProperty && !beforeAdding;
+	}
+	
+	synchronized public boolean helpfulToEnvelopeCache(NeighborProxy peer) {
+		int quality = peer.getQuality();
+		boolean beforeAdding = convexEnvelopeProperty();
+		this.addLocalViewNoCache(peer);
+		boolean convexProperty = convexEnvelopeProperty();
+		peer.setQuality(quality);
+		this.removeProxyNoCache(peer.getId());
 //		System.out.println("dans helpful "+convexProperty + " " + beforeAdding);
 		return convexProperty && !beforeAdding;
 	}
@@ -2303,8 +2353,14 @@ public class SolipsisProtocol implements EDProtocol {
 	public long[] subjectiveCoord(int id) {
 		long[] distant, local, subjective = null;
 		NeighborProxy proxy = this.proxies.get(id);
+		
 
 		if (proxy != null) {
+			local = this.mainVirtualEntity.getCoord(); 
+			distant = proxy.getCoord();
+			subjective = this.moduloModificationRule(local, distant);
+		}else{
+			proxy = this.cache.getCache().get(id);
 			local = this.mainVirtualEntity.getCoord(); 
 			distant = proxy.getCoord();
 			subjective = this.moduloModificationRule(local, distant);

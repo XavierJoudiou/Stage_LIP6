@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import peersim.core.CommonState;
+
 
 /**
  * @author xavier
@@ -27,10 +29,14 @@ public class CacheModule {
 	private int strategieCache;
 	/* mettre dans fichier de conf */
 	private int limit;
+	private SolipsisProtocol protocol;
+
+	
 
 	public CacheModule(HashMap<Integer, NeighborProxy> cache, HashMap<Integer, CacheData> cacheInfo, int cacheSize,
-			int strategieCache) {
+			int strategieCache,SolipsisProtocol protocol) {
 		super();
+		this.protocol = protocol;
 
 		/* Initialisation des variables pour le cache*/
 		this.cacheSize = cacheSize;
@@ -73,6 +79,7 @@ public class CacheModule {
 			this.cache.put(boor.getId(), boor);
 			cacheData = new CacheData(1, 0);
 			this.cacheInfo.put(boor.getId(), cacheData);
+			boor.setTime(CommonState.getIntTime());
 //			System.out.println("Ajout du nœud " + boor.getId() + " dans le cache réussi");
 //			System.out.println(boor.toString());
 			
@@ -254,6 +261,42 @@ public class CacheModule {
 		return best;
 	
 	}
+	
+	public NeighborProxy searchCacheNeighborEnvelop(long[] destination){
+		NeighborProxy current;
+		NeighborProxy best = null;
+		NeighborProxy other = null;
+		
+		double currentDist,bestDist = -1;
+		
+		
+//		HashMap<Integer, NeighborProxy> cach = this.cache;
+		Iterator it;
+		it = this.cache.entrySet().iterator();
+
+				
+		while(it.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
+			System.out.println(this.protocol.helpfulToEnvelopeCache(current));
+			if (this.protocol.helpfulToEnvelopeCache(current)){
+				best = current;
+				return best;
+			}
+			if ( this.protocol.constructingEnvelope(current)){
+				other = current;
+				
+			}
+		}
+		if (other != null){
+			System.out.println("OTHER PAS NULL");
+		}
+		
+		return other;
+	
+	}
+	
+	
 	
 	
 	public NeighborProxy searchCacheNeighborLimitNeighbor(long[] destination,HashMap<Integer, NeighborProxy> voisin){
