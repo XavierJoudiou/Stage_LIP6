@@ -1,0 +1,78 @@
+
+
+		Messages Importants dans SolipsisPeersim:
+
+
+-------------------------------------------------------------------------------------------------------
+
+
+Message.CONNECT:
+	+ Elle répond par un message connect validant l’ouverture de la connexion, puis ajoute immédiatement e à sesstructures de données
+	+ A la réception d’un message connect, l’entité e vérifie d’abord qu’elle a effectivement éemis un message hello, puis valide l’existence de la connexion.
+
+	- Appelé par processFoundMsg 
+	- Appelé par processDetectMsg
+	- Appelé par prospectPrefetched
+
+
+Message.DELTA:
+	+ Quand une entité e modifie une de ses caractéristiques, il informe ses voisins en émettant un message delta contenant son identifiant, la variable modifiée et la nouvelle valeur de cette caractéristique.
+
+	- Appelé par statePropagationMessage -> propagateStateInformation -> Animate
+
+
+Message.DETECT:
+	+ Un message de détection detect permet à une entité e0 de fournir à une entité e le moyen de se connecter à une entité e00, suivant le	mécanisme décrit dans la Section 2.3.1
+
+	- Appelé par sendDetectMsg -> sentinelAlgorithm -> processDeltaMsg
+
+
+Message.SEARCH:
+	+ Un message search émis par une entité e à une entité e0 permet à e de requérir la collaboration de e0 pour récupérer un nouveau voisin e00 dans le demi-plan délimité par la droite (e, e0) dans le sens trigonométrique si wise vaut 1 ou dans le sens des aiguilles d’une montre si wise vaut 0 
+
+	- Appelé par solipsisRecoverTopology -> recoverTopology -> maintainTopology -> keepTopology -> animate
+	- Appelé par processCacheUpdResponse
+	- Appelé par processFoundMsg
+
+
+Message.FOUND:
+	+ La réponse de l’entité e0 est un message found contenant les informations qui vont permettre à l’entité e de rentrer en communication avec une entité e00 sélectionnée.  < found, id(e00), host(e00), port(e00), posx(e00), posy(e00) >  Quand l’entité e reçoit un tel message, il peut ouvrir une connexion avec e00 et, si elle le juge nécessaire, renvoyer un message search à e00 en espérant que l’entité e00 lui communique une nouvelle entité qui lui permettra de respecter de nouveau la règle 2.3.1.
+
+	- Appelé par createFoundMsg -> processSearchMsg -> processSearchMsg ->
+	- Appelé par ... -> processPrefetchMsg 
+	- Appelé par ... -> sendPrefetchConnectMessage -> processPrefetchMsg
+
+
+Message.CLOSE:	
+	+ Une entité peut couper une connexion en émettant le message close. < close, id > Dès réception d’un message close, une entité e0 considère que l’entité e n’est plus un voisin et ôte immédiatement e de ses structures de données.
+
+	- Appelé par sendDisconnectMessage -> disconnect & removeUnwantedNeighbors & processSmallWorldAckMsg 
+	- Appelé par ... -> togglePrefetch -> maintainTopology -> keepTopology -> animate 
+
+
+Message.PREFETCH:
+	- Appelé par processFoundMsg 
+	- Appelé par createPrefetchMessage -> propagatePrefetchRequest -> prospectPrefetched -> maintainTopology ->  keepTopology -> animate
+
+
+Message.FIND_NEAREST:
+	- Appelé par sendFindNearestMessage -> lookup(request) -> lookup(dest,kind)
+	- Appelé par ... -> join -> executeSecondLife & executeSecondLife -> execute
+	- Appelé par ... -> processLookupReply
+	- Appelé par ... -> processQueryAround
+	- Appelé par ... -> processFindNearest
+
+
+Message.QUERYAROUND:
+	- Appelé par sendQueryAroundMessage -> lookup(request) & processQueryAround
+
+
+Message.LOOKED_UP:
+	- Appelé par sendLookedUpMsg -> warnNeighbors -> jumpingToPositionConnectionAlgorithm -> join & estimateHops & lui-meme & surroundingPositionConnectionAlgorithm
+	- Appelé par ... -> surroundingPositionConnectionAlgorithm -> jumpingToPositionConnectionAlgorithm & lui-meme
+	- Appelé par ... -> processQueryAround
+
+
+Message.LOOKUP_REPLY:
+	- Appelé par sendLookupReplyMessage -> lookup(request) & processQueryAround
+

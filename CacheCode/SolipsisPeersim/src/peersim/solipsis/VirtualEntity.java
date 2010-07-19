@@ -303,9 +303,6 @@ public class VirtualEntity implements VirtualEntityInterface {
 //		System.out.println("maintaining Topology "+CommonState.getTime());
 		this.protocol.maintainTopology();
 //		System.out.println("end of keepTopo");
-//		System.out.println("start maintain Cache Topology");
-//		this.protocol.maintainCacheTopology();
-//		System.out.println("end maintain Cache Topology");
 	}
 	
 	public void refreshState() {

@@ -25,6 +25,9 @@ public class CacheStatistics {
 	private int nbEnvelopNotOK;
 	private int nbMessSearch;
 	private int nbMessDelta;
+	private int nbMessFound;
+	private int nbMessConnect;
+	private int nbMessClose;
 
 	CacheStatistics() {
 		this.nbCaheMissGlob = 0;
@@ -84,6 +87,18 @@ public class CacheStatistics {
 		this.nbMessDelta ++;
 	}
 	
+	public void incnbMessConnect(){
+		this.nbMessConnect ++;
+	}
+	
+	public void incnbMessClose(){
+		this.nbMessClose ++;
+	}
+	
+	public void incnbMessFound(){
+		this.nbMessFound ++;
+	}
+	
 	
 	/*
 	 *  Fonctions Affichage Statistiques 
@@ -100,11 +115,15 @@ public class CacheStatistics {
 	}
 	
 	public void printStatisticsCacheMess() {
+		System.out.println("Hit:Mit:Miss:CacReq:CacResp:Time");
 		System.out.println(this.nbCaheHitGlob + ":" + this.nbCacheMitClob + ":" + this.nbCaheMissGlob + ":" + this.nbCacheRequest + ":" + this.nbCacheResponse +  ":"+ CommonState.getTime()+ ", ");
+		System.out.println("");
+
 	}
 	
 	public void printStatisticsActiviteMess() {
-		System.out.println(this.nbCacheRequest + "|" + this.nbMessSearch + "|" + this.nbMessDelta + "|" + this.nbEnvelopNotOK + "|" + this.nbNombreMessages +  "|"+ CommonState.getTime()+ ", ");
+		System.out.println("CacheReq|Search|Delta|Found|Total|Time");
+		System.out.println(this.nbCacheRequest + "|" + this.nbMessSearch + "|" + this.nbMessDelta + "|" + this.nbMessFound + "|" + this.nbNombreMessages +  "|"+ CommonState.getTime()+ ", ");
 	}
 	
 	public String printStatisticsCacheMessString() {
@@ -115,7 +134,7 @@ public class CacheStatistics {
 	
 	public String printStatisticsActiviteMessString() {
 		String res;
-		res = "" + this.nbCacheRequest + " " + this.nbMessSearch + " " + this.nbMessDelta + " " + this.nbEnvelopNotOK + " " + this.nbNombreMessages + " " + CommonState.getTime() + "\n";
+		res = "" + this.nbCacheRequest + " " + this.nbMessSearch + " " + this.nbMessDelta + " " + this.nbMessFound + " " + this.nbNombreMessages + " " + CommonState.getTime() + "\n";
 		return res;
 	}
 

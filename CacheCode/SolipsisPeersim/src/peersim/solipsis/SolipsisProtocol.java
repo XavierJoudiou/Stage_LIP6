@@ -813,19 +813,27 @@ public class SolipsisProtocol implements EDProtocol {
 		int [][] moduloCoefs;
 		Message recoverMsg = null;
 		NeighborProxy sendTo;
+		int find = 0;
+		
+		if (this.strategieCache == SolipsisProtocol.FIFO && this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
+			find = maintainCacheTopology();
+		}
+		System.out.println("++++++++++ find:" + find);
 
-		if (sector != null) {
-			if (sector[0] != null) {
-				sendTo = sector[0];
-				line  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(sendTo.getId()));
-				if (sector[1] != null && simpleAngleSign(this.subjectiveCoord(sector[0].getId()), this.mainVirtualEntity.getCoord(), this.subjectiveCoord(sector[1].getId())) < 0) {
-					line.setOri(VirtualWorld.LEFT);
-				} else {
-					line.setOri(VirtualWorld.RIGHT);
+		if (find == 0){
+			if (sector != null) {
+				if (sector[0] != null) {
+					sendTo = sector[0];
+					line  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(sendTo.getId()));
+					if (sector[1] != null && simpleAngleSign(this.subjectiveCoord(sector[0].getId()), this.mainVirtualEntity.getCoord(), this.subjectiveCoord(sector[1].getId())) < 0) {
+						line.setOri(VirtualWorld.LEFT);
+					} else {
+						line.setOri(VirtualWorld.RIGHT);
+					}
+					this.searchInProgress = true;
+					recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), sendTo.getId(), line);
+					this.send(recoverMsg, sendTo);
 				}
-				this.searchInProgress = true;
-				recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), sendTo.getId(), line);
-				this.send(recoverMsg, sendTo);
 			}
 		}
 	}
@@ -895,7 +903,7 @@ public class SolipsisProtocol implements EDProtocol {
 	 * nœud dans le cache, nous incrémentons les caches MISS
 	 * 
 	 */
-	public void maintainCacheTopology() {
+	public int maintainCacheTopology() {
 		Node n;
 		NeighborProxy neighbor = null;
 		
@@ -965,19 +973,24 @@ public class SolipsisProtocol implements EDProtocol {
 							if (cacheDebug == 1 || cacheDebug == 2){
 								System.out.println("<" + cache_test.getTypeString() + ", " +  this.mainVirtualEntity.getId() + ", " + neighbor.getId() + ">");
 							}
+							return 1;
 							
 						}else{
 							Globals.cacheEvaluator.incCacheMissGlob();
+							return 0;
 						}
 				
 				
-				break;
+//				break;
 
 			default:
-				break;
+//				break;
+				return 0;
 			}
 			
+			
 		}
+		return 0;
 	}
 	
 
@@ -1207,9 +1220,9 @@ public class SolipsisProtocol implements EDProtocol {
 		
 		if (Globals.topologyIsReady && stateUpdateTimerReady()) {
 			
-			if (this.strategieCache == SolipsisProtocol.FIFO && this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
-				maintainCacheTopology();
-			}else{
+//			if (this.strategieCache == SolipsisProtocol.FIFO && this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
+//				maintainCacheTopology();
+//			}else{
 			
 			neighbors = this.getParticularNeighbors(NeighborProxy.REGULAR);
 			size = neighbors.size();
@@ -1236,7 +1249,7 @@ public class SolipsisProtocol implements EDProtocol {
 				}
 			}
 			rearmStateUpdateTimer();
-			}
+//			}
 		} 
 	}
 
@@ -1467,6 +1480,8 @@ public class SolipsisProtocol implements EDProtocol {
 //			processHelloMsg(msg);
 			break;
 		case Message.CONNECT:
+			Globals.cacheEvaluator.incnbMessConnect();
+
 			/* environ 12 000 messages */
 			processConnectMsg(msg);
 			break;
@@ -1498,9 +1513,11 @@ public class SolipsisProtocol implements EDProtocol {
 			break;
 		case Message.FOUND:
 			/* environ 30 000 messages */
+			Globals.cacheEvaluator.incnbMessFound();
 			processFoundMsg(msg);
 			break;
 		case Message.CLOSE:	
+			Globals.cacheEvaluator.incnbMessClose();
 			processCloseMsg(msg);
 			break;
 		case Message.PREFETCH:
@@ -2017,6 +2034,8 @@ public class SolipsisProtocol implements EDProtocol {
 		int size;
 		this.convexEnvelope = this.findConvexEnvelope(this.idToProxyList(this.getParticularNeighbors(NeighborProxy.REGULAR)), this.mainVirtualEntity);
 		NeighborProxy [] sector = this.verifyEnvelope(convexEnvelope);
+
+		
 		if (this.type == ENHANCED) {
 			if (this.mainVirtualEntity.getState() == MobilityStateMachine.TRAVELLING) {
 				if (this.prefetchingModule.needToPropagateRequest()) {
