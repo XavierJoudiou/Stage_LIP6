@@ -4,6 +4,10 @@ import peersim.config.*;
 import peersim.core.*;
 import peersim.edsim.*;
 import peersim.solipsis.VirtualEntity;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -38,9 +42,9 @@ public class SolipsisProtocol implements EDProtocol {
 	private final static String CACHE_LIMIT		= "limite";
 	private final static String TIME_LIMIT		= "time_limite";
 	private final static String CACHE_DEBUG		= "cacheDebug";
-	private final static int FIFO	=  0;
-	private final static int LRU	=  1;
-	private final static int OFF	=  2;
+	private final static int OFF	=  0;
+	private final static int FIFO	=  1;
+	private final static int LRU	=  2;
 	
 	public final static int BASIC      = 0;
 	public final static int ENHANCED   = 1;
@@ -110,9 +114,11 @@ public class SolipsisProtocol implements EDProtocol {
 	private int limite;
 	private int time_limite;
 	private int cacheDebug;
+	private File fichier3;
+	private FileWriter fw3;
 	
 	
-	public SolipsisProtocol(String prefix) {
+	public SolipsisProtocol(String prefix) throws IOException {
 	
 		this.transport = Configuration.getPid(prefix+"."+PAR_TRANSPORT);
 		this.protocolId = Configuration.getPid(prefix+"."+PAR_ID);
@@ -148,6 +154,17 @@ public class SolipsisProtocol implements EDProtocol {
 			this.cacheDebug = Configuration.getInt(prefix+"."+CACHE_DEBUG);
 			this.strategieCache = Configuration.getInt(prefix+"."+CACHE_STRATEGIE);
 			this.cache = new CacheModule(null, null, this.cacheSize, this.strategieCache,this);
+			
+			if ( Globals.affichage_options == 0){
+				Globals.affichage_options ++;
+			  fichier3 = new File("Stats_EndTime.txt");
+			  fichier3.createNewFile();
+			  fw3 = new FileWriter("Stats_EndTime.txt",true);
+			  String options = "Limite: " + this.limite + ", CacheSize: " + this.cacheSize + ", Time_limite " + time_limite + 
+			  ", Durée: " + CommonState.getEndTime() + ", Stratégie: " + this.strategieCache + "\n";
+			  fw3.write(options);
+			  fw3.close();
+			}
 		}
 		
 	}
@@ -489,7 +506,13 @@ public class SolipsisProtocol implements EDProtocol {
 	@Override
 	public Object clone()
 	{
-		SolipsisProtocol dolly = new SolipsisProtocol(this.prefix);
+		SolipsisProtocol dolly = null;
+		try {
+			dolly = new SolipsisProtocol(this.prefix);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return dolly;
 	}
 	
@@ -889,23 +912,86 @@ public class SolipsisProtocol implements EDProtocol {
 		VirtualEntity stranger;
 		long [] origin;
 		Node n;
+		int find = 0;
+		
+//		if (this.strategieCache == SolipsisProtocol.FIFO && this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
+//			find = maintainCacheTopologyHelp(msg);
+//		}
+//		System.out.println("++++++++++ find:" + find);
 
-		neighbor = searchForAppropriateNeighbor(line);
-		if (neighbor != null) {
-			response = createFoundMsg(neighbor, msg.getSource());
-			if (source == null) {
-				n = Network.get(msg.getOriginAddress());
-				if (n != null) {
-					stranger = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity();
-					this.send(response, stranger);
+		if (find == 0){
+					
+			neighbor = searchForAppropriateNeighbor(line);
+			if (neighbor != null) {
+				response = createFoundMsg(neighbor, msg.getSource());
+				if (source == null) {
+					n = Network.get(msg.getOriginAddress());
+					if (n != null) {
+						stranger = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity();
+						this.send(response, stranger);
+					}
+				} else {
+					this.send(response, source);
 				}
-			} else {
-				this.send(response, source);
 			}
 		}
 	}
-	
-		
+//	
+//	public int maintainCacheTopologyHelp(Message msg) {
+//		Node n;
+//		NeighborProxy neighbor = null;
+//		
+//		Globals.cacheEvaluator.incnbCachePassClob();
+//		NeighborProxy source = this.proxies.get(msg.getSource());
+//	
+//		System.out.println("source = " + source.getId());
+//	
+//			
+//			switch (this.strategieCache) {
+//			case SolipsisProtocol.FIFO:
+//				
+//						long[] destination = msg.getDest();
+//						if (destination != null){
+//							switch(limite){
+//							case -1: 
+//								neighbor = cache.searchCacheNeighborLimitNeighbor(destination, this.cache.getCache());
+//								break;
+//							default:
+//								neighbor = cache.searchCacheNeighborLimitNeighbor(destination, this.cache.getCache());
+////								neighbor = cache.searchCacheNeighborEnvelopEv(destination);
+//								break;
+//							}
+//						}
+//						
+//						if (neighbor != null){
+//							if (cacheDebug == 1){
+//								System.out.println("----------------------------------------");
+//								System.out.println("--- On a trouvé un nœud dans le cache: " + neighbor.getId() + " ---");
+//								System.out.println("----------------------------------------");
+//							}
+//
+//							if ( neighbor.getTime() + time_limite > CommonState.getIntTime()){
+//								//cache.RmCache(neighbor);
+//								//addLocalView(neighbor);
+//								System.out.println("HELP HITTTTTTTTTTTTT");
+//								//neighbor.setQuality(NeighborProxy.REGULAR);
+//								Globals.cacheEvaluator.incCacheHitGLob();
+//								return 1;
+//								
+//							}
+//							System.out.println("====== TROP vieux neigtime: " + neighbor.getTime() +", time: " + CommonState.getIntTime());
+//							
+//						}else{
+//							System.out.println("HELP MISSSSSSSSSSSSS");
+//							Globals.cacheEvaluator.incCacheMissGlob();
+//							return 0;
+//						}
+//			default:
+//				return 0;
+//			}
+//	}
+//	
+//		
 	
 	/*
 	 * Fonction MaintainCacheTopology:
@@ -1153,9 +1239,10 @@ public class SolipsisProtocol implements EDProtocol {
 			/* regarder dans processFoundMsg, pour refaire l'envelope */ 
 			GeometricRegion lin;
 			Message recoverMsg;
+			Node n = Network.get(this.getPeersimNodeId());
 			NeighborProxy peer = ((CacheRequest)msg.getContent()).getOldData();
 			lin  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(peer.getId()));
-			recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), lin);
+			recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), lin,((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getDestination());
 			this.send(recoverMsg, peer);
 			
 		}

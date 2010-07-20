@@ -33,6 +33,8 @@ public class Message {
 	private int ttl;
 	private long timestamp;
 	
+	private long [] dest;
+	
 	/*optimization*/
 	private int originAddress;
 	
@@ -47,6 +49,19 @@ public class Message {
 		this.originAddress = fromAddress;
 		this.ttl = Integer.MAX_VALUE;
 		this.timestamp = 0;
+	}
+	public Message(int messageType, int fromAddress, int from, int to, Object body, long[] destination) {
+		this.messageType = messageType;
+		this.from = from;
+		this.to = to;
+		this.body = body;
+		this.from = from;
+		this.to = to;
+		this.body = body;
+		this.originAddress = fromAddress;
+		this.ttl = Integer.MAX_VALUE;
+		this.timestamp = 0;
+		this.dest = destination;
 	}
 	
 	public void setTimestamp(long value) {
@@ -96,6 +111,12 @@ public class Message {
 		return this.messageType;
 	}
 	
+	public long[] getDest() {
+		return dest;
+	}
+	public void setDest(long[] dest) {
+		this.dest = dest;
+	}
 	public String getTypeString(){
 		String res;
 		switch(this.messageType){

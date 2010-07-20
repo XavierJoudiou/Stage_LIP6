@@ -56,6 +56,8 @@ public class Globals {
 	public static int longRangeUse = 0;
 	public static int totalUse     = 0;
 	
+	public static int affichage_options = 0;
+	
 	public static SecondLifeTraceDistribution slTrace;
 	public static boolean generated = true;
 	public static int stepCount;

@@ -19,7 +19,9 @@ public class CacheModule {
 	/* pour le cache */
 	private final static String CACHE_SIZE		= "cacheSize";
 	private final static String CACHE_STRATEGIE = "cachestrategie";
-	private final static int FIFO	=  0;
+	private final static int OFF 	=  0;
+	private final static int FIFO	=  1;
+	private final static int LRU	=  2;
 	
 
 	/* Variables pour la mise en place du cache */ 
