@@ -18,7 +18,6 @@ public class PrefetchingModule {
 
 	private final static int DETONATOR_VALUE = 0;
 	
-	
 	private int prefetchExp;
 	
 	private int prefetchExpTolerance;

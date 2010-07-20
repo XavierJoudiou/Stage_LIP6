@@ -43,13 +43,6 @@ public class CacheModule {
 		this.strategieCache = strategieCache;
 		this.cache = new HashMap<Integer,NeighborProxy>();
 		this.cacheInfo = new HashMap<Integer, CacheData>();
-//		System.out.println("----------------------");
-//		System.out.println("----------------------");
-//		System.out.println("Taille du cache: " + cacheSize);
-//		System.out.println("----------------------");
-//		System.out.println("Strategie: " + strategieCache);
-//		System.out.println("----------------------");
-//		System.out.println("----------------------");
 	}
 	
 
@@ -218,7 +211,6 @@ public class CacheModule {
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 		}
 		
-//		System.out.println("Le nœud le plus proche est: " + nearest.getId() + ", avec une distance de " + nearestDist);
 		return nearest;
 	}
 	
@@ -230,7 +222,6 @@ public class CacheModule {
 		double currentDist,bestDist = -1;
 		
 		
-//		HashMap<Integer, NeighborProxy> cach = this.cache;
 		Iterator it;
 		it = this.cache.entrySet().iterator();
 		this.setLimite((int)limite);
@@ -240,10 +231,6 @@ public class CacheModule {
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
 			
-//			System.out.println("Current Dist: " + currentDist);
-//			System.out.println("Best Dist   : " + bestDist);
-//			System.out.println("Limite       : " + limite);
-
 			if (currentDist < limite){
 				if ( bestDist == -1){
 					bestDist = currentDist;
@@ -256,7 +243,6 @@ public class CacheModule {
 				}
 			}
 		}
-//		System.out.println("le Minimum est: " +  bestDist );
 		
 		return best;
 	
@@ -278,7 +264,7 @@ public class CacheModule {
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
-			System.out.println(this.protocol.helpfulToEnvelopeCache(current));
+//			System.out.println(this.protocol.helpfulToEnvelopeCache(current));
 			if (this.protocol.helpfulToEnvelopeCache(current)){
 				best = current;
 				return best;
@@ -296,6 +282,42 @@ public class CacheModule {
 	
 	}
 	
+	
+	public NeighborProxy searchCacheNeighborEnvelopEv(long[] destination){
+		NeighborProxy current;
+		NeighborProxy best = null;
+		NeighborProxy other = null;
+		long bestTime = -1;
+		double currentDist,bestDist = -1;
+		
+		
+//		HashMap<Integer, NeighborProxy> cach = this.cache;
+		Iterator it;
+		it = this.cache.entrySet().iterator();
+
+				
+		while(it.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
+//			System.out.println(this.protocol.helpfulToEnvelopeCache(current));
+			if (this.protocol.helpfulToEnvelopeCache(current) && current.getTime() > bestTime){
+				best = current;
+				bestTime = current.getTime();
+//				return best;
+			}
+			if ( this.protocol.constructingEnvelope(current)){
+				other = current;
+				
+			}
+		}
+		if (other != null){
+			System.out.println("OTHER PAS NULL");
+			return other;
+		}
+		
+		return best;
+	
+	}
 	
 	
 	

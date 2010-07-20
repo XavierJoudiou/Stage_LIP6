@@ -14,6 +14,7 @@ import javax.naming.LimitExceededException;
 
 
 
+
 /**
  * 
  * @author Legtchenko Sergey
@@ -35,6 +36,7 @@ public class SolipsisProtocol implements EDProtocol {
 	private final static String CACHE_SIZE		= "cacheSize";
 	private final static String CACHE_STRATEGIE = "cachestrategie";
 	private final static String CACHE_LIMIT		= "limite";
+	private final static String TIME_LIMIT		= "time_limite";
 	private final static String CACHE_DEBUG		= "cacheDebug";
 	private final static int FIFO	=  0;
 	private final static int LRU	=  1;
@@ -106,6 +108,7 @@ public class SolipsisProtocol implements EDProtocol {
 	private int cacheSize;
 	private int strategieCache;
 	private int limite;
+	private int time_limite;
 	private int cacheDebug;
 	
 	
@@ -141,6 +144,7 @@ public class SolipsisProtocol implements EDProtocol {
 		if (this.type == SolipsisProtocol.FIFO || this.type == SolipsisProtocol.LRU){ 
 			this.cacheSize = Configuration.getInt(prefix+"."+CACHE_SIZE);
 			this.limite = Configuration.getInt(prefix+"."+CACHE_LIMIT);
+			this.time_limite = Configuration.getInt(prefix+"."+TIME_LIMIT);
 			this.cacheDebug = Configuration.getInt(prefix+"."+CACHE_DEBUG);
 			this.strategieCache = Configuration.getInt(prefix+"."+CACHE_STRATEGIE);
 			this.cache = new CacheModule(null, null, this.cacheSize, this.strategieCache,this);
@@ -823,24 +827,16 @@ public class SolipsisProtocol implements EDProtocol {
 		if (this.strategieCache == SolipsisProtocol.FIFO && this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
 			find = maintainCacheTopology();
 		}
-		System.out.println("++++++++++ find:" + find);
+//		System.out.println("++++++++++ find:" + find);
 
 		if (find == 0){
-//			System.out.println("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
 			if (sector != null) {
 				if (sector[0] != null) {
 					sendTo = sector[0];
 					long [] a = this.mainVirtualEntity.getCoord();
 					long [] b = this.subjectiveCoord(sendTo.getId());
-//					System.out.println("a = " + a);
-//					System.out.println("b = " + b);
 					line  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(sendTo.getId()));
-					long [] c = this.subjectiveCoord(sector[0].getId());
-					long [] d = this.mainVirtualEntity.getCoord();
-					long [] e = this.subjectiveCoord(sector[1].getId());
-//					System.out.println("c = " + c);
-//					System.out.println("d = " + d);
-//					System.out.println("e = " + e);
+
 					
 					if (sector[1] != null && simpleAngleSign(this.subjectiveCoord(sector[0].getId()), this.mainVirtualEntity.getCoord(), this.subjectiveCoord(sector[1].getId())) < 0) {
 						line.setOri(VirtualWorld.LEFT);
@@ -951,7 +947,9 @@ public class SolipsisProtocol implements EDProtocol {
 							default:
 								
 //								neighbor = cache.searchCacheNeighborLimit(destination,limite);
-								neighbor = cache.searchCacheNeighborEnvelop(destination);
+//								neighbor = cache.searchCacheNeighborEnvelop(destination);
+								neighbor = cache.searchCacheNeighborEnvelopEv(destination);
+
 
 								break;
 								
@@ -972,16 +970,17 @@ public class SolipsisProtocol implements EDProtocol {
 								System.out.println("----------------------------------------");
 							}
 
-							if ( neighbor.getTime() + 4000 > CommonState.getIntTime()){
+							if ( neighbor.getTime() + time_limite > CommonState.getIntTime()){
 								cache.RmCache(neighbor);
 								addLocalView(neighbor);
 								neighbor.setQuality(NeighborProxy.REGULAR);
 								Globals.cacheEvaluator.incCacheHitGLob();
-								System.out.println("HIT DIRECT DANS TA FACE !!!");
 								return 1;
 								
 							}
-							System.out.println("====== TROP vieux neigtime: " + neighbor.getTime() +", time: " + CommonState.getIntTime());
+							if (cacheDebug == 1){
+								System.out.println("====== TROP vieux neigtime: " + neighbor.getTime() +", time: " + CommonState.getIntTime());
+							}
 
 							Message cache_test;
 							CacheRequest cache_request;
@@ -996,7 +995,6 @@ public class SolipsisProtocol implements EDProtocol {
 							cache_test = new Message(Message.CACHE_UPD, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), neighbor.getId(), cache_request);
 				
 							neighbor.setQuality(NeighborProxy.CACHED);
-
 							
 							
 							this.send(cache_test,neighbor);
@@ -1043,10 +1041,10 @@ public class SolipsisProtocol implements EDProtocol {
 		
 		if (compareNeighborProxy((CacheRequest)msg.getContent(), ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity() )){
 			
-//			if ( cacheDebug == 1 || cacheDebug == 2 ){
-				System.out.println("... Comparaison OK: Old " + ((CacheRequest)msg.getContent()).getOldData().getCoord() +
-						", Real " + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord() + " ...");	
-//			}
+			if ( cacheDebug == 1 || cacheDebug == 2 ){
+				System.out.println("... Comparaison OK: Old " + ((CacheRequest)msg.getContent()).getOldData().getCoord()[0] + "," + ((CacheRequest)msg.getContent()).getOldData().getCoord()[1] +
+						", Real " + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord()[0] + "," + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord()[1] + " ...");	
+			}
 			
 
 			/* Faire la Mis A Jour du Noeud */
@@ -1055,14 +1053,17 @@ public class SolipsisProtocol implements EDProtocol {
 			CacheRequest response = new CacheRequest(responseProx,this.mainVirtualEntity.getNeighbor( this.mainVirtualEntity.getId()));
 		
 		/* TODO probleme maj valeur */
+			
 			this.MajNeighborProxy(((CacheRequest)msg.getContent()).getOldData(), ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity());
-			System.out.println("-- realcoord: " + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord() );
-			System.out.println("-- new coord: " + response.getOldData().getCoord() );
-
+			if (cacheDebug == 1){
+				System.out.println("-- realcoord: " + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord()[0] + "," + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord()[1] );
+				System.out.println("-- new coord: " + response.getOldData().getCoord()[0] + "," + response.getOldData().getCoord()[1] );
+			}
 			
 			/*Envoyer un message pour faire un hit de cache */
 			Message cache_rep;
-			cache_rep = new Message(Message.CACHE_UPD_REP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), msg.getSource(), msg.getContent());
+			
+			cache_rep = new Message(Message.CACHE_UPD_REP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), msg.getSource(), response);
 
 			if (source != null){
 				this.send(cache_rep,source);
@@ -1102,6 +1103,8 @@ public class SolipsisProtocol implements EDProtocol {
 		CacheRequest neig = (CacheRequest) msg.getContent();
 		NeighborProxy neighbor = neig.getOldData();
 
+		
+
 		if ( cacheDebug == 1 || cacheDebug == 2 ){
 			System.out.println("Message Recu : <" + msg.getTypeString() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + ">");
 		}
@@ -1129,6 +1132,8 @@ public class SolipsisProtocol implements EDProtocol {
 		
 		/* Changement de la Qulity du nœud que l'on repasse à REGULAR */
 		neighbor.setQuality(NeighborProxy.REGULAR);
+		neighbor.setTime(CommonState.getIntTime());
+		
 		if (cacheDebug == 1){
 			System.out.println("--- Modification de la quality du nœud: " + neighbor.getQuality());
 		}
@@ -1162,22 +1167,25 @@ public class SolipsisProtocol implements EDProtocol {
 		
 		old.setCoord(nouv.getCoord());
 		
+		
 	}
 	
 	private boolean compareNeighborProxy(CacheRequest old,VirtualEntity act){
 		boolean resultat;
 		resultat = false;
 		
-		if ( act.getCoord() == old.getOldData().getCoord()){
+		if ( act.getCoord()[0] == old.getOldData().getCoord()[0] && act.getCoord()[1] == old.getOldData().getCoord()[1]){
 			resultat = true;
 		}
-//		System.out.println("old: " + old.getOldData().getCoord() + ", act: " + act.getCoord());
+		
 		double res = VirtualWorld.simpleDistance(old.getOldData().getCoord(), act.getCoord());
-//		System.out.println("- curtime: " + CommonState.getTime());
-//		System.out.println("---- dist: " + res);
-//		System.out.println("- oldtime: " + old.getOldData().getTime());
-//		System.out.println("-- limite: " + cache.getLimite());
-//		System.out.println("-- samlim: " + (cache.getLimite()/2));
+		if (cacheDebug == 1){
+			System.out.println(this);
+			System.out.println("old: " + old.getOldData().getCoord() + ", act: " + act.getCoord());
+			System.out.println("- curtime: " + CommonState.getTime());
+			System.out.println("---- dist: " + res);
+			System.out.println("- oldtime: " + old.getOldData().getTime());
+		}
 		if (res < this.limite){
 			resultat = true;
 		}
@@ -1250,10 +1258,6 @@ public class SolipsisProtocol implements EDProtocol {
 		
 		if (Globals.topologyIsReady && stateUpdateTimerReady()) {
 			
-//			if (this.strategieCache == SolipsisProtocol.FIFO && this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
-//				maintainCacheTopology();
-//			}else{
-			
 			neighbors = this.getParticularNeighbors(NeighborProxy.REGULAR);
 			size = neighbors.size();
 			time = CommonState.getTime();
@@ -1279,7 +1283,6 @@ public class SolipsisProtocol implements EDProtocol {
 				}
 			}
 			rearmStateUpdateTimer();
-//			}
 		} 
 	}
 
@@ -1392,23 +1395,30 @@ public class SolipsisProtocol implements EDProtocol {
 			this.disconnectTimestamps.put(peerToForget, msg.getTimestamp());
 	}
 	
-	/* A modifier pour mettre dans le cache */
+	/*
+	 * Fonction RemoveProxy:
+	 * On ajoute l'élement que l'on supprime des voisins 
+	 * dans le cache.
+	 */
 	public void removeProxy(int neighbor) {
 		NeighborProxy rm = this.proxies.get(neighbor);
 		if (this.strategieCache == SolipsisProtocol.FIFO) {
 			this.cache.AddCache(this.proxies.get(neighbor));
-	//		this.cache.ShowCache();
 		}
 		this.proxies.remove(neighbor);
-		/* regarder reste */
 		this.clearConnectionTime(neighbor);
 		this.updateTimestamps.remove(neighbor);
 		this.predictionVector.remove(neighbor);
 	}
 	
+	/* 
+	 * Fonction de suppression mais sans passer par le cache 
+	 * sert pour lorsque que l'on ajoute au voisin pour tester
+	 * la couverture dans la fonction de recherche dans le cache
+	 * 
+	 */
 	public void removeProxyNoCache(int neighbor) {
 		NeighborProxy rm = this.proxies.get(neighbor);
-		
 		this.proxies.remove(neighbor);
 		this.clearConnectionTime(neighbor);
 		this.updateTimestamps.remove(neighbor);
@@ -1507,7 +1517,6 @@ public class SolipsisProtocol implements EDProtocol {
 	}
 	
 	public void receive(Message msg, SolipsisProtocol oneHopSourcePeer) {
-		/* environ 500 000 messages */
 		Globals.cacheEvaluator.incnbNombreMessages();
 
 		if (!Globals.realTime) {
@@ -1515,19 +1524,14 @@ public class SolipsisProtocol implements EDProtocol {
 		}
 		switch(msg.getType()) {
 		case Message.HELLO:
-
-//			processHelloMsg(msg);
 			break;
 		case Message.CONNECT:
 			Globals.cacheEvaluator.incnbMessConnect();
-
-			/* environ 12 000 messages */
 			processConnectMsg(msg);
 			break;
 		case Message.HEARTBEAT:
 			break;
 		case Message.DELTA:
-			/* environ 400 000 messages */
 			Globals.cacheEvaluator.incnbMessDelta();
 			processDeltaMsg(msg);
 			if (!Globals.realTime) {
@@ -1535,14 +1539,12 @@ public class SolipsisProtocol implements EDProtocol {
 			}
 			break;
 		case Message.DETECT:
-			/* environ 55 000 messages */
 			processDetectMsg(msg);
 			if (!Globals.realTime) {
 				Globals.evaluator.messageDetect();
 			}
 			break;
 		case Message.SEARCH:
-			/* environ 100 messages */
 			Globals.cacheEvaluator.incnbMessSearch();
 			processSearchMsg(msg);
 
@@ -1551,7 +1553,6 @@ public class SolipsisProtocol implements EDProtocol {
 			}
 			break;
 		case Message.FOUND:
-			/* environ 30 000 messages */
 			Globals.cacheEvaluator.incnbMessFound();
 			processFoundMsg(msg);
 			break;
@@ -1585,17 +1586,10 @@ public class SolipsisProtocol implements EDProtocol {
 			break;
 		case Message.CACHE_UPD:
 			Globals.cacheEvaluator.incNbCacheRequest();
-//			System.out.println("Message reçu de type: " + msg.getType());
-//			System.out.println("Message Source: " + msg.getSource() );
-//			System.out.println("Message Destination: " + msg.getDestination() );
 			this.processCacheUpd(msg);
 			break;
 		case Message.CACHE_UPD_REP:
 			Globals.cacheEvaluator.incnbCacherResponse();
-
-//			System.out.println("Message reçu de type: " + msg.getType());
-//			System.out.println("Message Source: " + msg.getSource() );
-//			System.out.println("Message Destination: " + msg.getDestination() );
 			this.processCacheUpdResponse(msg);
 			break;
 		default:
@@ -1879,7 +1873,6 @@ public class SolipsisProtocol implements EDProtocol {
 		boolean convexProperty = convexEnvelopeProperty();
 		peer.setQuality(quality);
 		this.removeProxyNoCache(peer.getId());
-//		System.out.println("dans helpful "+convexProperty + " " + beforeAdding);
 		return convexProperty && !beforeAdding;
 	}
 	

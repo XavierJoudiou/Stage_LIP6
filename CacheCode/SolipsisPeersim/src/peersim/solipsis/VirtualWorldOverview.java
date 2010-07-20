@@ -53,8 +53,8 @@ public class VirtualWorldOverview implements Control {
 		    		
 		    			String res1,res2;
 		    			res1 = evalCache.printStatisticsCacheMessString();
-		    			res2 = evalCache.printStatisticsActiviteMessString();
 		    			fw.write(res1);
+		    			res2 = evalCache.printStatisticsActiviteMessString();
 		    			fw2.write(res2);
 					} catch (IOException e) {
 						e.printStackTrace();
