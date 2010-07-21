@@ -28,6 +28,10 @@ public class CacheStatistics {
 	private int nbMessFound;
 	private int nbMessConnect;
 	private int nbMessClose;
+	private int nbMessCacheHelpResp;
+	private int nbCacheHitHelpGLob;
+	private int nbCacheMissHelpGlob;
+	private int nbMessSearchHelp;
 
 	CacheStatistics() {
 		this.nbCaheMissGlob = 0;
@@ -39,6 +43,13 @@ public class CacheStatistics {
 		this.nbCacheRequest = 0;
 		this.nbMessSearch = 0;
 		this.nbMessDelta = 0;
+		this.nbMessFound = 0;
+		this.nbMessConnect = 0;
+		this.nbMessClose = 0;
+		this.nbMessCacheHelpResp = 0;
+		this.nbCacheHitHelpGLob = 0;
+		this.nbCacheMissHelpGlob = 0;
+		this.nbMessSearchHelp = 0;
 	}
 	
 	
@@ -71,7 +82,7 @@ public class CacheStatistics {
 		this.nbCacheRequest ++;
 	}
 	
-	public void incnbCacherResponse(){
+	public void incnbCacheResponse(){
 		this.nbCacheResponse ++;
 	}
 	
@@ -99,6 +110,20 @@ public class CacheStatistics {
 		this.nbMessFound ++;
 	}
 	
+	public void incnbMessCacheHelpResp(){
+		this.nbMessCacheHelpResp ++;
+	}
+	public void incCacheHitHelpGLob() {
+		this.nbCacheHitHelpGLob ++;		
+	}
+
+	public void incCacheMissHelpGlob() {
+		this.nbCacheMissHelpGlob ++;		
+	}
+
+	public void incnbMessSearchHelp() {
+		this.nbMessSearchHelp ++;			
+	}
 	
 	/*
 	 *  Fonctions Affichage Statistiques 
@@ -115,20 +140,20 @@ public class CacheStatistics {
 	}
 	
 	public void printStatisticsCacheMess() {
-		System.out.println("Hit:Mit:Miss:CacReq:CacResp:Time");
-		System.out.println(this.nbCaheHitGlob + ":" + this.nbCacheMitClob + ":" + this.nbCaheMissGlob + ":" + this.nbCacheRequest + ":" + this.nbCacheResponse +  ":"+ CommonState.getTime()+ ", ");
+		System.out.println("Hit:Mit:Miss:HitHelp:MissHelp:CacReq:CacHelpReq:Time");
+		System.out.println(this.nbCaheHitGlob + ":" + this.nbCacheMitClob + ":" + this.nbCaheMissGlob + ":" + this.nbCacheHitHelpGLob + ":" + this.nbCacheMissHelpGlob + ":" +this.nbCacheRequest + ":" + this.nbMessSearchHelp +  ":"+ CommonState.getTime()+ ", ");
 		System.out.println("");
 
 	}
 	
 	public void printStatisticsActiviteMess() {
-		System.out.println("CacheReq|Search|Delta|Found|Total|Time");
-		System.out.println(this.nbCacheRequest + "|" + this.nbMessSearch + "|" + this.nbMessDelta + "|" + this.nbMessFound + "|" + this.nbNombreMessages +  "|"+ CommonState.getTime()+ ", ");
+		System.out.println("CacheReq|Search|CacheHelp|Delta|Found|Total|Time");
+		System.out.println(this.nbCacheRequest + "|" + this.nbMessSearch + "|" + this.nbMessSearchHelp + "|" + this.nbMessDelta + "|" + this.nbMessFound + "|" + this.nbNombreMessages +  "|"+ CommonState.getTime()+ ", ");
 	}
 	
 	public String printStatisticsCacheMessString() {
 		String res;
-		res = "" + this.nbCaheHitGlob + " " + this.nbCacheMitClob + " " + this.nbCaheMissGlob + " " + this.nbCacheRequest + " " + this.nbCacheResponse + " " + CommonState.getTime() + "\n";
+		res = "" + this.nbCaheHitGlob + " " + this.nbCacheMitClob + " " + this.nbCaheMissGlob + " " + this.nbCacheHitHelpGLob + " " + this.nbCacheMissHelpGlob + " " + this.nbCacheRequest + " " + this.nbMessSearchHelp + " " + CommonState.getTime() + "\n";
 		return res;
 	}
 	
@@ -176,6 +201,11 @@ public class CacheStatistics {
 	public void setNbCachePassClob(int nbCachePassClob) {
 		this.nbCachePassClob = nbCachePassClob;
 	}
+
+
+
+
+
 
 	
 	

@@ -25,7 +25,12 @@ public class Message {
 	
 	public final static int CACHE_UPD 		= 21;
 	public final static int CACHE_UPD_REP 	= 22;
-	
+	public final static int CACHE_HELP_REP	= 23;
+	public final static int SEARCH_HELP	    = 31;
+	public final static int UPDATE_CACHE_REQ	= 32;
+	public final static int UPDATE_CACHE_REP	= 33;
+
+
 	private int messageType;
 	private int from;
 	private int to;

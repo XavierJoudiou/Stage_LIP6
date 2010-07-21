@@ -41,6 +41,8 @@ public class SolipsisProtocol implements EDProtocol {
 	private final static String CACHE_STRATEGIE = "cachestrategie";
 	private final static String CACHE_LIMIT		= "limite";
 	private final static String TIME_LIMIT		= "time_limite";
+	private final static String UPDATE_TIME		= "update_time";
+
 	private final static String CACHE_DEBUG		= "cacheDebug";
 	private final static int OFF	=  0;
 	private final static int FIFO	=  1;
@@ -113,6 +115,7 @@ public class SolipsisProtocol implements EDProtocol {
 	private int strategieCache;
 	private int limite;
 	private int time_limite;
+	private int update_time;
 	private int cacheDebug;
 	private File fichier3;
 	private FileWriter fw3;
@@ -151,6 +154,8 @@ public class SolipsisProtocol implements EDProtocol {
 			this.cacheSize = Configuration.getInt(prefix+"."+CACHE_SIZE);
 			this.limite = Configuration.getInt(prefix+"."+CACHE_LIMIT);
 			this.time_limite = Configuration.getInt(prefix+"."+TIME_LIMIT);
+			this.update_time = Configuration.getInt(prefix+"."+UPDATE_TIME);
+
 			this.cacheDebug = Configuration.getInt(prefix+"."+CACHE_DEBUG);
 			this.strategieCache = Configuration.getInt(prefix+"."+CACHE_STRATEGIE);
 			this.cache = new CacheModule(null, null, this.cacheSize, this.strategieCache,this);
@@ -850,7 +855,6 @@ public class SolipsisProtocol implements EDProtocol {
 		if (this.strategieCache == SolipsisProtocol.FIFO && this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
 			find = maintainCacheTopology();
 		}
-//		System.out.println("++++++++++ find:" + find);
 
 		if (find == 0){
 			if (sector != null) {
@@ -867,16 +871,22 @@ public class SolipsisProtocol implements EDProtocol {
 						line.setOri(VirtualWorld.RIGHT);
 					}
 					this.searchInProgress = true;
-					recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), sendTo.getId(), line);
+					Node n = Network.get(this.getPeersimNodeId());
+					if (this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
+						CacheHelpRequest request = new CacheHelpRequest(line, this.convexEnvelope,this.mainVirtualEntity.getCoord());
+						recoverMsg = new Message(Message.SEARCH_HELP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), sendTo.getId(), request);
+					}else{
+						recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), sendTo.getId(), line);
+					}
 					this.send(recoverMsg, sendTo);
 				}
 			}
 		}
 	}
 
-	/* peut etre a modifier */
+
 	private NeighborProxy searchForAppropriateNeighbor(GeometricRegion region) {
-		LinkedList<Integer> neighbors = this.getParticularNeighbors(NeighborProxy.REGULAR);//this.proxies.entrySet().iterator();
+		LinkedList<Integer> neighbors = this.getParticularNeighbors(NeighborProxy.REGULAR);
 		NeighborProxy current, appropriate = null;
 		LinkedList<NeighborProxy> choices = new LinkedList<NeighborProxy>();
 		Random rand = new Random();
@@ -884,7 +894,7 @@ public class SolipsisProtocol implements EDProtocol {
 
 		
 		for (int i = 0; i < size; i++) {
-			current = this.proxies.get(neighbors.get(i));//(NeighborProxy)((Map.Entry)it.next()).getValue();
+			current = this.proxies.get(neighbors.get(i));
 			if (isInHalfPlan(region,current)) {
 				choices.add(current);
 			}
@@ -904,7 +914,7 @@ public class SolipsisProtocol implements EDProtocol {
 	
 	
 	private void processSearchMsg(Message msg) {
-		GeometricRegion line = (GeometricRegion)msg.getContent();
+		GeometricRegion line;
 		int srcId = msg.getSource();
 		NeighborProxy neighbor = null;
 		NeighborProxy source = this.proxies.get(msg.getSource());
@@ -913,85 +923,176 @@ public class SolipsisProtocol implements EDProtocol {
 		long [] origin;
 		Node n;
 		int find = 0;
-		
-//		if (this.strategieCache == SolipsisProtocol.FIFO && this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
-//			find = maintainCacheTopologyHelp(msg);
-//		}
-//		System.out.println("++++++++++ find:" + find);
 
-		if (find == 0){
-					
-			neighbor = searchForAppropriateNeighbor(line);
-			if (neighbor != null) {
-				response = createFoundMsg(neighbor, msg.getSource());
-				if (source == null) {
-					n = Network.get(msg.getOriginAddress());
-					if (n != null) {
-						stranger = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity();
-						this.send(response, stranger);
-					}
-				} else {
-					this.send(response, source);
+		switch (msg.getType()) {
+		
+			case Message.SEARCH_HELP:
+				CacheHelpRequest request = (CacheHelpRequest) msg.getContent();
+				line = (GeometricRegion)request.getRegion();
+				System.out.println("Destination: " + ((CacheHelpRequest)msg.getContent()).getDestination()[0] + ", "  + ((CacheHelpRequest)msg.getContent()).getDestination()[1]);
+				
+				if (this.strategieCache == SolipsisProtocol.FIFO && this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
+					find = HelpNeighborCache(msg);
 				}
+	
+				if (find == 0){
+							
+					neighbor = searchForAppropriateNeighbor(line);
+					if (neighbor != null) {
+						response = createFoundMsg(neighbor, msg.getSource());
+						if (source == null) {
+							n = Network.get(msg.getOriginAddress());
+							if (n != null) {
+								stranger = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity();
+								this.send(response, stranger);
+							}
+						} else {
+							this.send(response, source);
+						}
+					}
+				}
+				
+				break;
+	
+			case Message.SEARCH:
+				line = (GeometricRegion) msg.getContent();
+				
+				neighbor = searchForAppropriateNeighbor(line);
+				if (neighbor != null) {
+					response = createFoundMsg(neighbor, msg.getSource());
+					if (source == null) {
+						n = Network.get(msg.getOriginAddress());
+						if (n != null) {
+							stranger = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity();
+							this.send(response, stranger);
+						}
+					} else {
+						this.send(response, source);
+					}
+				}
+				
+				break;
+				
+			default:
+				break;
+		}
+		
+	}
+	public void processUpdateCaheREQ(Message msg) {
+		
+		NeighborProxy source = (NeighborProxy)msg.getContent();
+		Message updateResponse = new Message(Message.UPDATE_CACHE_REP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), source.getId(), this.mainVirtualEntity);
+		this.send(updateResponse, msg.getOriginAddress());
+		
+	}
+	
+	
+	
+	public void processUpdateCaheREP(Message msg) {
+
+		VirtualEntity update = (VirtualEntity)msg.getContent();
+		System.out.println("_____id: " + msg.getDestination());
+		if (((NeighborProxy)this.cache.getCache().get(msg.getDestination())) != null){
+			if (cacheDebug == 1){
+				this.cache.ShowCache();
+				System.out.println("ancienne Coord: " + ((NeighborProxy)this.cache.getCache().get(msg.getDestination())).getCoord()[0] + ", " + 
+						((NeighborProxy)this.cache.getCache().get(msg.getDestination())).getCoord()[1] + ", id: " + update.getId());
+			}
+			((NeighborProxy)this.cache.getCache().get(msg.getDestination())).setCoord(update.getCoord());
+			if (cacheDebug == 1){
+				System.out.println("New Coord: " + ((NeighborProxy)this.cache.getCache().get(update.getId())).getCoord()[0] + ", " + 
+					((NeighborProxy)this.cache.getCache().get(update.getId())).getCoord()[1] + ", id: " + update.getId());
 			}
 		}
 	}
-//	
-//	public int maintainCacheTopologyHelp(Message msg) {
-//		Node n;
-//		NeighborProxy neighbor = null;
-//		
-//		Globals.cacheEvaluator.incnbCachePassClob();
-//		NeighborProxy source = this.proxies.get(msg.getSource());
-//	
-//		System.out.println("source = " + source.getId());
-//	
-//			
-//			switch (this.strategieCache) {
-//			case SolipsisProtocol.FIFO:
-//				
-//						long[] destination = msg.getDest();
-//						if (destination != null){
-//							switch(limite){
-//							case -1: 
-//								neighbor = cache.searchCacheNeighborLimitNeighbor(destination, this.cache.getCache());
-//								break;
-//							default:
-//								neighbor = cache.searchCacheNeighborLimitNeighbor(destination, this.cache.getCache());
-////								neighbor = cache.searchCacheNeighborEnvelopEv(destination);
-//								break;
-//							}
-//						}
-//						
-//						if (neighbor != null){
-//							if (cacheDebug == 1){
-//								System.out.println("----------------------------------------");
-//								System.out.println("--- On a trouvé un nœud dans le cache: " + neighbor.getId() + " ---");
-//								System.out.println("----------------------------------------");
-//							}
-//
+
+	
+	
+	
+	public void CacheUpdate(){
+		NeighborProxy current;
+		Iterator it;
+		it = this.cache.getCache().entrySet().iterator();
+
+				
+		while(it.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			Message updateRequest = new Message(Message.UPDATE_CACHE_REQ, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), current.getId(), current);
+			this.send(updateRequest, current);
+			
+		}
+		
+		
+	}
+	
+	
+	public int HelpNeighborCache(Message msg) {
+		Node n;
+		NeighborProxy neighbor = null;
+		
+		Globals.cacheEvaluator.incnbCachePassClob();
+	
+			
+			switch (this.strategieCache) {
+			case SolipsisProtocol.FIFO:
+				
+						CacheHelpRequest request = (CacheHelpRequest)msg.getContent();
+						NeighborProxy source = this.proxies.get(msg.getSource());
+						n = Network.get(msg.getOriginAddress());
+						VirtualEntity source1 = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity();
+						
+						if (request != null){
+							switch(limite){
+							case -1: 
+								neighbor = cache.searchCacheHelpNeighbor(request,msg.getSource());
+								break;
+							default:
+								neighbor = cache.searchCacheHelpNeighbor(request,msg.getSource());
+								break;
+							}
+						}
+						
+						if (neighbor != null){
+							if (cacheDebug == 1){
+								System.out.println("----------------------------------------");
+								System.out.println("--- On a trouvé un nœud dans le cache: " + neighbor.getId() + " ---");
+								System.out.println("----------------------------------------");
+							}
+
 //							if ( neighbor.getTime() + time_limite > CommonState.getIntTime()){
-//								//cache.RmCache(neighbor);
-//								//addLocalView(neighbor);
-//								System.out.println("HELP HITTTTTTTTTTTTT");
-//								//neighbor.setQuality(NeighborProxy.REGULAR);
-//								Globals.cacheEvaluator.incCacheHitGLob();
-//								return 1;
-//								
+							
+								if (cacheDebug == 1){
+									System.out.println("HELP HITTTTTTTTTTTTT");
+								}
+								Message response = new Message(Message.CACHE_HELP_REP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), msg.getSource(), neighbor);
+								if(source == null){
+									System.out.println("sourceestnull");
+									source = this.cache.getCache().get(msg.getSource());
+								}
+								if(source == null){
+									System.out.println("sourceestnullagain");
+									this.send(response,source1);
+								}else{
+									this.send(response,source);
+								}
+								return 1;
+								
 //							}
-//							System.out.println("====== TROP vieux neigtime: " + neighbor.getTime() +", time: " + CommonState.getIntTime());
-//							
-//						}else{
-//							System.out.println("HELP MISSSSSSSSSSSSS");
-//							Globals.cacheEvaluator.incCacheMissGlob();
-//							return 0;
-//						}
-//			default:
-//				return 0;
-//			}
-//	}
-//	
-//		
+							
+							}else{
+								if (cacheDebug == 1){
+									System.out.println("HELP MISSSSSSSSSSSSS");
+								}
+								Globals.cacheEvaluator.incCacheMissHelpGlob();
+								/** envoie un message ???? **/
+								return 0;
+							}
+			default:
+				return 0;
+			}
+	}
+	
+		
 	
 	/*
 	 * Fonction MaintainCacheTopology:
@@ -1014,7 +1115,7 @@ public class SolipsisProtocol implements EDProtocol {
 			case SolipsisProtocol.FIFO:
 				
 				n = Network.get(this.getPeersimNodeId());
-						long[] destination = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getDestination();
+						long[] destination = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord();
 						
 						/* 
 						 * Recherche dans le cache 
@@ -1055,13 +1156,28 @@ public class SolipsisProtocol implements EDProtocol {
 								System.out.println("--- On a trouvé un nœud dans le cache: " + neighbor.getId() + " ---");
 								System.out.println("----------------------------------------");
 							}
-
+						
+							
+							
 							if ( neighbor.getTime() + time_limite > CommonState.getIntTime()){
+								
+								boolean aide = this.helpfulToEnvelopeCache(neighbor);
+								boolean avant = convexEnvelopeProperty();
+
+								System.out.println("!?aide_ou_pas : " + aide +", myId: " + this.mainVirtualEntity.getId() + ", newId: " + neighbor.getId() + ", time: " + CommonState.getTime());
+								System.out.println("!?Envelop state before: " + avant);
+								System.out.println("!?My Coords: " + this.mainVirtualEntity.getCoord()[0] + ", " + this.mainVirtualEntity.getCoord()[1]);
+								System.out.println("!?Coord: " + neighbor.getCoord()[0] + ", " + neighbor.getCoord()[1]);
+
 								cache.RmCache(neighbor);
 								addLocalView(neighbor);
 								neighbor.setQuality(NeighborProxy.REGULAR);
 								Globals.cacheEvaluator.incCacheHitGLob();
+								boolean apres = convexEnvelopeProperty();
+								System.out.println("!?Envelop State after: " + apres);
+								
 								return 1;
+								
 								
 							}
 							if (cacheDebug == 1){
@@ -1071,17 +1187,17 @@ public class SolipsisProtocol implements EDProtocol {
 							Message cache_test;
 							CacheRequest cache_request;
 							NeighborProxy source = this.createMyImage();
+							NeighborProxy neigh = neighbor.clone();
 							
 							if (source == null){
 								if (cacheDebug == 1){
 									System.out.println("Erreur: La Source est Null!!");
 								}
 							}	
-							cache_request = new CacheRequest(neighbor,source);
+							cache_request = new CacheRequest(neigh,source);
 							cache_test = new Message(Message.CACHE_UPD, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), neighbor.getId(), cache_request);
 				
 							neighbor.setQuality(NeighborProxy.CACHED);
-							
 							
 							this.send(cache_test,neighbor);
 							if (cacheDebug == 1 || cacheDebug == 2){
@@ -1094,11 +1210,7 @@ public class SolipsisProtocol implements EDProtocol {
 							return 0;
 						}
 				
-				
-//				break;
-
 			default:
-//				break;
 				return 0;
 			}
 			
@@ -1121,35 +1233,35 @@ public class SolipsisProtocol implements EDProtocol {
 	 */
 	private void processCacheUpd(Message msg){
 		
-		Node n = Network.get(msg.getOriginAddress());
+//		Node n = Network.get(msg.getDestination());
 		NeighborProxy source = ((NeighborProxy)((CacheRequest)msg.getContent()).getSource());
 
 		
-		if (compareNeighborProxy((CacheRequest)msg.getContent(), ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity() )){
+		if (compareNeighborProxy((CacheRequest)msg.getContent(), this.mainVirtualEntity )){
 			
 			if ( cacheDebug == 1 || cacheDebug == 2 ){
 				System.out.println("... Comparaison OK: Old " + ((CacheRequest)msg.getContent()).getOldData().getCoord()[0] + "," + ((CacheRequest)msg.getContent()).getOldData().getCoord()[1] +
-						", Real " + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord()[0] + "," + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord()[1] + " ...");	
+						", Real " + this.mainVirtualEntity.getCoord()[0] + "," + this.mainVirtualEntity.getCoord()[1] + " ...");	
 			}
 			
 
 			/* Faire la Mis A Jour du Noeud */
 			NeighborProxy responseProx = ((CacheRequest)msg.getContent()).getOldData();
-			responseProx.setCoord(((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord());
+//			responseProx.setCoord(this.mainVirtualEntity.getCoord());
 			CacheRequest response = new CacheRequest(responseProx,this.mainVirtualEntity.getNeighbor( this.mainVirtualEntity.getId()));
 		
 		/* TODO probleme maj valeur */
 			
-			this.MajNeighborProxy(((CacheRequest)msg.getContent()).getOldData(), ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity());
+			this.MajNeighborProxy(((CacheRequest)msg.getContent()).getOldData(), this.mainVirtualEntity);
 			if (cacheDebug == 1){
-				System.out.println("-- realcoord: " + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord()[0] + "," + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord()[1] );
+				System.out.println("-- realcoord: " + this.mainVirtualEntity.getCoord()[0] + "," + this.mainVirtualEntity.getCoord()[1] + ", id: " +  this.mainVirtualEntity.getId());
 				System.out.println("-- new coord: " + response.getOldData().getCoord()[0] + "," + response.getOldData().getCoord()[1] );
 			}
 			
 			/*Envoyer un message pour faire un hit de cache */
 			Message cache_rep;
 			
-			cache_rep = new Message(Message.CACHE_UPD_REP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), msg.getSource(), response);
+			cache_rep = new Message(Message.CACHE_UPD_REP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), msg.getSource(), msg.getContent());
 
 			if (source != null){
 				this.send(cache_rep,source);
@@ -1167,12 +1279,100 @@ public class SolipsisProtocol implements EDProtocol {
 		}else{
 			if ( cacheDebug == 1 || cacheDebug == 2 ){
 				System.out.println("''' Comparaison FOLD: Old " + ((CacheRequest)msg.getContent()).getOldData().getCoord() +
-						", Real " + ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord() + " '''");	
+						", Real " + this.mainVirtualEntity.getCoord() + " '''");	
 			}
 			Globals.cacheEvaluator.incCacheMitGLob();
 			/*Envoyer un message pour pas faire un hit de cache ?*/
 
 		}
+		
+	}
+	
+	private boolean isInCache(NeighborProxy neighbor){
+
+		NeighborProxy current;
+		Iterator it;
+		it = this.cache.getCache().entrySet().iterator();
+
+				
+		while(it.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			if (neighbor.getId() == current.getId()){
+//				System.out.println("DANS LE CACHE -----------");
+				return true;
+				
+			}
+			
+		}
+		return false;
+	}
+	
+	private boolean isInNeig(NeighborProxy neighbor){
+
+		NeighborProxy current;
+		Iterator it;
+		it = this.proxies.entrySet().iterator();
+
+				
+		while(it.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			if (neighbor.getId() == current.getId()){
+//				System.out.println("DANS LES PROXIES -----------");
+				return true;
+				
+			}
+			
+		}
+		return false;
+	}
+	
+	private void processCacheHelpResponse(Message msg){
+
+		NeighborProxy neighbor = (NeighborProxy)msg.getContent();
+		
+		boolean aide = helpfulToEnvelope(neighbor);
+		boolean inCache = isInCache(neighbor);
+		boolean inNeig = isInNeig(neighbor);
+		
+		boolean avant = convexEnvelopeProperty();
+		
+		if (cacheDebug == 1 ){
+			System.out.println("Is In CACHE ?? " + inCache);
+			System.out.println("Is In PROXIES ?? " + inNeig);
+
+			System.out.println("newNode_Coord= " + neighbor.getCoord()[0] + ", " + neighbor.getCoord()[1]);
+			System.out.println("me_Coord= " + this.mainVirtualEntity.getCoord()[0] + ", " + this.mainVirtualEntity.getCoord()[1]);
+
+
+			System.out.println("aide_ou_pas : " + aide);
+			System.out.println("Envelop state before: " + avant);
+		}
+
+
+		if ( cacheDebug == 1 || cacheDebug == 2 ){
+			System.out.println("Message Recu : <" + msg.getTypeString() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + ">");
+		}
+		
+	
+		
+		addLocalView(neighbor);
+		
+		if (cacheDebug == 1){
+			System.out.println("taille cache: " + cache.getCache().size());
+			System.out.println("taille voisin: " + proxies.size());
+			cache.ShowCache();
+		}
+		
+		if (cacheDebug == 1){
+			System.out.println("--- Modification de la quality du nœud: " + neighbor.getQuality());
+		}
+		
+		
+		boolean apres = convexEnvelopeProperty();
+		if (cacheDebug == 1 ){
+//			System.out.println("Envelop State after: " + apres);
+		}
+		Globals.cacheEvaluator.incCacheHitHelpGLob();
 		
 	}
 	
@@ -1189,7 +1389,13 @@ public class SolipsisProtocol implements EDProtocol {
 		CacheRequest neig = (CacheRequest) msg.getContent();
 		NeighborProxy neighbor = neig.getOldData();
 
-		
+		boolean aide = this.helpfulToEnvelopeCache(neighbor);
+		boolean avant = convexEnvelopeProperty();
+
+		System.out.println("!!!aide_ou_pas : " + aide +", myId: " + this.mainVirtualEntity.getId() + ", newId: " + neighbor.getId() + ", time: " + CommonState.getTime());
+		System.out.println("!!!Envelop state before: " + avant);
+		System.out.println("!!!My Coords: " + this.mainVirtualEntity.getCoord()[0] + ", " + this.mainVirtualEntity.getCoord()[1]);
+		System.out.println("!!!Coord: " + neighbor.getCoord()[0] + ", " + neighbor.getCoord()[1]);
 
 		if ( cacheDebug == 1 || cacheDebug == 2 ){
 			System.out.println("Message Recu : <" + msg.getTypeString() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + ">");
@@ -1224,28 +1430,35 @@ public class SolipsisProtocol implements EDProtocol {
 			System.out.println("--- Modification de la quality du nœud: " + neighbor.getQuality());
 		}
 		
-		boolean envOK = checkEnvelopeState();
-		if (envOK){		
-			if ( cacheDebug == 1 || cacheDebug == 2 ){
-					System.out.println("--- Envelope OK, nodeId: " + neighbor.getId() );
-			}
-			cache.RmCache(neighbor);
-			addLocalView(neighbor);
-		}else{
-			if ( cacheDebug == 1 || cacheDebug == 2 ){
-				System.out.println("--- Envelope NOT_OK, nodeId: " + neighbor.getId() );
-			}
-			Globals.cacheEvaluator.incnbEnvelopNotOK();
-			/* regarder dans processFoundMsg, pour refaire l'envelope */ 
-			GeometricRegion lin;
-			Message recoverMsg;
-			Node n = Network.get(this.getPeersimNodeId());
-			NeighborProxy peer = ((CacheRequest)msg.getContent()).getOldData();
-			lin  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(peer.getId()));
-			recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), lin,((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getDestination());
-			this.send(recoverMsg, peer);
-			
-		}
+//		boolean envOK = checkEnvelopeState();
+//		if (envOK){		
+//			if ( cacheDebug == 1 || cacheDebug == 2 ){
+//					System.out.println("--- Envelope OK, nodeId: " + neighbor.getId() );
+//			}
+//			cache.RmCache(neighbor);
+//			addLocalView(neighbor);
+//		}else{
+//			if ( cacheDebug == 1 || cacheDebug == 2 ){
+//				System.out.println("--- Envelope NOT_OK, nodeId: " + neighbor.getId() );
+//			}
+//			Globals.cacheEvaluator.incnbEnvelopNotOK();
+//			/* regarder dans processFoundMsg, pour refaire l'envelope */ 
+//			GeometricRegion lin;
+//			Message recoverMsg;
+//			Node n = Network.get(this.getPeersimNodeId());
+//			NeighborProxy peer = ((CacheRequest)msg.getContent()).getOldData();
+//			lin  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(peer.getId()));
+//			if (this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
+//				CacheHelpRequest request = new CacheHelpRequest(lin, this.convexEnvelope,this.mainVirtualEntity.getDestination());
+//				recoverMsg = new Message(Message.SEARCH_HELP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), request);
+//			}else{
+//				recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), lin);
+//			}
+//			this.send(recoverMsg, peer);
+//			
+//		}
+		boolean apres = convexEnvelopeProperty();
+		System.out.println("!!!Envelop State after: " + apres);
 		Globals.cacheEvaluator.incCacheHitGLob();
 		
 	}
@@ -1303,8 +1516,14 @@ public class SolipsisProtocol implements EDProtocol {
 			} else {
 				if (peer.getQuality() == NeighborProxy.REGULAR) {
 					if (!this.checkEnvelopeState()) {
+						Node n = Network.get(this.getPeersimNodeId());
 						line  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(peer.getId()));
-						recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), line);
+						if (this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
+							CacheHelpRequest request = new CacheHelpRequest(line, this.convexEnvelope,this.mainVirtualEntity.getCoord());
+							recoverMsg = new Message(Message.SEARCH_HELP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), request);
+						}else{
+							recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), line);
+						}
 						this.send(recoverMsg, peer);
 						this.stabilized = false;
 						this.searchInProgress = true;
@@ -1676,8 +1895,28 @@ public class SolipsisProtocol implements EDProtocol {
 			this.processCacheUpd(msg);
 			break;
 		case Message.CACHE_UPD_REP:
-			Globals.cacheEvaluator.incnbCacherResponse();
+			Globals.cacheEvaluator.incnbCacheResponse();
 			this.processCacheUpdResponse(msg);
+			break;
+		case Message.CACHE_HELP_REP:
+			Globals.cacheEvaluator.incnbMessCacheHelpResp();
+			this.processCacheHelpResponse(msg);
+			break;
+		case Message.SEARCH_HELP:
+			Globals.cacheEvaluator.incnbMessSearchHelp();
+			processSearchMsg(msg);
+
+			if (!Globals.realTime) {
+				Globals.evaluator.messageSearch();
+			}
+			break;
+		case Message.UPDATE_CACHE_REQ:
+			Globals.cacheEvaluator.incnbMessCacheHelpResp();
+			this.processUpdateCaheREQ(msg);
+			break;
+		case Message.UPDATE_CACHE_REP:
+			Globals.cacheEvaluator.incnbMessCacheHelpResp();
+			this.processUpdateCaheREP(msg);
 			break;
 		default:
 			break;
@@ -1932,6 +2171,12 @@ public class SolipsisProtocol implements EDProtocol {
 		return sector == null;
 	}
 	
+	private boolean convexEnvelopePropertyHelp(long [] destination, LinkedList<NeighborProxy> envelope) {
+		NeighborProxy[] sector = this.verifyEnvelopeHelpCache(destination,envelope);
+		return sector == null;
+	}
+	
+	
 	public boolean necessaryToEnvelope(NeighborProxy peer) {
 		boolean beforeRemoval = convexEnvelopeProperty();
 		NeighborProxy proxy = this.proxies.remove(peer.getId());
@@ -1961,6 +2206,23 @@ public class SolipsisProtocol implements EDProtocol {
 		peer.setQuality(quality);
 		this.removeProxyNoCache(peer.getId());
 		return convexProperty && !beforeAdding;
+	}
+	
+	synchronized public boolean helpfulToEnvelopeCacheHelpNeighbor(NeighborProxy peer,CacheHelpRequest request) {
+
+		boolean beforeAdding = convexEnvelopePropertyHelp(request.getDestination(), request.getEnvelop());
+//		System.out.println("before_ Adding:" + beforeAdding);
+		
+		LinkedList<NeighborProxy> newenvelope = request.getEnvelop();
+		newenvelope.add(peer);
+		
+		boolean convexProperty = convexEnvelopePropertyHelp(request.getDestination(),newenvelope);
+		newenvelope.remove(peer);
+//		System.out.println("CONVEX_Property:" + convexProperty);
+
+		return convexProperty && !beforeAdding ;
+//		return convexProperty ;
+
 	}
 	
 	public void removeUnwantedNeighbors() {
@@ -2267,6 +2529,34 @@ public class SolipsisProtocol implements EDProtocol {
 		return sector;
 	}
 	
+	private NeighborProxy[] verifyEnvelopeHelpCache(long [] destination, LinkedList<NeighborProxy> envelope) {
+		NeighborProxy [] sector = null;
+		NeighborProxy current, next;
+		if (envelope != null) {
+			int size = envelope.size();
+			if (size >= 3) {
+				for (int i = 0; i < size; i++) {
+					current = envelope.get(i);
+					next = envelope.get((i+1)%size);
+					if(simpleAngleSign(this.subjectiveCoordHelp(destination, current.getCoord()),this.subjectiveCoordHelp(destination, next.getCoord()),destination) >= 0) {
+						sector = new NeighborProxy[2];
+						sector[0] = current;
+						sector[1] = next;
+						break;
+					}
+				}
+			} else {
+				sector = new NeighborProxy[2];
+				for (int i = 0; i < size; i++) {
+					sector[i] = envelope.get(i);
+				}
+			}
+		}else{
+			System.out.println("__________Envelop NULL");
+		}
+		return sector;
+	}
+	
 	public boolean isNeighbor(NeighborProxy e) {
 		boolean is = false;
 		Iterator it = proxies.entrySet().iterator();
@@ -2447,6 +2737,19 @@ public class SolipsisProtocol implements EDProtocol {
 		}
 		return subjective;
 	}
+	
+	public long[] subjectiveCoordHelp(long [] dest,long [] current) {
+		long[] distant, local, subjective = null;
+		
+
+
+			local = dest; 
+			distant = current;
+			subjective = this.moduloModificationRule(local, distant);
+
+		return subjective;
+	}
+	
 	
 	public long[] subjectiveCoord(long[] coord) {
 		long[] local, subjective = null;

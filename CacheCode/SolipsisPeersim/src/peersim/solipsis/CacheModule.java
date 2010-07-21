@@ -269,7 +269,10 @@ public class CacheModule {
 //			System.out.println(this.protocol.helpfulToEnvelopeCache(current));
 			if (this.protocol.helpfulToEnvelopeCache(current)){
 				best = current;
+				System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
+				System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
 				return best;
+
 			}
 			if ( this.protocol.constructingEnvelope(current)){
 				other = current;
@@ -281,6 +284,40 @@ public class CacheModule {
 		}
 		
 		return other;
+	
+	}
+	
+	public NeighborProxy searchCacheHelpNeighbor(CacheHelpRequest request,int id){
+		NeighborProxy current;
+		NeighborProxy best = null;
+		long bestTime = -1;
+		
+		
+		Iterator it;
+		it = this.cache.entrySet().iterator();
+
+				
+		while(it.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			if (this.protocol.helpfulToEnvelopeCacheHelpNeighbor(current,request) && current.getTime() > bestTime){
+				if (current.getId() != id){
+				best = current;
+				bestTime = current.getTime();
+//				return best;
+		
+
+//				System.out.println("UN DE TROUVE ==========");
+//				System.out.println("find_Coord= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
+//				System.out.println("afindé_Coord= " + request.getDestination()[0] + ", " + request.getDestination()[1]);
+
+
+				}else{
+					System.out.println("C le meme ==========");
+				}
+
+			}
+		}
+		return best;
 	
 	}
 	
@@ -306,6 +343,8 @@ public class CacheModule {
 				best = current;
 				bestTime = current.getTime();
 //				return best;
+				System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
+				System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
 			}
 			if ( this.protocol.constructingEnvelope(current)){
 				other = current;

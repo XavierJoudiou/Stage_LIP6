@@ -305,6 +305,10 @@ public class VirtualEntity implements VirtualEntityInterface {
 //		System.out.println("end of keepTopo");
 	}
 	
+	public void UpdateCache(){
+		this.protocol.CacheUpdate();
+	}
+	
 	public void refreshState() {
 		this.protocol.refreshState();
 	}

@@ -225,6 +225,10 @@ public class VirtualWorldDistribution implements VirtualWorldDistributionInterfa
 				this.manageChurn();
 				Globals.stepCount++;
 			}
+			if (CommonState.getIntTime() % Globals.update_time == 0 && CommonState.getTime() != 0){
+				System.out.println("time update: " + CommonState.getIntTime() );
+				entity.UpdateCache();
+			}
 		}
 	}
 
