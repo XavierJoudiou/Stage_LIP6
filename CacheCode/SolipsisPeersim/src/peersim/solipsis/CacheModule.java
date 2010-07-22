@@ -350,10 +350,7 @@ public class CacheModule {
 //					System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
 //					System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
 				}
-				if ( this.protocol.constructingEnvelope(current)){
-					other = current;
-					
-				}
+				
 			}
 		}
 		if (other != null){

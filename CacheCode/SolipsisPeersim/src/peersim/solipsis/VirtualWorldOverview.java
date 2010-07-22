@@ -13,8 +13,8 @@ public class VirtualWorldOverview implements Control {
 	
 	private String prefix;
 	private int percent;
-	private File fichier,fichier2,fichier3;
-	private FileWriter fw,fw2,fw3;
+	private File fichier,fichier2,fichier3,fichier4,fichier5;
+	private FileWriter fw,fw2,fw3,fw4,fw5;
 	
 	public VirtualWorldOverview(String prefix) throws IOException {
 		this.prefix = prefix;
@@ -31,7 +31,14 @@ public class VirtualWorldOverview implements Control {
 	    fichier3 = new File("Stats_EndTime.txt");
 	    fichier3.createNewFile();
 	    fw3 = new FileWriter("Stats_EndTime.txt",true);
-		
+	   
+	    fichier4 = new File("Stats_Finish.txt");
+	    fichier4.createNewFile();
+	    fw4 = new FileWriter("Stats_Finish.txt",true);
+	    
+	    fichier5 = new File("Stats_sergey.txt");
+	    fichier5.createNewFile();
+	    fw5 = new FileWriter("Stats_sergey.txt",true);
 	}
 	
     public boolean execute() {
@@ -49,17 +56,23 @@ public class VirtualWorldOverview implements Control {
     			recorder.record();
     		} else {
     			if (Globals.cacheStat) {
+    				
+    				eval = Globals.evaluator;
+    				eval.printStatistics();
             		evalCache = Globals.cacheEvaluator;
             		evalCache.printStatisticsCacheMess();
             		evalCache.printStatisticsActiviteMess();
             		System.out.println("+++++++++++++++++++++++++++++++++++");
 		    		try {;
 		    		
-		    			String res1,res2;
+		    			String res1,res2,res6;
 		    			res1 = evalCache.printStatisticsCacheMessString();
 		    			fw.write(res1);
 		    			res2 = evalCache.printStatisticsActiviteMessString();
 		    			fw2.write(res2);
+		    			res6 = eval.printStatistics();
+		    			fw5.write(res6);
+
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -75,7 +88,12 @@ public class VirtualWorldOverview implements Control {
 						fw3.write(res3);
 						fw3.write("=============================\n");
 						fw3.close();
-						
+						res3=evalCache.printStatisticsActiviteMessString();
+						fw4.write(res3);
+						res3=evalCache.printStatisticsActiviteMessString();
+						fw4.write(res3);
+						fw4.close();
+						fw5.close();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}

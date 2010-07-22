@@ -42,6 +42,8 @@ public class SolipsisProtocol implements EDProtocol {
 	private final static String CACHE_LIMIT		= "limite";
 	private final static String TIME_LIMIT		= "time_limite";
 	private final static String UPDATE_TIME		= "update_time";
+	private final static String UPDATE_OK		= "update_ok";
+
 
 	private final static String CACHE_DEBUG		= "cacheDebug";
 	private final static int OFF	=  0;
@@ -116,6 +118,7 @@ public class SolipsisProtocol implements EDProtocol {
 	private int limite;
 	private int time_limite;
 	private int update_time;
+	private int update_ok;
 	private int cacheDebug;
 	private File fichier3;
 	private FileWriter fw3;
@@ -155,20 +158,22 @@ public class SolipsisProtocol implements EDProtocol {
 			this.limite = Configuration.getInt(prefix+"."+CACHE_LIMIT);
 			this.time_limite = Configuration.getInt(prefix+"."+TIME_LIMIT);
 			this.update_time = Configuration.getInt(prefix+"."+UPDATE_TIME);
-
+			Globals.update_time = this.update_time;
+			this.update_ok = Configuration.getInt(prefix+"."+UPDATE_OK);
+			Globals.update_ok = update_ok;
 			this.cacheDebug = Configuration.getInt(prefix+"."+CACHE_DEBUG);
 			this.strategieCache = Configuration.getInt(prefix+"."+CACHE_STRATEGIE);
 			this.cache = new CacheModule(null, null, this.cacheSize, this.strategieCache,this);
 			
 			if ( Globals.affichage_options == 0){
 				Globals.affichage_options ++;
-			  fichier3 = new File("Stats_EndTime.txt");
-			  fichier3.createNewFile();
-			  fw3 = new FileWriter("Stats_EndTime.txt",true);
-			  String options = "Limite: " + this.limite + ", CacheSize: " + this.cacheSize + ", Time_limite " + time_limite + 
-			  ", Durée: " + CommonState.getEndTime() + ", Stratégie: " + this.strategieCache + "\n";
-			  fw3.write(options);
-			  fw3.close();
+				fichier3 = new File("Stats_EndTime.txt");
+				fichier3.createNewFile();
+				fw3 = new FileWriter("Stats_EndTime.txt",true);
+				String options = "Limite: " + this.limite + ", CacheSize: " + this.cacheSize + ", Time_limite " + time_limite + 
+				", Durée: " + CommonState.getEndTime() + ", Stratégie: " + this.strategieCache + "\n";
+				fw3.write(options);
+				fw3.close();
 			}
 		}
 		
@@ -970,14 +975,15 @@ public class SolipsisProtocol implements EDProtocol {
 		Iterator it;
 		it = this.cache.getCache().entrySet().iterator();
 
-				
-		while(it.hasNext()){
-			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
-			Message updateRequest = new Message(Message.UPDATE_CACHE_REQ, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), current.getId(), current);
-			this.send(updateRequest, current);
+		if (update_ok == 1){
+			while(it.hasNext()){
+				Globals.cacheEvaluator.incnbMessUpdateTot();
+				current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+				Message updateRequest = new Message(Message.UPDATE_CACHE_REQ, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), current.getId(), current);
+				this.send(updateRequest, current);
 			
+			}
 		}
-		
 		
 	}
 	
@@ -1942,13 +1948,11 @@ public class SolipsisProtocol implements EDProtocol {
 			}
 			break;
 		case Message.UPDATE_CACHE_REQ:
-			Globals.cacheEvaluator.incnbMessUpdateTot();
-			Globals.cacheEvaluator.incnbMessCacheHelpResp();
+//			Globals.cacheEvaluator.incnbMessUpdateTot();
 			this.processUpdateCaheREQ(msg);
 			break;
 		case Message.UPDATE_CACHE_REP:
-			Globals.cacheEvaluator.incnbMessUpdateTot();
-			Globals.cacheEvaluator.incnbMessCacheHelpResp();
+//			Globals.cacheEvaluator.incnbMessUpdateTot();
 			this.processUpdateCaheREP(msg);
 			break;
 		default:

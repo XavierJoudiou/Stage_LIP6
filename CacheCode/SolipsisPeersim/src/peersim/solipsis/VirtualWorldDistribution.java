@@ -219,18 +219,19 @@ public class VirtualWorldDistribution implements VirtualWorldDistributionInterfa
 				//			System.out.println("removing unwanted");
 				entity.removeUnwantedNeighbors();
 				//			System.out.println("end of animation");
+				if (Globals.update_ok == 1){
+					if (CommonState.getIntTime() % Globals.update_time == 0 && CommonState.getTime() != 0){
+//						System.err.println("time update: " + CommonState.getIntTime() );
+						entity.UpdateCache();
+					}
+				}
 
 			}
 			if (!Globals.generated) {
 				this.manageChurn();
 				Globals.stepCount++;
 			}
-			if (Globals.update_time != -1){
-				if (CommonState.getIntTime() % Globals.update_time == 0 && CommonState.getTime() != 0){
-					System.out.println("time update: " + CommonState.getIntTime() );
-					entity.UpdateCache();
-				}
-			}
+			
 		}
 	}
 

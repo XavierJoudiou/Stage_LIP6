@@ -15,8 +15,9 @@ set grid
  
 #l'origine
  
-plot "Résultats_ActivitéMess.txt" using 8:1 title 'CacheRequest' with lines linewidth 2, "Résultats_ActivitéMess.txt" using 8:2 title 'SEARCH' with lines linewidth 2,"Résultats_ActivitéMess.txt" using 8:3 title 'Help' with lines linewidth 2,"Résultats_ActivitéMess.txt" using 8:4 title 'Update' with lines linewidth 2,"Résultats_ActivitéMess.txt" using 8:6 title 'FOUND' with lines linewidth 2
+#plot "Résultats_ActivitéMess.txt" using 8:1 title 'CacheRequest' with lines linewidth 2, "Résultats_ActivitéMess.txt" using 8:2 title 'SEARCH' with lines #linewidth 2,"Résultats_ActivitéMess.txt" using 8:3 title 'Help' with lines linewidth 2,"Résultats_ActivitéMess.txt" using 8:4 title 'Update' with lines #linewidth 2,"Résultats_ActivitéMess.txt" using 8:6 title 'FOUND' with lines linewidth 2
 
+plot "Résultats_ActivitéMess.txt" using 8:1 title 'CacheRequest' with points pointstype 1, "Résultats_ActivitéMess.txt" using 8:2 title 'SEARCH' with points 2,"Résultats_ActivitéMess.txt" using 8:3 title 'Help' with points 3,"Résultats_ActivitéMess.txt" using 8:4 title 'Update' with points 4,"Résultats_ActivitéMess.txt" using 8:6 title 'FOUND' with points 5
  
 pause -1 "maintenant va créer un fichier au format png appuyer sur entrée"
  
