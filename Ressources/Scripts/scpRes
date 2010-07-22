@@ -1,0 +1,10 @@
+#!/bin/sh
+
+time=`date '+%X_%j-%m'`
+#echo $time
+
+scp xavier@joudiou.dyndns.org:/home/xavier/Git_Lip6/Stage_LIP6/CacheCode/SolipsisPeersim/Stats_EndTime.txt /home/xavier/Résultats_scp/Stats_EndTime_$time.txt
+scp xavier@joudiou.dyndns.org:/home/xavier/Git_Lip6/Stage_LIP6/CacheCode/SolipsisPeersim/Résultats_ActivitéMess.txt /home/xavier/Résultats_scp/Résultats_ActivitéMess_$time.txt
+scp xavier@joudiou.dyndns.org:/home/xavier/Git_Lip6/Stage_LIP6/CacheCode/SolipsisPeersim/Résultats_CacheMess.txt /home/xavier/Résultats_scp/Résultats_CacheMess_$time.txt
+
+

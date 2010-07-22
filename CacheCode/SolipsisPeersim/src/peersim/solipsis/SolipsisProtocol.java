@@ -843,7 +843,12 @@ public class SolipsisProtocol implements EDProtocol {
 	public void processEvent( Node node, int pid, Object event ) {
 		receive((Message)event,(SolipsisProtocol)node.getProtocol(pid));
 	}
-		
+	
+	
+	/*
+	 * Point d'entrée pour l'utilisation du cache, on fait appel 
+	 * à la fonction maintainCacheTopology 
+	 */
 	private void solipsisRecoverTopology(NeighborProxy [] sector) {
 
 		GeometricRegion line;
@@ -872,12 +877,12 @@ public class SolipsisProtocol implements EDProtocol {
 					}
 					this.searchInProgress = true;
 					Node n = Network.get(this.getPeersimNodeId());
-					if (this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
+//					if (this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
 						CacheHelpRequest request = new CacheHelpRequest(line, this.convexEnvelope,this.mainVirtualEntity.getCoord());
 						recoverMsg = new Message(Message.SEARCH_HELP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), sendTo.getId(), request);
-					}else{
-						recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), sendTo.getId(), line);
-					}
+//					}else{
+//						recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), sendTo.getId(), line);
+//					}
 					this.send(recoverMsg, sendTo);
 				}
 			}
@@ -911,8 +916,76 @@ public class SolipsisProtocol implements EDProtocol {
 		return new Message(Message.FOUND, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), destination, neighbor.clone());
 	}
 
+	/*****************************************************/
+				/****Fonctions pour Update ****/
+	/*****************************************************/
 	
 	
+	/*
+	 * Fonction processUpdateCaheREQ:
+	 * Traite la réception d'un message de type UPDATE_CACHE_REQ
+	 * Met dans les objets du message les informations nécessaires
+	 * à la mise à jour de u nœud dans le cache 
+	 * 
+	 */
+	public void processUpdateCaheREQ(Message msg) {
+		
+		NeighborProxy source = (NeighborProxy)msg.getContent();
+		Message updateResponse = new Message(Message.UPDATE_CACHE_REP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), source.getId(), this.mainVirtualEntity);
+		this.send(updateResponse, msg.getOriginAddress());
+		
+	}
+	
+	
+	/*
+	 * Fonction processUpdateCaheREP:
+	 * Traite la reception d'un message de type UPDATE_CACHE_REP
+	 * Met à jour les coordonnées de la données du cache.
+	 * 
+	 */
+	public void processUpdateCaheREP(Message msg) {
+
+		VirtualEntity update = (VirtualEntity)msg.getContent();
+//		System.out.println("_____id: " + msg.getDestination());
+		if (((NeighborProxy)this.cache.getCache().get(msg.getDestination())) != null){
+			if (cacheDebug == 1){
+				this.cache.ShowCache();
+				System.out.println("ancienne Coord: " + ((NeighborProxy)this.cache.getCache().get(msg.getDestination())).getCoord()[0] + ", " + 
+						((NeighborProxy)this.cache.getCache().get(msg.getDestination())).getCoord()[1] + ", id: " + update.getId());
+			}
+			((NeighborProxy)this.cache.getCache().get(msg.getDestination())).setCoord(update.getCoord());
+			if (cacheDebug == 1){
+				System.out.println("New Coord: " + ((NeighborProxy)this.cache.getCache().get(update.getId())).getCoord()[0] + ", " + 
+					((NeighborProxy)this.cache.getCache().get(update.getId())).getCoord()[1] + ", id: " + update.getId());
+			}
+		}
+	}
+
+	/*
+	 * Fonction CacheUpdate:
+	 * Va lancer la mis à jour du cache 
+	 */
+	public void CacheUpdate(){
+		NeighborProxy current;
+		Iterator it;
+		it = this.cache.getCache().entrySet().iterator();
+
+				
+		while(it.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			Message updateRequest = new Message(Message.UPDATE_CACHE_REQ, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), current.getId(), current);
+			this.send(updateRequest, current);
+			
+		}
+		
+		
+	}
+	
+	/*
+	 * Fonction processSearch:
+	 * traite les message de type SEARCH et SEARCH_HELP
+	 * 
+	 */
 	private void processSearchMsg(Message msg) {
 		GeometricRegion line;
 		int srcId = msg.getSource();
@@ -929,7 +1002,9 @@ public class SolipsisProtocol implements EDProtocol {
 			case Message.SEARCH_HELP:
 				CacheHelpRequest request = (CacheHelpRequest) msg.getContent();
 				line = (GeometricRegion)request.getRegion();
-				System.out.println("Destination: " + ((CacheHelpRequest)msg.getContent()).getDestination()[0] + ", "  + ((CacheHelpRequest)msg.getContent()).getDestination()[1]);
+				if (cacheDebug == 1){
+					System.out.println("Destination: " + ((CacheHelpRequest)msg.getContent()).getDestination()[0] + ", "  + ((CacheHelpRequest)msg.getContent()).getDestination()[1]);
+				}
 				
 				if (this.strategieCache == SolipsisProtocol.FIFO && this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
 					find = HelpNeighborCache(msg);
@@ -978,52 +1053,7 @@ public class SolipsisProtocol implements EDProtocol {
 		}
 		
 	}
-	public void processUpdateCaheREQ(Message msg) {
-		
-		NeighborProxy source = (NeighborProxy)msg.getContent();
-		Message updateResponse = new Message(Message.UPDATE_CACHE_REP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), source.getId(), this.mainVirtualEntity);
-		this.send(updateResponse, msg.getOriginAddress());
-		
-	}
 	
-	
-	
-	public void processUpdateCaheREP(Message msg) {
-
-		VirtualEntity update = (VirtualEntity)msg.getContent();
-		System.out.println("_____id: " + msg.getDestination());
-		if (((NeighborProxy)this.cache.getCache().get(msg.getDestination())) != null){
-			if (cacheDebug == 1){
-				this.cache.ShowCache();
-				System.out.println("ancienne Coord: " + ((NeighborProxy)this.cache.getCache().get(msg.getDestination())).getCoord()[0] + ", " + 
-						((NeighborProxy)this.cache.getCache().get(msg.getDestination())).getCoord()[1] + ", id: " + update.getId());
-			}
-			((NeighborProxy)this.cache.getCache().get(msg.getDestination())).setCoord(update.getCoord());
-			if (cacheDebug == 1){
-				System.out.println("New Coord: " + ((NeighborProxy)this.cache.getCache().get(update.getId())).getCoord()[0] + ", " + 
-					((NeighborProxy)this.cache.getCache().get(update.getId())).getCoord()[1] + ", id: " + update.getId());
-			}
-		}
-	}
-
-	
-	
-	
-	public void CacheUpdate(){
-		NeighborProxy current;
-		Iterator it;
-		it = this.cache.getCache().entrySet().iterator();
-
-				
-		while(it.hasNext()){
-			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
-			Message updateRequest = new Message(Message.UPDATE_CACHE_REQ, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), current.getId(), current);
-			this.send(updateRequest, current);
-			
-		}
-		
-		
-	}
 	
 	
 	public int HelpNeighborCache(Message msg) {
@@ -1392,10 +1422,10 @@ public class SolipsisProtocol implements EDProtocol {
 		boolean aide = this.helpfulToEnvelopeCache(neighbor);
 		boolean avant = convexEnvelopeProperty();
 
-		System.out.println("!!!aide_ou_pas : " + aide +", myId: " + this.mainVirtualEntity.getId() + ", newId: " + neighbor.getId() + ", time: " + CommonState.getTime());
-		System.out.println("!!!Envelop state before: " + avant);
-		System.out.println("!!!My Coords: " + this.mainVirtualEntity.getCoord()[0] + ", " + this.mainVirtualEntity.getCoord()[1]);
-		System.out.println("!!!Coord: " + neighbor.getCoord()[0] + ", " + neighbor.getCoord()[1]);
+//		System.out.println("!!!aide_ou_pas : " + aide +", myId: " + this.mainVirtualEntity.getId() + ", newId: " + neighbor.getId() + ", time: " + CommonState.getTime());
+//		System.out.println("!!!Envelop state before: " + avant);
+//		System.out.println("!!!My Coords: " + this.mainVirtualEntity.getCoord()[0] + ", " + this.mainVirtualEntity.getCoord()[1]);
+//		System.out.println("!!!Coord: " + neighbor.getCoord()[0] + ", " + neighbor.getCoord()[1]);
 
 		if ( cacheDebug == 1 || cacheDebug == 2 ){
 			System.out.println("Message Recu : <" + msg.getTypeString() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + ">");
@@ -1458,7 +1488,7 @@ public class SolipsisProtocol implements EDProtocol {
 //			
 //		}
 		boolean apres = convexEnvelopeProperty();
-		System.out.println("!!!Envelop State after: " + apres);
+//		System.out.println("!!!Envelop State after: " + apres);
 		Globals.cacheEvaluator.incCacheHitGLob();
 		
 	}
@@ -1903,6 +1933,7 @@ public class SolipsisProtocol implements EDProtocol {
 			this.processCacheHelpResponse(msg);
 			break;
 		case Message.SEARCH_HELP:
+			Globals.cacheEvaluator.incnbMessSearch();
 			Globals.cacheEvaluator.incnbMessSearchHelp();
 			processSearchMsg(msg);
 
@@ -1911,10 +1942,12 @@ public class SolipsisProtocol implements EDProtocol {
 			}
 			break;
 		case Message.UPDATE_CACHE_REQ:
+			Globals.cacheEvaluator.incnbMessUpdateTot();
 			Globals.cacheEvaluator.incnbMessCacheHelpResp();
 			this.processUpdateCaheREQ(msg);
 			break;
 		case Message.UPDATE_CACHE_REP:
+			Globals.cacheEvaluator.incnbMessUpdateTot();
 			Globals.cacheEvaluator.incnbMessCacheHelpResp();
 			this.processUpdateCaheREP(msg);
 			break;

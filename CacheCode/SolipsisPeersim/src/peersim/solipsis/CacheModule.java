@@ -232,15 +232,16 @@ public class CacheModule {
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
-			
-			if (currentDist < limite){
-				if ( bestDist == -1){
-					bestDist = currentDist;
-					best = current;
-				}else{
-					if(currentDist < bestDist){
-						best = current;
+			if (current.getQuality() !=  NeighborProxy.CACHED){
+				if (currentDist < limite){
+					if ( bestDist == -1){
 						bestDist = currentDist;
+						best = current;
+					}else{
+						if(currentDist < bestDist){
+							best = current;
+							bestDist = currentDist;
+						}
 					}
 				}
 			}
@@ -267,16 +268,18 @@ public class CacheModule {
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
 //			System.out.println(this.protocol.helpfulToEnvelopeCache(current));
-			if (this.protocol.helpfulToEnvelopeCache(current)){
-				best = current;
-				System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
-				System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
-				return best;
-
-			}
-			if ( this.protocol.constructingEnvelope(current)){
-				other = current;
-				
+			if (current.getQuality() !=  NeighborProxy.CACHED){
+				if (this.protocol.helpfulToEnvelopeCache(current)){
+					best = current;
+//					System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
+//					System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
+					return best;
+	
+				}
+				if ( this.protocol.constructingEnvelope(current)){
+					other = current;
+					
+				}
 			}
 		}
 		if (other != null){
@@ -339,16 +342,18 @@ public class CacheModule {
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
 //			System.out.println(this.protocol.helpfulToEnvelopeCache(current));
-			if (this.protocol.helpfulToEnvelopeCache(current) && current.getTime() > bestTime){
-				best = current;
-				bestTime = current.getTime();
-//				return best;
-				System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
-				System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
-			}
-			if ( this.protocol.constructingEnvelope(current)){
-				other = current;
-				
+			if (current.getQuality() !=  NeighborProxy.CACHED){
+				if (this.protocol.helpfulToEnvelopeCache(current) && current.getTime() > bestTime){
+					best = current;
+					bestTime = current.getTime();
+	//				return best;
+//					System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
+//					System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
+				}
+				if ( this.protocol.constructingEnvelope(current)){
+					other = current;
+					
+				}
 			}
 		}
 		if (other != null){
@@ -378,6 +383,7 @@ public class CacheModule {
 		while(it_voisin.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it_voisin.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
+
 			if ( limite == -1){
 				limite = currentDist;
 			}else{
@@ -385,6 +391,7 @@ public class CacheModule {
 					bestDist = limite;
 				}
 			}	
+			
 		}
 		
 //		System.out.println("Limite = " + limite);
@@ -393,15 +400,16 @@ public class CacheModule {
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
-
-			if (currentDist < limite){
-				if ( bestDist == -1){
-					bestDist = currentDist;
-					best = current;
-				}else{
-					if(currentDist < bestDist){
-						best = current;
+			if (current.getQuality() !=  NeighborProxy.CACHED){
+				if (currentDist < limite){
+					if ( bestDist == -1){
 						bestDist = currentDist;
+						best = current;
+					}else{
+						if(currentDist < bestDist){
+							best = current;
+							bestDist = currentDist;
+						}
 					}
 				}
 			}
@@ -432,6 +440,7 @@ public class CacheModule {
 		while(it_voisin.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it_voisin.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
+			
 			if( farNeighDist < currentDist){
 				farNeigh = current;
 				farNeighDist = currentDist;
@@ -445,10 +454,13 @@ public class CacheModule {
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
-			if( farNeighDist > currentDist){
-				best = current;
-				bestDist = currentDist;		
-//				System.out.println("On a un plus proche, le nœud: " + best.getId() + ", distance = " + bestDist);
+			if (current.getQuality() !=  NeighborProxy.CACHED){
+
+				if( farNeighDist > currentDist){
+					best = current;
+					bestDist = currentDist;		
+	//				System.out.println("On a un plus proche, le nœud: " + best.getId() + ", distance = " + bestDist);
+				}
 			}
 			
 			//((SolipsisProtocol)n.getProtocol(me.getPeersimNodeId())).getVirtualEntity();

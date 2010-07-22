@@ -32,6 +32,7 @@ public class CacheStatistics {
 	private int nbCacheHitHelpGLob;
 	private int nbCacheMissHelpGlob;
 	private int nbMessSearchHelp;
+	private int nbMessUpdateTot;
 
 	CacheStatistics() {
 		this.nbCaheMissGlob = 0;
@@ -50,6 +51,7 @@ public class CacheStatistics {
 		this.nbCacheHitHelpGLob = 0;
 		this.nbCacheMissHelpGlob = 0;
 		this.nbMessSearchHelp = 0;
+		this.nbMessUpdateTot = 0;
 	}
 	
 	
@@ -124,7 +126,10 @@ public class CacheStatistics {
 	public void incnbMessSearchHelp() {
 		this.nbMessSearchHelp ++;			
 	}
-	
+	public void incnbMessUpdateTot() {
+		this.nbMessUpdateTot ++;
+	}
+		
 	/*
 	 *  Fonctions Affichage Statistiques 
 	 */
@@ -140,30 +145,47 @@ public class CacheStatistics {
 	}
 	
 	public void printStatisticsCacheMess() {
-		System.out.println("Hit:Mit:Miss:HitHelp:MissHelp:CacReq:CacHelpReq:Time");
-		System.out.println(this.nbCaheHitGlob + ":" + this.nbCacheMitClob + ":" + this.nbCaheMissGlob + ":" + this.nbCacheHitHelpGLob + ":" + this.nbCacheMissHelpGlob + ":" +this.nbCacheRequest + ":" + this.nbMessSearchHelp +  ":"+ CommonState.getTime()+ ", ");
+		System.out.println("Hit:Mit:Miss:HitHelp:MissHelp:Time");
+		System.out.println(this.nbCaheHitGlob + ":" + this.nbCacheMitClob + ":" + this.nbCaheMissGlob + ":" + this.nbCacheHitHelpGLob + ":" + this.nbCacheMissHelpGlob + ":"+ CommonState.getTime()+ ", ");
 		System.out.println("");
 
 	}
 	
 	public void printStatisticsActiviteMess() {
-		System.out.println("CacheReq|Search|CacheHelp|Delta|Found|Total|Time");
-		System.out.println(this.nbCacheRequest + "|" + this.nbMessSearch + "|" + this.nbMessSearchHelp + "|" + this.nbMessDelta + "|" + this.nbMessFound + "|" + this.nbNombreMessages +  "|"+ CommonState.getTime()+ ", ");
+		System.out.println("CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time");
+		System.out.println(this.nbCacheRequest + "|" + this.nbMessSearch + "|" + this.nbMessSearchHelp + "|" + this.nbMessUpdateTot + "|" + this.nbMessDelta + "|" + this.nbMessFound + "|" + this.nbNombreMessages +  "|"+ CommonState.getTime()+ ", ");
 	}
 	
 	public String printStatisticsCacheMessString() {
 		String res;
-		res = "" + this.nbCaheHitGlob + " " + this.nbCacheMitClob + " " + this.nbCaheMissGlob + " " + this.nbCacheHitHelpGLob + " " + this.nbCacheMissHelpGlob + " " + this.nbCacheRequest + " " + this.nbMessSearchHelp + " " + CommonState.getTime() + "\n";
+		res = "" + this.nbCaheHitGlob + " " + this.nbCacheMitClob + " " + this.nbCaheMissGlob + " " + this.nbCacheHitHelpGLob + " " + this.nbCacheMissHelpGlob + " " + CommonState.getTime() + "\n";
 		return res;
 	}
 	
 	public String printStatisticsActiviteMessString() {
 		String res;
-		res = "" + this.nbCacheRequest + " " + this.nbMessSearch + " " + this.nbMessDelta + " " + this.nbMessFound + " " + this.nbNombreMessages + " " + CommonState.getTime() + "\n";
+		res = "" + this.nbCacheRequest + " " + this.nbMessSearch + " " + this.nbMessSearchHelp + " " + this.nbMessUpdateTot + " " + this.nbMessDelta + " " + this.nbMessFound + " " + this.nbNombreMessages + " " + CommonState.getTime() + "\n";
 		return res;
 	}
 
+	public String printStatisticsCacheMessFinalString() {
+		String res;
+		res = "Hit:Mit:Miss:HitHelp:MissHelp:Time\n";
+		res += this.nbCaheHitGlob + ":" + this.nbCacheMitClob + ":" + this.nbCaheMissGlob + ":" + this.nbCacheHitHelpGLob + ":" + this.nbCacheMissHelpGlob + ":" + CommonState.getTime() + "\n"; 
+		res += "\n";
+		return res;
+	}
+	
+	public String printStatisticsActiviteMessFinalString() {
+		String res;
 
+		res = "CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time\n";
+		res += this.nbCacheRequest + "|" + this.nbMessSearch + "|" + this.nbMessSearchHelp + "|" + this.nbMessUpdateTot + "|" + this.nbMessDelta + "|" + this.nbMessFound + "|" + this.nbNombreMessages +  "|" + CommonState.getTime() + "\n";
+		res += "\n";
+		return res;
+
+	}
+	
 	public int getNbCaheMissGlob() {
 		return nbCaheMissGlob;
 	}

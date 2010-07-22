@@ -69,9 +69,9 @@ public class VirtualWorldOverview implements Control {
 						fw.close();
 						fw2.close();
 						String res3;
-						res3 = evalCache.printStatisticsCacheMessString();
+						res3 = evalCache.printStatisticsCacheMessFinalString();
 						fw3.write(res3);
-						res3 = evalCache.printStatisticsActiviteMessString();
+						res3 = evalCache.printStatisticsActiviteMessFinalString();
 						fw3.write(res3);
 						fw3.write("=============================\n");
 						fw3.close();

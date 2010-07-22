@@ -16,10 +16,10 @@ set grid
  
 #l'origine
  
-#plot "Résultats_CacheMess.txt" using 6:1 title 'HIT' with line linewidth 3, "Résultats_CacheMess.txt" using 6:2 title 'MIT' with lines linewidth #3,"Résultats_CacheMess.txt" using 6:3 title 'MISS' with line linewidth 3
+plot "Résultats_CacheMess.txt" using 6:1 title 'HIT' with line linewidth 3, "Résultats_CacheMess.txt" using 6:2 title 'MIT' with lines linewidth 3,"Résultats_CacheMess.txt" using 6:3 title 'MISS' with line linewidth 3,"Résultats_CacheMess.txt" using 6:4 title 'HIT_HELP' with line linewidth 3,"Résultats_CacheMess.txt" using 6:5 title 'MISS_HELP' with line linewidth 3
  
  
-plot "Résultats_CacheMess.txt" using 6:1 title 'HIT' with points, "Résultats_CacheMess.txt" using 6:2 title 'MIT' with points,"Résultats_CacheMess.txt" using 6:3 title 'MISS' with points
+#plot "Résultats_CacheMess.txt" using 6:1 title 'HIT' with points, "Résultats_CacheMess.txt" using 6:2 title 'MIT' with points,"Résultats_CacheMess.txt" #using 6:3 title 'MISS' with points
 
 pause -1 "maintenant va créer un fichier au format png appuyer sur entrée"
  
