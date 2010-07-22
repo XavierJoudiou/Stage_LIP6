@@ -973,9 +973,10 @@ public class SolipsisProtocol implements EDProtocol {
 	public void CacheUpdate(){
 		NeighborProxy current;
 		Iterator it;
-		it = this.cache.getCache().entrySet().iterator();
 
 		if (update_ok == 1){
+			it = this.cache.getCache().entrySet().iterator();
+
 			while(it.hasNext()){
 				Globals.cacheEvaluator.incnbMessUpdateTot();
 				current = (NeighborProxy)((Map.Entry)it.next()).getValue();
