@@ -874,7 +874,7 @@ public class SolipsisProtocol implements EDProtocol {
 		}
 		
 
-//		if (find == 0){
+		if (find == 0){
 			if (sector != null) {
 				if (sector[0] != null) {
 					sendTo = sector[0];
@@ -899,7 +899,7 @@ public class SolipsisProtocol implements EDProtocol {
 					}
 					this.send(recoverMsg, sendTo);
 				}
-//			}
+			}
 		}
 	}
 
@@ -1192,7 +1192,7 @@ public class SolipsisProtocol implements EDProtocol {
 								
 //								neighbor = cache.searchCacheNeighborLimit(destination,limite);
 //								neighbor = cache.searchCacheNeighborEnvelop(destination);
-								neighbor = cache.searchCacheNeighborEnvelopEv(destination);
+								neighbor = cache.searchCacheNeighborEnvelopEv(destination,this.knowledgeRay);
 
 								break;
 								

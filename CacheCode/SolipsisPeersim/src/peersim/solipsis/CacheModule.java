@@ -339,7 +339,7 @@ public class CacheModule {
 	}
 	
 	
-	public NeighborProxy searchCacheNeighborEnvelopEv(long[] destination){
+	public NeighborProxy searchCacheNeighborEnvelopEv(long[] coord){
 		NeighborProxy current;
 		NeighborProxy best = null;
 		NeighborProxy other = null;
@@ -354,9 +354,45 @@ public class CacheModule {
 				
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
-			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
+			currentDist = VirtualWorld.simpleDistance(coord, current.getCoord());
 //			System.out.println(this.protocol.helpfulToEnvelopeCache(current));
 			if (current.getQuality() !=  NeighborProxy.CACHED){
+				if (this.protocol.helpfulToEnvelopeCache(current) && current.getTime() > bestTime){
+					best = current;
+					bestTime = current.getTime();
+	//				return best;
+//					System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
+//					System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
+				}
+				
+			}
+		}
+		
+		return best;
+	
+	}
+	
+	public NeighborProxy searchCacheNeighborEnvelopEv(long[] coord, double knowledgeRay){
+		NeighborProxy current;
+		NeighborProxy best = null;
+		NeighborProxy other = null;
+		long bestTime = -1;
+		double currentDist,bestDist = -1;
+		
+		
+//		HashMap<Integer, NeighborProxy> cach = this.cache;
+		Iterator it;
+		it = this.cache.entrySet().iterator();
+
+				
+		while(it.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			currentDist = VirtualWorld.simpleDistance(coord, current.getCoord());
+//			System.out.println(this.protocol.helpfulToEnvelopeCache(current));
+			if (current.getQuality() !=  NeighborProxy.CACHED){
+				if ( currentDist < knowledgeRay ){
+					return current;
+				}
 				if (this.protocol.helpfulToEnvelopeCache(current) && current.getTime() > bestTime){
 					best = current;
 					bestTime = current.getTime();
