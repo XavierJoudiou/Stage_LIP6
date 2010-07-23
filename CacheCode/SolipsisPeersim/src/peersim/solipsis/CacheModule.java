@@ -22,6 +22,7 @@ public class CacheModule {
 	private final static int OFF 	=  0;
 	private final static int FIFO	=  1;
 	private final static int LRU	=  2;
+	private final static int FIFOMULT = 3;
 	
 
 	/* Variables pour la mise en place du cache */ 
@@ -139,6 +140,19 @@ public class CacheModule {
 		
 		switch(strategieCache){
 		case FIFO:
+			suppr = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			supprInfo = (CacheData)((Map.Entry)info.next()).getValue();
+				while(it.hasNext()){
+					current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+					currentInfo = (CacheData)((Map.Entry)info.next()).getValue();
+					if ( supprInfo.getPosition() < currentInfo.getPosition() ){
+						suppr = current;
+						supprInfo = currentInfo;
+					}
+				}
+//				System.out.println("FIFO: Le noeud choisi est " + suppr.getId());
+			break;
+		case FIFOMULT:
 			suppr = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			supprInfo = (CacheData)((Map.Entry)info.next()).getValue();
 				while(it.hasNext()){
@@ -353,15 +367,42 @@ public class CacheModule {
 				
 			}
 		}
-		if (other != null){
-			System.out.println("OTHER PAS NULL");
-			return other;
-		}
 		
 		return best;
 	
 	}
 	
+	public HashMap<Integer,NeighborProxy>  searchCacheNeighborEnvelopEvMult(long[] destination){
+		NeighborProxy current;
+		HashMap<Integer,NeighborProxy> best = new HashMap<Integer, NeighborProxy>();
+		NeighborProxy other = null;
+		long bestTime = -1;
+		double currentDist,bestDist = -1;
+		
+		
+//		HashMap<Integer, NeighborProxy> cach = this.cache;
+		Iterator it;
+		it = this.cache.entrySet().iterator();
+
+				
+		while(it.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
+//			System.out.println(this.protocol.helpfulToEnvelopeCache(current));
+			if (current.getQuality() !=  NeighborProxy.CACHED){
+				if (this.protocol.helpfulToEnvelopeCache(current)){
+					best.put(current.getId(), current);
+	//				return best;
+//					System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
+//					System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
+				}
+				
+			}
+		}
+		
+		return best;
+	
+	}
 	
 	
 	public NeighborProxy searchCacheNeighborLimitNeighbor(long[] destination,HashMap<Integer, NeighborProxy> voisin){
