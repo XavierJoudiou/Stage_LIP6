@@ -76,7 +76,7 @@ public class StatisticsGatherer {
 	
 	public String printStatistics () {
 //		String detailedMessageInfo = this.getAverageMessageCount()+" (delta: "+this.getDeltaMessageCount()+", search: "+this.getSearchMessageCount()+", detect: "+this.getDetectMessageCount()+")"+ "Rejection: "+this.getAverageMessageRejection();
-		String result = ""+this.getCumulatedAverageViewDivergence()+" "+this.getCumulatedOverallTopologyCoherence()+" "+this.getAverageMessageCount() + " " + getCumulatedAheadNeighborCount() + " " + getOverallAverageConnectionDuration() +"\n" ;
+		String result = ""+this.getCumulatedAverageViewDivergence()+" "+this.getCumulatedOverallTopologyCoherence()+" "+this.getAverageMessageCount() + " " + getCumulatedAheadNeighborCount() + " " + getOverallAverageConnectionDuration() + " " + CommonState.getIntTime() + "\n" ;
 		
 		this.stepCount++;
 		Globals.steps = this.stepCount;

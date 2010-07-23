@@ -866,14 +866,15 @@ public class SolipsisProtocol implements EDProtocol {
 		NeighborProxy sendTo;
 		int find = 0;
 //		System.err.println("STRATEGIE_CACHE: " + this.strategieCache);
+//		boolean avant = convexEnvelopeProperty();
 
-		if ( this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
-			System.err.println("CACHECACHE");
+		if ( this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING ){
+//			System.err.println("CACHECACHE");
 			find = maintainCacheTopology();
 		}
 		
 
-		if (find == 0){
+//		if (find == 0){
 			if (sector != null) {
 				if (sector[0] != null) {
 					sendTo = sector[0];
@@ -889,6 +890,7 @@ public class SolipsisProtocol implements EDProtocol {
 					}
 					this.searchInProgress = true;
 					Node n = Network.get(this.getPeersimNodeId());
+					
 					if ( help_ok == 1 ){
 						CacheHelpRequest request = new CacheHelpRequest(line, this.convexEnvelope,this.mainVirtualEntity.getCoord());
 						recoverMsg = new Message(Message.SEARCH_HELP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), sendTo.getId(), request);
@@ -897,7 +899,7 @@ public class SolipsisProtocol implements EDProtocol {
 					}
 					this.send(recoverMsg, sendTo);
 				}
-			}
+//			}
 		}
 	}
 
@@ -1519,66 +1521,74 @@ public class SolipsisProtocol implements EDProtocol {
 //		System.out.println("!!!My Coords: " + this.mainVirtualEntity.getCoord()[0] + ", " + this.mainVirtualEntity.getCoord()[1]);
 //		System.out.println("!!!Coord: " + neighbor.getCoord()[0] + ", " + neighbor.getCoord()[1]);
 
-		if ( cacheDebug == 1 || cacheDebug == 2 ){
-			System.out.println("Message Recu : <" + msg.getTypeString() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + ">");
-		}
+		if (aide){		
+			if ( cacheDebug == 1 || cacheDebug == 2 ){
+					System.out.println("--- Envelope OK, nodeId: " + neighbor.getId() );
+			}
 		
-		if (cacheDebug == 1){
-			System.out.println("--- Nœud supprimé du cache: " + neighbor.getId() + " ---");
-			cache.ShowCache();
-			System.out.println("taille  cache: " + cache.getCache().size());
-			System.out.println("taille voisin: " + proxies.size());
-		}		
-		cache.RmCache(neighbor);
+			if ( cacheDebug == 1 || cacheDebug == 2 ){
+				System.out.println("Message Recu : <" + msg.getTypeString() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + ">");
+			}
+			
+			if (cacheDebug == 1){
+				System.out.println("--- Nœud supprimé du cache: " + neighbor.getId() + " ---");
+				cache.ShowCache();
+				System.out.println("taille  cache: " + cache.getCache().size());
+				System.out.println("taille voisin: " + proxies.size());
+			}		
+			cache.RmCache(neighbor);
+			
+			if (cacheDebug == 1){
+				System.out.println("taille cache: " + cache.getCache().size());
+				System.out.println("taille voisin: " + proxies.size());
+			}
+			
+			addLocalView(neighbor);
+			
+			if (cacheDebug == 1){
+				System.out.println("taille cache: " + cache.getCache().size());
+				System.out.println("taille voisin: " + proxies.size());
+				cache.ShowCache();
+			}
+			
+			/* Changement de la Qulity du nœud que l'on repasse à REGULAR */
+			neighbor.setQuality(NeighborProxy.REGULAR);
+			neighbor.setTime(CommonState.getIntTime());
+			
+			if (cacheDebug == 1){
+				System.out.println("--- Modification de la quality du nœud: " + neighbor.getQuality());
+			}
 		
-		if (cacheDebug == 1){
-			System.out.println("taille cache: " + cache.getCache().size());
-			System.out.println("taille voisin: " + proxies.size());
-		}
-		
-		addLocalView(neighbor);
-		
-		if (cacheDebug == 1){
-			System.out.println("taille cache: " + cache.getCache().size());
-			System.out.println("taille voisin: " + proxies.size());
-			cache.ShowCache();
-		}
-		
-		/* Changement de la Qulity du nœud que l'on repasse à REGULAR */
-		neighbor.setQuality(NeighborProxy.REGULAR);
-		neighbor.setTime(CommonState.getIntTime());
-		
-		if (cacheDebug == 1){
-			System.out.println("--- Modification de la quality du nœud: " + neighbor.getQuality());
-		}
-		
-//		boolean envOK = checkEnvelopeState();
-//		if (envOK){		
-//			if ( cacheDebug == 1 || cacheDebug == 2 ){
-//					System.out.println("--- Envelope OK, nodeId: " + neighbor.getId() );
+		}else{
+			if ( cacheDebug == 1 || cacheDebug == 2 ){
+				System.out.println("--- Envelope NOT_OK, nodeId: " + neighbor.getId() );
+			}
+			Globals.cacheEvaluator.incnbEnvelopNotOK();
+//			if (sector != null) {
+//				if (sector[0] != null) {
+//					sendTo = sector[0];
+//					long [] a = this.mainVirtualEntity.getCoord();
+//					long [] b = this.subjectiveCoord(sendTo.getId());
+//					line  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(sendTo.getId()));
+//
+//					
+//					if (sector[1] != null && simpleAngleSign(this.subjectiveCoord(sector[0].getId()), this.mainVirtualEntity.getCoord(), this.subjectiveCoord(sector[1].getId())) < 0) {
+//						line.setOri(VirtualWorld.LEFT);
+//					} else {
+//						line.setOri(VirtualWorld.RIGHT);
+//					}
+//					this.searchInProgress = true;
+//					Node n = Network.get(this.getPeersimNodeId());
+//					if ( help_ok == 1 ){
+//						CacheHelpRequest request = new CacheHelpRequest(line, this.convexEnvelope,this.mainVirtualEntity.getCoord());
+//						recoverMsg = new Message(Message.SEARCH_HELP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), sendTo.getId(), request);
+//					}else{
+//						recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), sendTo.getId(), line);
+//					}
+//					this.send(recoverMsg, sendTo);
+//				}
 //			}
-//			cache.RmCache(neighbor);
-//			addLocalView(neighbor);
-//		}else{
-//			if ( cacheDebug == 1 || cacheDebug == 2 ){
-//				System.out.println("--- Envelope NOT_OK, nodeId: " + neighbor.getId() );
-//			}
-//			Globals.cacheEvaluator.incnbEnvelopNotOK();
-//			/* regarder dans processFoundMsg, pour refaire l'envelope */ 
-//			GeometricRegion lin;
-//			Message recoverMsg;
-//			Node n = Network.get(this.getPeersimNodeId());
-//			NeighborProxy peer = ((CacheRequest)msg.getContent()).getOldData();
-//			lin  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(peer.getId()));
-//			if (help_ok == 1){
-//				CacheHelpRequest request = new CacheHelpRequest(lin, this.convexEnvelope,this.mainVirtualEntity.getDestination());
-//				recoverMsg = new Message(Message.SEARCH_HELP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), request);
-//			}else{
-//				recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), peer.getId(), lin);
-//			}
-//			this.send(recoverMsg, peer);
-//			
-//		}
+		}
 		boolean apres = convexEnvelopeProperty();
 //		System.out.println("!!!Envelop State after: " + apres);
 		Globals.cacheEvaluator.incCacheHitGLob();

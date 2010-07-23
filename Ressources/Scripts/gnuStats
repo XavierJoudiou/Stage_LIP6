@@ -1,0 +1,38 @@
+#!/bin/sh 
+
+#Step 1: create file 
+echo reset > plotfile.dat
+echo set term x11 >>plotfile.dat 
+echo set title \"$1\" >>plotfile.dat
+echo plot \"$1.txt\" using 6:1 title \'View Divergence \' with lines linewidth 2,\"resultats\/Base\/Stats_sergey_NoCachePrefetch.txt\" using 6:1 title \'View Divergence No Cache\' with lines linewidth 2, \"resultats\/Base\/Stats_sergey_Nothing.txt\" using 6:1 title \'View Divergence Base\' with lines linewidth 2 >>plotfile.dat 
+#echo pause -1 >>plotfile.dat
+echo set term png >>plotfile.dat 
+echo set out \"View_Divergence_$1.png\" >>plotfile.dat 
+echo rep >>plotfile.dat
+echo set out >>plotfile.dat 
+echo set term x11 >>plotfile.dat 
+
+echo testtest
+#Step 2: call gnuplot 
+gnuplot plotfile.dat
+
+#Step 1: create file 
+echo reset > plotfile.dat
+echo set term x11 >>plotfile.dat 
+echo set title \"$1\" >>plotfile.dat
+echo plot \"$1.txt\" using 6:2 title \'Topology Coherence \' with lines linewidth 2,\"resultats\/Base\/Stats_sergey_NoCachePrefetch.txt\" using 6:2 title \'Topology Coherence No Cache\' with lines linewidth 2, \"resultats\/Base\/Stats_sergey_Nothing.txt\" using 6:2 title \'Topology Coherence Base\' with lines linewidth 2 >>plotfile.dat 
+#echo pause -1 >>plotfile.dat
+echo set term png >>plotfile.dat 
+echo set out \"Topology_Coherence$_1.png\" >>plotfile.dat 
+echo rep >>plotfile.dat
+echo set out >>plotfile.dat 
+echo set term x11 >>plotfile.dat 
+
+echo testtest
+#Step 2: call gnuplot 
+gnuplot plotfile.dat
+
+
+
+
+rm -f plotfile.dat
