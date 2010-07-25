@@ -1,0 +1,14 @@
+#Step 1: create file 
+reset
+set term x11 
+set title "Topology Coherence"
+set xlabel "Temps de simulation"
+set ylabel "Nombre de nœud proche mais pas voisin"
+set grid
+plot "Stats_sergey.txt" using 6:2 title 'Solution courante' with lines linewidth 1,"resultats/Data/600_300/Stats_sergey_NoCachePrefetch.txt" using 6:2 title 'No Cache' with lines linewidth 1,"resultats/Data/600_300/Stats_sergey_Nothing.txt" using 6:2 title 'Base' with lines linewidth 1 
+pause -1
+set term png 
+set out "resultats/Courbes/Courbes_$time/Topology_Coherence.png" 
+rep
+set out 
+set term x11 

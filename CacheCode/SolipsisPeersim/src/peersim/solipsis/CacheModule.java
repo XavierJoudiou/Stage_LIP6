@@ -308,25 +308,21 @@ public class CacheModule {
 		NeighborProxy current;
 		NeighborProxy best = null;
 		long bestTime = -1;
-		
+		double currentDist = -1;
 		
 		Iterator it;
 		it = this.cache.entrySet().iterator();
-
 				
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			currentDist = VirtualWorld.simpleDistance(request.getDestination(), current.getCoord());
+			if ( currentDist < request.getKnowledgeRay() ){
+				return current;
+			}
 			if (this.protocol.helpfulToEnvelopeCacheHelpNeighbor(current,request) && current.getTime() > bestTime){
 				if (current.getId() != id){
 				best = current;
 				bestTime = current.getTime();
-//				return best;
-		
-
-//				System.out.println("UN DE TROUVE ==========");
-//				System.out.println("find_Coord= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
-//				System.out.println("afindé_Coord= " + request.getDestination()[0] + ", " + request.getDestination()[1]);
-
 
 				}else{
 					System.out.println("C le meme ==========");
@@ -346,11 +342,8 @@ public class CacheModule {
 		long bestTime = -1;
 		double currentDist,bestDist = -1;
 		
-		
-//		HashMap<Integer, NeighborProxy> cach = this.cache;
 		Iterator it;
 		it = this.cache.entrySet().iterator();
-
 				
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
@@ -408,7 +401,7 @@ public class CacheModule {
 	
 	}
 	
-	public HashMap<Integer,NeighborProxy>  searchCacheNeighborEnvelopEvMult(long[] destination){
+	public HashMap<Integer,NeighborProxy>  searchCacheNeighborEnvelopEvMult(long[] destination, double knowledgeRay){
 		NeighborProxy current;
 		HashMap<Integer,NeighborProxy> best = new HashMap<Integer, NeighborProxy>();
 		NeighborProxy other = null;
@@ -417,8 +410,9 @@ public class CacheModule {
 		
 		
 //		HashMap<Integer, NeighborProxy> cach = this.cache;
-		Iterator it;
+		Iterator it,it2;
 		it = this.cache.entrySet().iterator();
+		it2 = this.cache.entrySet().iterator();
 
 				
 		while(it.hasNext()){
@@ -426,16 +420,71 @@ public class CacheModule {
 			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
 //			System.out.println(this.protocol.helpfulToEnvelopeCache(current));
 			if (current.getQuality() !=  NeighborProxy.CACHED){
+				if ( currentDist < knowledgeRay ){
+					best.put(current.getId(), current);
+				}
+				if (best.size() > 4){
+					return best;
+				}
+			}
+		}
+		
+		while(it2.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it2.next()).getValue();
+			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
+			if (current.getQuality() !=  NeighborProxy.CACHED){
+				if (best.size() > 4){
+					return best;
+				}
 				if (this.protocol.helpfulToEnvelopeCache(current)){
 					best.put(current.getId(), current);
-	//				return best;
-//					System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
-//					System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
 				}
 				
 			}
 		}
 		
+		return best;
+	
+	}
+	
+	public HashMap<Integer,NeighborProxy>  searchCacheHelpNeighborMult(CacheHelpRequest request,int id){
+		NeighborProxy current;
+		HashMap<Integer,NeighborProxy> best = new HashMap<Integer, NeighborProxy>();
+		long bestTime = -1;
+		double currentDist = -1;
+		
+		Iterator it,it2;
+		it = this.cache.entrySet().iterator();
+		it2 = this.cache.entrySet().iterator();
+
+				
+		while(it.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			currentDist = VirtualWorld.simpleDistance(request.getDestination(), current.getCoord());
+			if ( currentDist < request.getKnowledgeRay() ){
+				best.put(current.getId(), current);
+			}
+			if (best.size() > 4){
+				return best;
+			}
+		}
+		
+		while(it2.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it2.next()).getValue();
+			currentDist = VirtualWorld.simpleDistance(request.getDestination(), current.getCoord());			
+			if (this.protocol.helpfulToEnvelopeCacheHelpNeighbor(current,request) && current.getTime() > bestTime){
+				if (best.size() > 4){
+					return best;
+				}
+				if (current.getId() != id){
+					best.put(current.getId(), current);
+
+				}else{
+					System.out.println("C le meme ==========");
+				}
+
+			}
+		}
 		return best;
 	
 	}

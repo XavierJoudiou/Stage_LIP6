@@ -1,37 +1,115 @@
 #!/bin/sh 
 
+time=`date '+%j_%H-%M'`
+
+
+if [ $# -ne 3 ]
+then
+	echo Nombre de paramètre insuffissant\: Fichier_pour_Règles_Solipsis, Dossier_pour_Comparaison, Fichier_pour_cache
+	exit 1
+fi
+
+#Création du répertoire pour mettre les courbes
+mkdir ./resultats/Courbes/Courbes_$time
+mkdir ./resultats/Courbes/Courbes_$time/Datas
+
+############################################### Courbres résultats de Solispis Règles, etc ##############################################
+
 #Step 1: create file 
 echo reset > plotfile.dat
 echo set term x11 >>plotfile.dat 
-echo set title \"$1\" >>plotfile.dat
-echo plot \"$1.txt\" using 6:1 title \'View Divergence \' with lines linewidth 2,\"resultats\/$2\/Stats_sergey_NoCachePrefetch.txt\" using 6:1 title \'View Divergence No Cache\' with lines linewidth 2, \"resultats\/$2\/Stats_sergey_Nothing.txt\" using 6:1 title \'View Divergence Base\' with lines linewidth 2 >>plotfile.dat 
+echo set title \"View Divergence\" >>plotfile.dat
+echo set xlabel \"Temps de simulation\" >>plotfile.dat
+echo set ylabel \"Nombre ??\" >>plotfile.dat
+echo set grid >>plotfile.dat
+echo plot \"$1.txt\" using 6:1 title \'Solution courante\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_NoCachePrefetch.txt\" using 6:1 title \'No Cache\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_Nothing.txt\" using 6:1 title \'Base\' with lines linewidth 1 >>plotfile.dat 
 #echo pause -1 >>plotfile.dat
 echo set term png >>plotfile.dat 
-echo set out \"View_Divergence_$1.png\" >>plotfile.dat 
+echo set out \"resultats\/Courbes\/Courbes_$time\/View_Divergence.png\" >>plotfile.dat 
 echo rep >>plotfile.dat
 echo set out >>plotfile.dat 
 echo set term x11 >>plotfile.dat 
 
-echo testtest
 #Step 2: call gnuplot 
 gnuplot plotfile.dat
 
 #Step 1: create file 
 echo reset > plotfile.dat
 echo set term x11 >>plotfile.dat 
-echo set title \"$1\" >>plotfile.dat
-echo plot \"$1.txt\" using 6:2 title \'Topology Coherence \' with lines linewidth 2,\"resultats\/$2\/Stats_sergey_NoCachePrefetch.txt\" using 6:2 title \'Topology Coherence No Cache\' with lines linewidth 2, \"resultats\/$2\/Stats_sergey_Nothing.txt\" using 6:2 title \'Topology Coherence Base\' with lines linewidth 2 >>plotfile.dat 
+echo set title \"Topology Coherence\" >>plotfile.dat
+echo set xlabel \"Temps de simulation\" >>plotfile.dat
+echo set ylabel \"Nombre de nœud proche mais pas voisin\" >>plotfile.dat
+echo set grid >>plotfile.dat
+echo plot \"$1.txt\" using 6:2 title \'Solution courante\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_NoCachePrefetch.txt\" using 6:2 title \'No Cache\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_Nothing.txt\" using 6:2 title \'Base\' with lines linewidth 1 >>plotfile.dat 
 #echo pause -1 >>plotfile.dat
 echo set term png >>plotfile.dat 
-echo set out \"Topology_Coherence$_1.png\" >>plotfile.dat 
+echo set out \"resultats\/Courbes\/Courbes_$time\/Topology_Coherence.png\" >>plotfile.dat 
 echo rep >>plotfile.dat
 echo set out >>plotfile.dat 
 echo set term x11 >>plotfile.dat 
 
-echo testtest
 #Step 2: call gnuplot 
 gnuplot plotfile.dat
 
+
+#Step 1: create file 
+echo reset > plotfile.dat
+echo set term x11 >>plotfile.dat
+echo set title \"Nombre moyen de message \" >>plotfile.dat
+echo set xlabel \"Temps de simulation\" >>plotfile.dat
+echo set ylabel \"Nombre de message\" >>plotfile.dat
+echo set grid >>plotfile.dat
+echo plot \"$1.txt\" using 6:3 title \'Solution courante\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_NoCachePrefetch.txt\" using 6:3 title \'No Cache\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_Nothing.txt\" using 6:3 title \'Base\' with lines linewidth 1 >>plotfile.dat
+#echo pause -1 >>plotfile.dat
+echo set term png >>plotfile.dat
+echo set out \"resultats\/Courbes\/Courbes_$time\/Nombre_Messages.png\" >>plotfile.dat
+echo rep >>plotfile.dat
+echo set out >>plotfile.dat
+echo set term x11 >>plotfile.dat
+
+#Step 2: call gnuplot 
+gnuplot plotfile.dat
+
+
+############################################### Courbres résultats sur le cache  ##############################################
+
+
+#Step 1: create file 
+echo reset > plotfile.dat
+echo set term x11 >>plotfile.dat
+echo set title \"Données sur le cache\" >>plotfile.dat
+echo set xlabel \"Temps de simulation\" >>plotfile.dat
+echo set ylabel \"Nombre de Hit\/Mit\/Miss\" >>plotfile.dat
+echo set grid >>plotfile.dat
+echo plot \"$3.txt\" using 6:1 title \'Hit\' with lines linewidth 2,\"$3.txt\" using 6:2 title \'No Cache\' with lines linewidth 2,\"$3.txt\" using 6:3 title \'Miss\' with lines linewidth 2 >>plotfile.dat
+#echo pause -1 >>plotfile.dat
+echo set term png >>plotfile.dat
+echo set out \"resultats\/Courbes\/Courbes_$time\/Cache_fonction_Temps.png\" >>plotfile.dat
+echo rep >>plotfile.dat
+echo set out >>plotfile.dat
+echo set term x11 >>plotfile.dat
+
+#Step 2: call gnuplot 
+gnuplot plotfile.dat
+
+
+
+
+
+#Traçage des courbes fini
+for inode in $(ls)
+do
+if
+	[ -f $inode ]
+then
+	mv ./Stats_sergey.txt ./resultats/Courbes/Courbes_$time/Datas/
+	mv ./Stats_EndTime.txt ./resultats/Courbes/Courbes_$time/Datas/
+	mv ./Stats_Finish.txt ./resultats/Courbes/Courbes_$time/Datas/
+	mv ./Résultats_CacheMess.txt ./resultats/Courbes/Courbes_$time/Datas/
+	mv ./Résultats_ActivitéMess.txt ./resultats/Courbes/Courbes_$time/Datas/
+	break
+fi
+done
 
 
 
