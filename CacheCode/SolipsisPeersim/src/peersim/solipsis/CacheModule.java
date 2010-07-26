@@ -53,14 +53,16 @@ public class CacheModule {
 	/* Fonctions pour le cache */
 	/* ********************************************************************* */
 	
+	/*
+	 * Ajout d'un nœud dans le cache
+	 */
 	public void AddCache(NeighborProxy boor){
 		Iterator it,info;
 		NeighborProxy current;
 		it = this.cache.entrySet().iterator();
 		info = this.cacheInfo.entrySet().iterator();
 		CacheData cacheData;
-		
-		
+			
 		/* On vérifie que le nœud n'est pas déjà dans le cache */
 		if (!IsInCache(boor)){
 			
@@ -68,24 +70,15 @@ public class CacheModule {
 			if (this.cache.size() >= this.cacheSize){
 				RmCache(SelectNode());
 			}
-			
-			
+						
 			IncPosAll();
 			/* Ajout du nœud au cache à la première place */
 			this.cache.put(boor.getId(), boor);
 			cacheData = new CacheData(1, 0);
 			this.cacheInfo.put(boor.getId(), cacheData);
-			boor.setTime(CommonState.getIntTime());
-//			System.out.println("Ajout du nœud " + boor.getId() + " dans le cache réussi");
-//			System.out.println(boor.toString());
+			boor.setTime(CommonState.getIntTime());;
 			
-		}else{
-//			System.out.println("Problème d'ajout d'un nœud dans le cache: " + boor.getId() + " déjà présent.");
-//			System.out.println(boor.toString());
-		}
-		
-		
-		
+		}		
 	}
 	
 	/*
@@ -119,10 +112,6 @@ public class CacheModule {
 			}
 			this.cache.remove(boor.getId());
 			this.cacheInfo.remove(boor.getId());
-//			System.out.println("Le nœud " + boor.getId() + " a été supprimé");
-		}else{
-//			System.out.println("Le nœud " + boor.getId() + " n'est pas dans la liste, alors il va être difficile de le supprimer");
-
 		}
 	}
 	
@@ -150,7 +139,6 @@ public class CacheModule {
 						supprInfo = currentInfo;
 					}
 				}
-//				System.out.println("FIFO: Le noeud choisi est " + suppr.getId());
 			break;
 		case FIFOMULT:
 			suppr = (NeighborProxy)((Map.Entry)it.next()).getValue();
@@ -163,13 +151,18 @@ public class CacheModule {
 						supprInfo = currentInfo;
 					}
 				}
-//				System.out.println("FIFO: Le noeud choisi est " + suppr.getId());
 			break;
 		}			
 				
 		return suppr;
 	}
 	
+	/*
+	 * Fonction IsInCache:
+	 *  renvoie un booleen en fonction de la présence
+	 *  ou non du nœud passé en argument dans le cache
+	 * 
+	 */
 	public boolean IsInCache(NeighborProxy boor){
 		boolean res = false;
 		Iterator it;
@@ -184,8 +177,10 @@ public class CacheModule {
 		}
 		return res;
 	}
+	
 	/*
 	 * Affiche le contenu du cache et les informations correspondantes
+	 * 
 	 */
 	public void ShowCache(){
 		Iterator it,info;
@@ -202,7 +197,12 @@ public class CacheModule {
 		}
 	}
 	
-	
+	/*
+	 * Fonction NeighborProxyFindNearest: 
+	 *  recherche le nœud le plus proche du cache du 
+	 *  nœud passé en argument
+	 *  
+	 */
 	public  NeighborProxy NeighborProxyFindNearest(HashMap<Integer, NeighborProxy> kach, NeighborProxy me){
 		NeighborProxy current, nearest;
 		long[] currentCoord,nearestCoord;;
@@ -230,18 +230,22 @@ public class CacheModule {
 		return nearest;
 	}
 	
-	
+	/*
+	 * Fonction searchCacheNeighborLimit:
+	 *  Recherche dans le cache le nœud le plus proche de
+	 *  la destination passé en argument et qui est inférieur 
+	 *  à la limite passé en argument
+	 * 
+	 */
 	public NeighborProxy searchCacheNeighborLimit(long[] destination,int limite){
 		NeighborProxy current;
 		NeighborProxy best = null;
 		
 		double currentDist,bestDist = -1;
-		
-		
+			
 		Iterator it;
 		it = this.cache.entrySet().iterator();
 		this.setLimite((int)limite);
-
 				
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
@@ -260,50 +264,18 @@ public class CacheModule {
 				}
 			}
 		}
-		
 		return best;
-	
 	}
 	
-	public NeighborProxy searchCacheNeighborEnvelop(long[] destination){
-		NeighborProxy current;
-		NeighborProxy best = null;
-		NeighborProxy other = null;
-		
-		double currentDist,bestDist = -1;
-		
-		
-//		HashMap<Integer, NeighborProxy> cach = this.cache;
-		Iterator it;
-		it = this.cache.entrySet().iterator();
-
-				
-		while(it.hasNext()){
-			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
-			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
-//			System.out.println(this.protocol.helpfulToEnvelopeCache(current));
-			if (current.getQuality() !=  NeighborProxy.CACHED){
-				if (this.protocol.helpfulToEnvelopeCache(current)){
-					best = current;
-//					System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
-//					System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
-					return best;
-	
-				}
-				if ( this.protocol.constructingEnvelope(current)){
-					other = current;
-					
-				}
-			}
-		}
-		if (other != null){
-			System.out.println("OTHER PAS NULL");
-		}
-		
-		return other;
-	
-	}
-	
+	/*
+	 * Fonction searchCacheHelpNeighbor:
+	 *  Recherche dans le cache si un nœud peut aider à 
+	 *  reconstruire l'enveloppe ou si il est dans sa zone 
+	 *  de connaissance. Ce fait après la reception d'un message
+	 *  SEARCH_HELP, regarde en fonction des arguments du émetteur
+	 *  du message
+	 * 
+	 */
 	public NeighborProxy searchCacheHelpNeighbor(CacheHelpRequest request,int id){
 		NeighborProxy current;
 		NeighborProxy best = null;
@@ -327,14 +299,17 @@ public class CacheModule {
 				}else{
 					System.out.println("C le meme ==========");
 				}
-
 			}
 		}
 		return best;
 	
 	}
 	
-	
+	/*
+	 * Fonction searchCacheNeighborEnvelopEv:
+	 *  recherche dans le cache si un nœud peut aider à 
+	 *  reconstruire l'enveloppe du nœud local.
+	 */
 	public NeighborProxy searchCacheNeighborEnvelopEv(long[] coord){
 		NeighborProxy current;
 		NeighborProxy best = null;
@@ -348,23 +323,24 @@ public class CacheModule {
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(coord, current.getCoord());
-//			System.out.println(this.protocol.helpfulToEnvelopeCache(current));
 			if (current.getQuality() !=  NeighborProxy.CACHED){
 				if (this.protocol.helpfulToEnvelopeCache(current) && current.getTime() > bestTime){
 					best = current;
 					bestTime = current.getTime();
-	//				return best;
-//					System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
-//					System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
+					//System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
+					//System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
 				}
-				
 			}
 		}
-		
 		return best;
-	
 	}
 	
+	/*
+	 * Fonction searchCacheNeighborEnvelopEv:
+	 *  recherche dans le cache si un nœud peut aider à 
+	 *  reconstruire l'enveloppe du nœud local ou si il 
+	 *  est dans sa zone de connaissance.
+	 */
 	public NeighborProxy searchCacheNeighborEnvelopEv(long[] coord, double knowledgeRay){
 		NeighborProxy current;
 		NeighborProxy best = null;
@@ -372,16 +348,12 @@ public class CacheModule {
 		long bestTime = -1;
 		double currentDist,bestDist = -1;
 		
-		
-//		HashMap<Integer, NeighborProxy> cach = this.cache;
 		Iterator it;
 		it = this.cache.entrySet().iterator();
-
 				
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(coord, current.getCoord());
-//			System.out.println(this.protocol.helpfulToEnvelopeCache(current));
 			if (current.getQuality() !=  NeighborProxy.CACHED){
 				if ( currentDist < knowledgeRay ){
 					return current;
@@ -389,18 +361,20 @@ public class CacheModule {
 				if (this.protocol.helpfulToEnvelopeCache(current) && current.getTime() > bestTime){
 					best = current;
 					bestTime = current.getTime();
-	//				return best;
-//					System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
-//					System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
+					//System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
+					//System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
 				}
-				
 			}
 		}
-		
 		return best;
-	
 	}
 	
+	/*
+	 * Fonction searchCacheNeighborEnvelopEvMult:
+	 *  recherche dans le cache si un ou plusieurs nœud(s) 
+	 *  peu(t/vent) aider à reconstruire l'enveloppe du nœud 
+	 *  local ou si il est dans sa zone de connaissance.
+	 */
 	public HashMap<Integer,NeighborProxy>  searchCacheNeighborEnvelopEvMult(long[] destination, double knowledgeRay){
 		NeighborProxy current;
 		HashMap<Integer,NeighborProxy> best = new HashMap<Integer, NeighborProxy>();
@@ -408,8 +382,6 @@ public class CacheModule {
 		long bestTime = -1;
 		double currentDist,bestDist = -1;
 		
-		
-//		HashMap<Integer, NeighborProxy> cach = this.cache;
 		Iterator it,it2;
 		it = this.cache.entrySet().iterator();
 		it2 = this.cache.entrySet().iterator();
@@ -418,7 +390,6 @@ public class CacheModule {
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
-//			System.out.println(this.protocol.helpfulToEnvelopeCache(current));
 			if (current.getQuality() !=  NeighborProxy.CACHED){
 				if ( currentDist < knowledgeRay ){
 					best.put(current.getId(), current);
@@ -439,14 +410,20 @@ public class CacheModule {
 				if (this.protocol.helpfulToEnvelopeCache(current)){
 					best.put(current.getId(), current);
 				}
-				
 			}
 		}
-		
 		return best;
-	
 	}
 	
+	/*
+	 * Fonction searchCacheHelpNeighborMult:
+	 *  Recherche dans le cache si un ou plusieurs nœud(s) peu(t/vent)
+	 *  aider à reconstruire l'enveloppe ou si il est dans sa zone 
+	 *  de connaissance. Ce fait après la reception d'un message
+	 *  SEARCH_HELP, regarde en fonction des arguments du émetteur
+	 *  du message
+	 * 
+	 */
 	public HashMap<Integer,NeighborProxy>  searchCacheHelpNeighborMult(CacheHelpRequest request,int id){
 		NeighborProxy current;
 		HashMap<Integer,NeighborProxy> best = new HashMap<Integer, NeighborProxy>();
@@ -456,7 +433,6 @@ public class CacheModule {
 		Iterator it,it2;
 		it = this.cache.entrySet().iterator();
 		it2 = this.cache.entrySet().iterator();
-
 				
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
@@ -486,10 +462,16 @@ public class CacheModule {
 			}
 		}
 		return best;
-	
 	}
 	
 	
+	
+	/*
+	 * Fonction  searchCacheNeighborLimitNeighbor:
+	 * recherche dans le cache le plus proche des nœud de la 
+	 * destination passée en argument et qui est plus proche 
+	 * que le plus loin des voisins
+	 */
 	public NeighborProxy searchCacheNeighborLimitNeighbor(long[] destination,HashMap<Integer, NeighborProxy> voisin){
 		NeighborProxy current;
 		NeighborProxy best = null;
@@ -497,12 +479,10 @@ public class CacheModule {
 		double currentDist,bestDist = -1;
 		double limite = -1;
 		
-//		HashMap<Integer, NeighborProxy> cach = this.cache;
 		Iterator it,it_voisin;
 		it = this.cache.entrySet().iterator();
 		it_voisin = voisin.entrySet().iterator();	
-		
-		
+				
 		while(it_voisin.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it_voisin.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
@@ -514,10 +494,7 @@ public class CacheModule {
 					bestDist = limite;
 				}
 			}	
-			
-		}
-		
-//		System.out.println("Limite = " + limite);
+		}		
 		this.setLimite((int)limite);
 		
 		while(it.hasNext()){
@@ -537,11 +514,15 @@ public class CacheModule {
 				}
 			}
 		}
-		
 		return best;
-	
 	}
 	
+	/*
+	 * Fonction  searchCacheNeighbor:
+	 * recherche dans le cache le plus proche des nœud de la 
+	 * destination passée en argument et qui est plus proche 
+	 * que le plus loin des voisins
+	 */
 	public NeighborProxy searchCacheNeighbor(long[] destination,HashMap<Integer, NeighborProxy> voisin,int limite){
 		NeighborProxy current;
 		NeighborProxy best = null;
@@ -549,15 +530,11 @@ public class CacheModule {
 		
 		double farNeighDist,currentDist,bestDist = 0;
 		
-		
-//		HashMap<Integer, NeighborProxy> cach = this.cache;
 		Iterator it,it_voisin;
 		it = this.cache.entrySet().iterator();
 		it_voisin = voisin.entrySet().iterator();
-		
-		
+				
 		farNeigh = (NeighborProxy)((Map.Entry)it_voisin.next()).getValue();
-//		System.out.println("destination: " + destination + ", farneigh: " + farNeigh.getCoord());
 		farNeighDist = VirtualWorld.simpleDistance(destination, farNeigh.getCoord());
 		
 		while(it_voisin.hasNext()){
@@ -567,12 +544,8 @@ public class CacheModule {
 			if( farNeighDist < currentDist){
 				farNeigh = current;
 				farNeighDist = currentDist;
-//				System.out.println("Changement de farNeigh, distance = " + farNeighDist);
 			}			
 		}
-//		System.out.println("Le voisin le plus loin est :" + farNeigh.getId() + ", distance = " + farNeighDist);
-		
-		
 		
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
@@ -582,21 +555,11 @@ public class CacheModule {
 				if( farNeighDist > currentDist){
 					best = current;
 					bestDist = currentDist;		
-	//				System.out.println("On a un plus proche, le nœud: " + best.getId() + ", distance = " + bestDist);
 				}
 			}
-			
-			//((SolipsisProtocol)n.getProtocol(me.getPeersimNodeId())).getVirtualEntity();
 		}
-		if(best != null){
-//			System.out.println("On a trouvé un meilleur dans le cache ,le nœud: " + best.getId() + ", distance = " + bestDist);
-		}else{
-//			System.out.println("Pas de meilleur dans le cache");
-		}
-		
 		if (bestDist > limite){
 			best = null;
-//			System.out.println("trop éloigné");
 		}
 		return best;
 	}
@@ -654,8 +617,5 @@ public class CacheModule {
 	public void setLimite(int limite) {
 		this.limit = limite;
 	}
-	
-	
-	
 	
 }

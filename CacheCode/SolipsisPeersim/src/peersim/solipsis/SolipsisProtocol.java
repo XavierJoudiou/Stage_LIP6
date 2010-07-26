@@ -113,7 +113,7 @@ public class SolipsisProtocol implements EDProtocol {
 	private SmallWorld smallWorldModule;
 	private int routeAlgorithm;
 	
-	/* Pour le cache */
+	/* Variables pour le cache */
 	private CacheModule cache;
 	private int cacheSize;
 	private int strategieCache;
@@ -682,7 +682,7 @@ public class SolipsisProtocol implements EDProtocol {
 	public void addLocalView(VirtualEntity entity) {
 		NeighborProxy view = new NeighborProxy(entity.getCoord(), entity.getKnowledgeRay(), entity.getId(), entity.getProtocol().getPeersimNodeId());
 		this.proxies.put(view.getId(), view);
-//		entity.setTime(CommonState.getTime());
+		view.setTime(CommonState.getTime());
 
 	}
 	
@@ -855,8 +855,10 @@ public class SolipsisProtocol implements EDProtocol {
 	
 	
 	/*
-	 * Point d'entrée pour l'utilisation du cache, on fait appel 
-	 * à la fonction maintainCacheTopology 
+	 * Fonction solipsisRecoverTopology:
+	 * 	Point d'entrée pour l'utilisation du cache, on fait appel 
+	 * 	à la fonction maintainCacheTopology si le nœud est dans 
+	 * 	l'état Wandering
 	 */
 	private void solipsisRecoverTopology(NeighborProxy [] sector) {
 
@@ -864,17 +866,14 @@ public class SolipsisProtocol implements EDProtocol {
 		int [][] moduloCoefs;
 		Message recoverMsg = null;
 		NeighborProxy sendTo;
-		int find = 0;
-//		System.err.println("STRATEGIE_CACHE: " + this.strategieCache);
-//		boolean avant = convexEnvelopeProperty();
+		int find = 0;;
 
 		if ( this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING ){
-//			System.err.println("CACHECACHE");
 			find = maintainCacheTopology();
 		}
 		
 
-//		if (find == 0){
+		if (find == 0){
 			if (sector != null) {
 				if (sector[0] != null) {
 					sendTo = sector[0];
@@ -900,7 +899,7 @@ public class SolipsisProtocol implements EDProtocol {
 					this.send(recoverMsg, sendTo);
 				}
 			}
-//		}
+		}
 	}
 
 
@@ -930,6 +929,7 @@ public class SolipsisProtocol implements EDProtocol {
 		return new Message(Message.FOUND, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), destination, neighbor.clone());
 	}
 
+	
 	/*****************************************************/
 				/****Fonctions pour Update ****/
 	/*****************************************************/
@@ -937,9 +937,9 @@ public class SolipsisProtocol implements EDProtocol {
 	
 	/*
 	 * Fonction processUpdateCaheREQ:
-	 * Traite la réception d'un message de type UPDATE_CACHE_REQ
-	 * Met dans les objets du message les informations nécessaires
-	 * à la mise à jour de u nœud dans le cache 
+	 * 	Traite la réception d'un message de type UPDATE_CACHE_REQ
+	 * 	Met dans les objets du message les informations nécessaires
+	 * 	à la mise à jour de u nœud dans le cache 
 	 * 
 	 */
 	public void processUpdateCaheREQ(Message msg) {
@@ -953,8 +953,8 @@ public class SolipsisProtocol implements EDProtocol {
 	
 	/*
 	 * Fonction processUpdateCaheREP:
-	 * Traite la reception d'un message de type UPDATE_CACHE_REP
-	 * Met à jour les coordonnées de la données du cache.
+	 * 	Traite la reception d'un message de type UPDATE_CACHE_REP
+	 * 	Met à jour les coordonnées de la données du cache.
 	 * 
 	 */
 	public void processUpdateCaheREP(Message msg) {
@@ -976,9 +976,9 @@ public class SolipsisProtocol implements EDProtocol {
 
 	/*
 	 * Fonction CacheUpdate:
-	 * Va lancer la mis à jour du cache, on fait une mise à 
-	 * jour que sur les nœuds qui ont des données vieilles de
-	 * de plusde la moitié de la limite de update
+	 * 	Va lancer la mis à jour du cache, on fait une mise à 
+	 * 	jour que sur les nœuds qui ont des données vieilles de
+	 * 	de plusde la moitié de la limite de update
 	 *  
 	 */
 	public void CacheUpdate(){
@@ -1000,9 +1000,15 @@ public class SolipsisProtocol implements EDProtocol {
 		
 	}
 	
+	
+	/*****************************************************/
+	/***** Fonctions pour le traitement des messages *****/
+	/****************************************************=/
+	
+	
 	/*
 	 * Fonction processSearch:
-	 * traite les message de type SEARCH et SEARCH_HELP
+	 * 	traite les messages de type SEARCH et SEARCH_HELP
 	 * 
 	 */
 	private void processSearchMsg(Message msg) {
@@ -1075,7 +1081,15 @@ public class SolipsisProtocol implements EDProtocol {
 	}
 	
 	
-	
+	/*
+	 * Fonction HelpNeighborCache:
+	 * 	elle est appelée par la fonction processSearchMsg
+	 * 	Elle va regarder dans le cache si un ou plusieurs
+	 * 	nœud(s) (en fonction de la stratégie) peu(t/vent)
+	 * 	aider le nœud qui a émis le message.
+	 * 	Si aucun nœud trouvé dans le cache, elle effectue
+	 *  le traitement de base.
+	 */	
 	public int HelpNeighborCache(Message msg) {
 		Node n;
 		NeighborProxy neighbor = null;
@@ -1200,11 +1214,11 @@ public class SolipsisProtocol implements EDProtocol {
 	
 	/*
 	 * Fonction MaintainCacheTopology:
-	 * Va regarder dans le cache si un nœud de ce dernier est proche 
-	 * de la destination du nœud courant. Si un nœud est trouvé, nous 
-	 * allons alors le contacter avec un message de type CACHE_UPD et 
-	 * changer la Quality du nœud courant. Si nous ne trouvons pas de 
-	 * nœud dans le cache, nous incrémentons les caches MISS
+	 * 	Va regarder dans le cache si un nœud de ce dernier est proche 
+	 * 	de la destination du nœud courant. Si un nœud est trouvé, nous 
+	 * 	allons alors le contacter avec un message de type CACHE_UPD et 
+	 * 	changer la Quality du nœud courant. Si nous ne trouvons pas de 
+	 * 	nœud dans le cache, nous incrémentons les caches MISS
 	 * 
 	 */
 	public int maintainCacheTopology() {
@@ -1242,7 +1256,6 @@ public class SolipsisProtocol implements EDProtocol {
 							default:
 								
 //								neighbor = cache.searchCacheNeighborLimit(destination,limite);
-//								neighbor = cache.searchCacheNeighborEnvelop(destination);
 								neighbor = cache.searchCacheNeighborEnvelopEv(destination,this.knowledgeRay);
 
 								break;
@@ -1397,18 +1410,17 @@ public class SolipsisProtocol implements EDProtocol {
 
 	/*
 	 * Fonction processCacheUpd:
-	 * Fonction qui va traiter l'arrivée d'un message de type CACHE_UPD,
-	 * ce message est envoyé par la fonction maintainCacheTopology() qui 
-	 * sert à chercher dans le cache un nœud. La fonction suivante va 
-	 * comparer les coordonnées du nœud envoyée et les coordonnées réelles
-	 * de ce dernier. S'il n'a pas trop bougé, nous pourrons émettre un
-	 * message CACHE_UPD_REP pour provoquer un cache HIT. Si il a trop 
-	 * bougé, nous incrémenterons le compteur des caches MIT.
+	 * 	Fonction qui va traiter l'arrivée d'un message de type CACHE_UPD,
+	 * 	ce message est envoyé par la fonction maintainCacheTopology() qui 
+	 * 	sert à chercher dans le cache un nœud. La fonction suivante va 
+	 * 	comparer les coordonnées du nœud envoyée et les coordonnées réelles
+	 * 	de ce dernier. S'il n'a pas trop bougé, nous pourrons émettre un
+	 * 	message CACHE_UPD_REP pour provoquer un cache HIT. Si il a trop 
+	 * 	bougé, nous incrémenterons le compteur des caches MIT.
 	 * 
 	 */
 	private void processCacheUpd(Message msg){
 		
-//		Node n = Network.get(msg.getDestination());
 		NeighborProxy source = ((NeighborProxy)((CacheRequest)msg.getContent()).getSource());
 
 		
@@ -1422,12 +1434,9 @@ public class SolipsisProtocol implements EDProtocol {
 
 			/* Faire la Mis A Jour du Noeud */
 			NeighborProxy responseProx = ((CacheRequest)msg.getContent()).getOldData();
-//			responseProx.setCoord(this.mainVirtualEntity.getCoord());
 			CacheRequest response = new CacheRequest(responseProx,this.mainVirtualEntity.getNeighbor( this.mainVirtualEntity.getId()));
-		
-		/* TODO probleme maj valeur */
-			
 			this.MajNeighborProxy(((CacheRequest)msg.getContent()).getOldData(), this.mainVirtualEntity);
+
 			if (cacheDebug == 1){
 				System.out.println("-- realcoord: " + this.mainVirtualEntity.getCoord()[0] + "," + this.mainVirtualEntity.getCoord()[1] + ", id: " +  this.mainVirtualEntity.getId());
 				System.out.println("-- new coord: " + response.getOldData().getCoord()[0] + "," + response.getOldData().getCoord()[1] );
@@ -1435,7 +1444,6 @@ public class SolipsisProtocol implements EDProtocol {
 			
 			/*Envoyer un message pour faire un hit de cache */
 			Message cache_rep;
-			
 			cache_rep = new Message(Message.CACHE_UPD_REP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), msg.getSource(), msg.getContent());
 
 			if (source != null){
@@ -1468,16 +1476,13 @@ public class SolipsisProtocol implements EDProtocol {
 		NeighborProxy current;
 		Iterator it;
 		it = this.cache.getCache().entrySet().iterator();
-
 				
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			if (neighbor.getId() == current.getId()){
 //				System.out.println("DANS LE CACHE -----------");
 				return true;
-				
 			}
-			
 		}
 		return false;
 	}
@@ -1487,16 +1492,12 @@ public class SolipsisProtocol implements EDProtocol {
 		NeighborProxy current;
 		Iterator it;
 		it = this.proxies.entrySet().iterator();
-
 				
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			if (neighbor.getId() == current.getId()){
-//				System.out.println("DANS LES PROXIES -----------");
 				return true;
-				
 			}
-			
 		}
 		return false;
 	}
@@ -1508,28 +1509,23 @@ public class SolipsisProtocol implements EDProtocol {
 		boolean aide = helpfulToEnvelope(neighbor);
 		boolean inCache = isInCache(neighbor);
 		boolean inNeig = isInNeig(neighbor);
-		
 		boolean avant = convexEnvelopeProperty();
 		
 		if (cacheDebug == 1 ){
 			System.out.println("Is In CACHE ?? " + inCache);
 			System.out.println("Is In PROXIES ?? " + inNeig);
-
 			System.out.println("newNode_Coord= " + neighbor.getCoord()[0] + ", " + neighbor.getCoord()[1]);
 			System.out.println("me_Coord= " + this.mainVirtualEntity.getCoord()[0] + ", " + this.mainVirtualEntity.getCoord()[1]);
-
-
 			System.out.println("aide_ou_pas : " + aide);
 			System.out.println("Envelop state before: " + avant);
 		}
-
 
 		if ( cacheDebug == 1 || cacheDebug == 2 ){
 			System.out.println("Message Recu : <" + msg.getTypeString() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + ">");
 		}
 		
 		double dist = VirtualWorld.simpleDistance(this.mainVirtualEntity.getCoord(), neighbor.getCoord());
-		
+
 		if (aide || dist < this.knowledgeRay ){		
 			
 			addLocalView(neighbor);
@@ -1538,16 +1534,12 @@ public class SolipsisProtocol implements EDProtocol {
 				System.out.println("taille cache: " + cache.getCache().size());
 				System.out.println("taille voisin: " + proxies.size());
 				cache.ShowCache();
-			}
-		
-			if (cacheDebug == 1){
 				System.out.println("--- Modification de la quality du nœud: " + neighbor.getQuality());
 			}
 		
-		
 			boolean apres = convexEnvelopeProperty();
 			if (cacheDebug == 1 ){
-	//			System.out.println("Envelop State after: " + apres);
+				System.out.println("Envelop State after: " + apres);
 			}
 			Globals.cacheEvaluator.incCacheHitHelpGLob();
 		}
@@ -1555,9 +1547,9 @@ public class SolipsisProtocol implements EDProtocol {
 	
 	/*
 	 * Fonction processCacheUpdResponse:
-	 * On traite la réponse en supprimant le nœud du cache et en l'ajoutant 
-	 * dans la liste des voisins, on incrément le compteur de cache HIT, on 
-	 * passe la quality du nœud à REGULAR et on vérifie l'enveloppe.
+	 * 	On traite la réponse en supprimant le nœud du cache et en l'ajoutant 
+	 * 	dans la liste des voisins, on incrément le compteur de cache HIT, on 
+	 * 	passe la quality du nœud à REGULAR et on vérifie l'enveloppe.
 	 * 
 	 */
 	
@@ -1569,20 +1561,19 @@ public class SolipsisProtocol implements EDProtocol {
 		boolean aide = this.helpfulToEnvelopeCache(neighbor);
 		boolean avant = convexEnvelopeProperty();
 
-//		System.out.println("!!!aide_ou_pas : " + aide +", myId: " + this.mainVirtualEntity.getId() + ", newId: " + neighbor.getId() + ", time: " + CommonState.getTime());
-//		System.out.println("!!!Envelop state before: " + avant);
-//		System.out.println("!!!My Coords: " + this.mainVirtualEntity.getCoord()[0] + ", " + this.mainVirtualEntity.getCoord()[1]);
-//		System.out.println("!!!Coord: " + neighbor.getCoord()[0] + ", " + neighbor.getCoord()[1]);
-
+		if (cacheDebug == 1 ){
+			System.out.println("!!!aide_ou_pas : " + aide +", myId: " + this.mainVirtualEntity.getId() + ", newId: " + neighbor.getId() + ", time: " + CommonState.getTime());
+			System.out.println("!!!Envelop state before: " + avant);
+			System.out.println("!!!My Coords: " + this.mainVirtualEntity.getCoord()[0] + ", " + this.mainVirtualEntity.getCoord()[1]);
+			System.out.println("!!!Coord: " + neighbor.getCoord()[0] + ", " + neighbor.getCoord()[1]);
+		}
+		
 		double dist = VirtualWorld.simpleDistance(this.mainVirtualEntity.getCoord(), neighbor.getCoord());
 		
 		if (aide || dist < this.knowledgeRay ){		
 			if ( cacheDebug == 1 || cacheDebug == 2 ){
 					System.out.println("--- Envelope OK, nodeId: " + neighbor.getId() );
-			}
-		
-			if ( cacheDebug == 1 || cacheDebug == 2 ){
-				System.out.println("Message Recu : <" + msg.getTypeString() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + ">");
+					System.out.println("Message Recu : <" + msg.getTypeString() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + ">");
 			}
 			
 			if (cacheDebug == 1){
@@ -1650,11 +1641,13 @@ public class SolipsisProtocol implements EDProtocol {
 		
 	}
 	
+	/*
+	 * Fonction MajNeighborProxy:
+	 * 	met à jour les coordonnées du nœud "old"
+	 * 	avec les valeurs du nœud "nouv"
+	 */
 	private void MajNeighborProxy(NeighborProxy old, VirtualEntity nouv){
-		
-		old.setCoord(nouv.getCoord());
-		
-		
+		old.setCoord(nouv.getCoord());		
 	}
 	
 	private boolean compareNeighborProxy(CacheRequest old,VirtualEntity act){
@@ -1676,9 +1669,7 @@ public class SolipsisProtocol implements EDProtocol {
 		if (res < this.limite){
 			resultat = true;
 		}
-		
 		return resultat;
-		
 	}
 	
 
@@ -1747,7 +1738,6 @@ public class SolipsisProtocol implements EDProtocol {
 		LinkedList<NeighborProxy> longRange;
 		int size;
 		Iterator it;
-		
 		
 		if (Globals.topologyIsReady && stateUpdateTimerReady()) {
 			
@@ -1890,8 +1880,8 @@ public class SolipsisProtocol implements EDProtocol {
 	
 	/*
 	 * Fonction RemoveProxy:
-	 * On ajoute l'élement que l'on supprime des voisins 
-	 * dans le cache.
+	 * 	On ajoute l'élement que l'on supprime des voisins 
+	 * 	dans le cache.
 	 */
 	public void removeProxy(int neighbor) {
 		NeighborProxy rm = this.proxies.get(neighbor);
@@ -1906,8 +1896,8 @@ public class SolipsisProtocol implements EDProtocol {
 	
 	/* 
 	 * Fonction de suppression mais sans passer par le cache 
-	 * sert pour lorsque que l'on ajoute au voisin pour tester
-	 * la couverture dans la fonction de recherche dans le cache
+	 * 	sert pour lorsque que l'on ajoute au voisin pour tester
+	 * 	la couverture dans la fonction de recherche dans le cache
 	 * 
 	 */
 	public void removeProxyNoCache(int neighbor) {
@@ -2099,11 +2089,11 @@ public class SolipsisProtocol implements EDProtocol {
 			}
 			break;
 		case Message.UPDATE_CACHE_REQ:
-//			Globals.cacheEvaluator.incnbMessUpdateTot();
+			Globals.cacheEvaluator.incnbMessUpdateTot();
 			this.processUpdateCaheREQ(msg);
 			break;
 		case Message.UPDATE_CACHE_REP:
-//			Globals.cacheEvaluator.incnbMessUpdateTot();
+			Globals.cacheEvaluator.incnbMessUpdateTot();
 			this.processUpdateCaheREP(msg);
 			break;
 		default:
@@ -2372,7 +2362,6 @@ public class SolipsisProtocol implements EDProtocol {
 		if (proxy != null)
 			this.proxies.put(peer.getId(), peer);
 			peer.setTime(CommonState.getTime());
-
 		return !convexProperty && beforeRemoval;
 	}
 	
@@ -2382,7 +2371,6 @@ public class SolipsisProtocol implements EDProtocol {
 		peer.setQuality(NeighborProxy.REGULAR);
 		boolean convexProperty = convexEnvelopeProperty();
 		peer.setQuality(quality);
-//		System.out.println("dans helpful "+convexProperty + " " + beforeAdding);
 		return convexProperty && !beforeAdding;
 	}
 	
@@ -2399,18 +2387,14 @@ public class SolipsisProtocol implements EDProtocol {
 	synchronized public boolean helpfulToEnvelopeCacheHelpNeighbor(NeighborProxy peer,CacheHelpRequest request) {
 
 		boolean beforeAdding = convexEnvelopePropertyHelp(request.getDestination(), request.getEnvelop());
-//		System.out.println("before_ Adding:" + beforeAdding);
 		
 		LinkedList<NeighborProxy> newenvelope = request.getEnvelop();
 		newenvelope.add(peer);
 		
 		boolean convexProperty = convexEnvelopePropertyHelp(request.getDestination(),newenvelope);
 		newenvelope.remove(peer);
-//		System.out.println("CONVEX_Property:" + convexProperty);
 
 		return convexProperty && !beforeAdding ;
-//		return convexProperty ;
-
 	}
 	
 	public void removeUnwantedNeighbors() {

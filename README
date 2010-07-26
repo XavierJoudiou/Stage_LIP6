@@ -7,11 +7,21 @@
 
 /repertoire: ./CacheCode
 	
-	./CacheAv: Fichiers pour le cache avec tests junit et couverture
+	./CacheAv: Fichiers pour le cache avec tests junit et couverture, pas à jour
 
-	./SolipsisPeerSim: Projet Eclipse avec ajout du cache
+	./SolipsisPeerSim: Projet Eclipse avec ajout du cache, avec résultats 
 
 	./*: Autres projets Eclipse
+
+
+/Repertoire: ./docs ( seulement sus le depot GIT)
+
+	*: documentation nécessaire, articles, thèses, ...
+
+
+/Repertoire: ./Evolutions
+	
+	*: Différents rapports sur les évolutions possibles de Blue Banana
 
 
 /Repertoire: ./Fiches_Lectures
@@ -21,11 +31,25 @@
 	Makefile: makefile pour passer en pdf, nettoyer le dossier et afficher le pdf
 
 
-/Repertoire: ./Vocabulaire
+/Repertoire: ./Old
 
-	*.tex: Fiche de vocabulaire pour l'article correspondant 
+	*: Anciens fichiers types ou autres
 
-	Makefile : makefile pour passer en pdf, nettoyer le dossier et afficher le pdf
+
+/Repertoire: ./Rapport_Final
+
+	./Ressources:
+	
+		./Documents:
+			
+			*: Fichiers qui pourraient être nécessaire au rapport
+
+		./Images:
+		
+			*: Images qui pourraient être nécessaire au rapport
+
+	*: Makefile, Biblio et fiechiers pour le rapport final (.tex et .sty)
+
 
 
 /Repertoire: ./Ressources/Images
@@ -63,6 +87,10 @@
 
 	*.tex: Fichiers nécessaires au rapport bibliographique 
 
+/Repertoire: ./Sounds
+	
+	*.wav: différents son pour la fin du make
+
 
 /Repertoire: ./src
 
@@ -75,13 +103,13 @@
 	*.tex: Fichiers nécessaires à l'étude rapide du code de Blue Banana
 
 
-/Repertoire: ./Old
+/Repertoire: ./Vocabulaire
 
-	*: Anciens fichiers types ou autres
+	*.tex: Fiche de vocabulaire pour l'article correspondant 
+
+	Makefile : makefile pour passer en pdf, nettoyer le dossier et afficher le pdf
 
 
-/Repertoire: ./docs ( seulement sus le depot GIT)
 
-	*: documentation nécessaire, articles, thèses, ...
 	
 
