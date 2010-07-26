@@ -11,6 +11,29 @@ doc:
 	mkdir -p doc
 	javadoc -sourcepath src -classpath $(ALL) -d doc peersim.pastry
 
+runnothing:
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
+	CalculBases Nothing 600_300
+
+runnocache:
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
+	CalculBases NoCachePrefetch 600_300
+
+rundebut:
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
+	CalculBases Nothing 600_300
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
+	CalculBases Nothing 600_300
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
+	CalculBases Nothing 600_300
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
+	CalculBases NoCachePrefetch 600_300
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
+	CalculBases NoCachePrefetch 600_300
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
+	CalculBases NoCachePrefetch 600_300
+	play -q ../../Sounds/Homer_Dooh.wav
+
 run:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
 	play -q ../../Sounds/Homer_Dooh.wav
@@ -18,7 +41,7 @@ run:
 runtest:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
 	gnuStats Stats_sergey 600_300 Résultats_CacheMess
-	lay -q ../../Sounds/Homer_Dooh.wav
+	play -q ../../Sounds/Homer_Dooh.wav
 
 runten:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace

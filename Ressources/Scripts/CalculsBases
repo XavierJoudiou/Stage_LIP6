@@ -1,0 +1,25 @@
+#!/bin/sh 
+
+time=`date '+%j_%H_%M'`
+
+#chemin="./resulats/Data/Nothing"
+#mkdir $chemin
+#mkdir ./resultats/Data/$1/$2_$time/
+
+for inode in $(ls)
+do
+if
+	[ -f $inode ]
+then
+	mv ./Stats_sergey.txt ./resultats/Data/Stats_sergey_$1_$2_$time.txt
+	mv ./Stats_EndTime.txt ./resultats/Data/Stats_EndTime_$1_$2_$time.txt
+	mv ./Stats_Finish.txt ./resultats/Data/Stats_Finish_$1_$2_$time.txt
+	mv ./Résultats_CacheMess.txt ./resultats/Data/Résultats_CacheMess_$1_$2_$time.txt
+	mv ./Résultats_ActivitéMess.txt ./resultats/Data/Résultats_ActivitéMess_$1_$2_$time.txt
+	break
+fi
+done
+
+
+
+rm -f plotfile.dat
