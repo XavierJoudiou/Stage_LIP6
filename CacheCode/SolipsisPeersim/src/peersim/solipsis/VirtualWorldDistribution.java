@@ -201,9 +201,16 @@ public class VirtualWorldDistribution implements VirtualWorldDistributionInterfa
 		VirtualEntity entity = null;
 		int size;
 		
+		
 		if (Globals.generated || (!Globals.generated && Globals.stepCount < Globals.slTrace.getTrace().size())) {
 			while(it.hasNext()) {
 				entity = (VirtualEntity)((Map.Entry)it.next()).getValue();
+//				if (CommonState.getIntTime() == 49800){
+//					entity.getProtocol().setCacheDebug(1);
+//				}
+//				if (CommonState.getIntTime() == 50200){
+//					entity.getProtocol().setCacheDebug(0);
+//				}
 				if(Globals.HQRendering) {
 					this.HQRendering = true;
 					this.savedForHQ.put(entity.getId(), entity.getCoord().clone());

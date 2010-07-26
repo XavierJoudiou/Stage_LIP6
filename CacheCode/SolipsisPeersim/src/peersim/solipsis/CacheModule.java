@@ -354,17 +354,18 @@ public class CacheModule {
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(coord, current.getCoord());
-			if (current.getQuality() !=  NeighborProxy.CACHED){
-				if ( currentDist < knowledgeRay ){
+//			if (current.getQuality() !=  NeighborProxy.CACHED){
+				if ( currentDist < (knowledgeRay - 1000) ){
+//				if ( this.protocol.isInsideKnowledgeZone(current)){
 					return current;
 				}
-				if (this.protocol.helpfulToEnvelopeCache(current) && current.getTime() > bestTime){
-					best = current;
-					bestTime = current.getTime();
-					//System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
-					//System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
-				}
-			}
+//				if (this.protocol.helpfulToEnvelopeCache(current) && current.getTime() > bestTime){
+//					best = current;
+//					bestTime = current.getTime();
+//					//System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
+//					//System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
+//				}
+//			}
 		}
 		return best;
 	}

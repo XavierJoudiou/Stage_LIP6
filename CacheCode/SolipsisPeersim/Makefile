@@ -13,11 +13,11 @@ doc:
 
 runnothing:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
-	CalculBases Nothing 600_300
+	CalculsBases Nothing 300_60
 
 runnocache:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
-	CalculBases NoCachePrefetch 600_300
+	CalculsBases NoCachePrefetch 300_60
 
 rundebut:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
@@ -40,7 +40,7 @@ run:
 
 runtest:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
-	gnuStats Stats_sergey 600_300 Résultats_CacheMess
+	gnuStats Stats_sergey 300_60 Résultats_CacheMess
 	play -q ../../Sounds/Homer_Dooh.wav
 
 runten:

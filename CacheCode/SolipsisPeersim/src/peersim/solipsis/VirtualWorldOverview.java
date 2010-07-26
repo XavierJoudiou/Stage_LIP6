@@ -47,6 +47,8 @@ public class VirtualWorldOverview implements Control {
     	StatisticsGatherer eval;
 		CacheStatistics evalCache;
     	percent++;
+    	
+    	
     	if (Globals.topologyIsReady) {
     		if (Globals.realTime) {
 //    			monitor = Globals.monitor;
@@ -54,6 +56,7 @@ public class VirtualWorldOverview implements Control {
     			System.err.println("Step " + percent + " done.");
     			recorder = Globals.recorder;
     			recorder.record();
+
     		} else {
     			if (Globals.cacheStat) {
     				
@@ -63,14 +66,14 @@ public class VirtualWorldOverview implements Control {
             		evalCache.printStatisticsCacheMess();
             		evalCache.printStatisticsActiviteMess();
             		System.out.println("+++++++++++++++++++++++++++++++++++");
-		    		try {;
+		    		try {
 		    		
 		    			String res1,res2,res6;
 		    			res1 = evalCache.printStatisticsCacheMessString();
 		    			fw.write(res1);
 		    			res2 = evalCache.printStatisticsActiviteMessString();
 		    			fw2.write(res2);
-		    			res6 = eval.printStatistics();
+		    			res6 = eval.printStatistics2();
 		    			fw5.write(res6);
 
 					} catch (IOException e) {

@@ -74,7 +74,7 @@ public class StatisticsGatherer {
 		return null;
 	}
 	
-	public String printStatistics () {
+	public void printStatistics () {
 //		String detailedMessageInfo = this.getAverageMessageCount()+" (delta: "+this.getDeltaMessageCount()+", search: "+this.getSearchMessageCount()+", detect: "+this.getDetectMessageCount()+")"+ "Rejection: "+this.getAverageMessageRejection();
 		String result = ""+this.getCumulatedAverageViewDivergence()+" "+this.getCumulatedOverallTopologyCoherence()+" "+this.getAverageMessageCount() + " " + getCumulatedAheadNeighborCount() + " " + getOverallAverageConnectionDuration() + " " + CommonState.getIntTime() + "\n" ;
 		
@@ -96,6 +96,13 @@ public class StatisticsGatherer {
 //			if (getAverageNeighborSetSize() > 25) System.out.println(getAverageNeighborSetSize());
 			System.err.print("- "+EDSimulator.heapSize());
 		}
+		System.out.println(result);
+	}
+	
+	public String printStatistics2() {
+//		String detailedMessageInfo = this.getAverageMessageCount()+" (delta: "+this.getDeltaMessageCount()+", search: "+this.getSearchMessageCount()+", detect: "+this.getDetectMessageCount()+")"+ "Rejection: "+this.getAverageMessageRejection();
+		String result = ""+this.getCumulatedAverageViewDivergence()+" "+this.getCumulatedOverallTopologyCoherence()+" "+this.getAverageMessageCount() + " " + getCumulatedAheadNeighborCount() + " " + getOverallAverageConnectionDuration() + " " + CommonState.getIntTime() + "\n" ;
+		
 		return result;
 	}
 	
