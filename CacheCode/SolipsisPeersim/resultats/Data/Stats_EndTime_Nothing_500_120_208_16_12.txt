@@ -1,8 +1,0 @@
-Limite: 5000, CacheSize: 20, Time_limite 5000, Durée: 120000, Stratégie: 0
-Hit:Mit:Miss:HitHelp:MissHelp:Time
-0:0:0:0:0:119900
-
-CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
-0|6247|0|0|8723589|6061|11576768|119900
-
-=============================
