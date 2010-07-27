@@ -291,15 +291,15 @@ public class CacheModule {
 			if ( currentDist < request.getKnowledgeRay() ){
 				return current;
 			}
-			if (this.protocol.helpfulToEnvelopeCacheHelpNeighbor(current,request) && current.getTime() > bestTime){
-				if (current.getId() != id){
-				best = current;
-				bestTime = current.getTime();
-
-				}else{
-					System.out.println("C le meme ==========");
-				}
-			}
+//			if (this.protocol.helpfulToEnvelopeCacheHelpNeighbor(current,request) && current.getTime() > bestTime){
+//				if (current.getId() != id){
+//				best = current;
+//				bestTime = current.getTime();
+//
+//				}else{
+//					System.out.println("C le meme ==========");
+//				}
+//			}
 		}
 		return best;
 	
