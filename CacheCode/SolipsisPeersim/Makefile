@@ -21,17 +21,17 @@ runnocache:
 
 rundebut:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
-	CalculBases Nothing 600_300
+	CalculsBases Nothing 600_300
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
-	CalculBases Nothing 600_300
+	CalculsBases Nothing 600_300
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
-	CalculBases Nothing 600_300
+	CalculsBases Nothing 600_300
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
-	CalculBases NoCachePrefetch 600_300
+	CalculsBases NoCachePrefetch 600_300
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
-	CalculBases NoCachePrefetch 600_300
+	CalculsBases NoCachePrefetch 600_300
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
-	CalculBases NoCachePrefetch 600_300
+	CalculsBases NoCachePrefetch 600_300
 	play -q ../../Sounds/Homer_Dooh.wav
 
 run:
