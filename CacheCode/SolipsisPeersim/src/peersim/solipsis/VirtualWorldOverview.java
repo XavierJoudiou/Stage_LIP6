@@ -14,7 +14,11 @@ public class VirtualWorldOverview implements Control {
 	private String prefix;
 	private int percent;
 	private File fichier,fichier2,fichier3,fichier4,fichier5;
+//	private File fichier,fichier2,fichier3,fichier4;
+
 	private FileWriter fw,fw2,fw3,fw4,fw5;
+//	private FileWriter fw,fw2,fw3,fw4;
+
 	
 	public VirtualWorldOverview(String prefix) throws IOException {
 		this.prefix = prefix;
@@ -61,7 +65,7 @@ public class VirtualWorldOverview implements Control {
     			if (Globals.cacheStat) {
     				
     				eval = Globals.evaluator;
-    				eval.printStatistics();
+//    				eval.printStatistics();
             		evalCache = Globals.cacheEvaluator;
             		evalCache.printStatisticsCacheMess();
             		evalCache.printStatisticsActiviteMess();
@@ -73,7 +77,7 @@ public class VirtualWorldOverview implements Control {
 		    			fw.write(res1);
 		    			res2 = evalCache.printStatisticsActiviteMessString();
 		    			fw2.write(res2);
-		    			res6 = eval.printStatistics2();
+		    			res6 = eval.printStatistics();
 		    			fw5.write(res6);
 
 					} catch (IOException e) {

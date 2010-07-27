@@ -74,13 +74,13 @@ public class StatisticsGatherer {
 		return null;
 	}
 	
-	public void printStatistics () {
+	public String printStatistics () {
 //		String detailedMessageInfo = this.getAverageMessageCount()+" (delta: "+this.getDeltaMessageCount()+", search: "+this.getSearchMessageCount()+", detect: "+this.getDetectMessageCount()+")"+ "Rejection: "+this.getAverageMessageRejection();
 		String result = ""+this.getCumulatedAverageViewDivergence()+" "+this.getCumulatedOverallTopologyCoherence()+" "+this.getAverageMessageCount() + " " + getCumulatedAheadNeighborCount() + " " + getOverallAverageConnectionDuration() + " " + CommonState.getIntTime() + "\n" ;
 		
 		this.stepCount++;
 		Globals.steps = this.stepCount;
-		if (!this.hasBeenReinitialized && this.stepCount == 1000) {
+		if (!this.hasBeenReinitialized ) {
 			this.reinitializeCounts();
 		}
 		if (this.hasBeenReinitialized) {
@@ -89,22 +89,22 @@ public class StatisticsGatherer {
 			} else {
 				if (CommonState.getTime() > CommonState.
 						getEndTime() - 100) {
-					System.out.println(result);
+					return result;
 				} 
 			}
 		}else {
 //			if (getAverageNeighborSetSize() > 25) System.out.println(getAverageNeighborSetSize());
 			System.err.print("- "+EDSimulator.heapSize());
 		}
-		System.out.println(result);
-	}
-	
-	public String printStatistics2() {
-//		String detailedMessageInfo = this.getAverageMessageCount()+" (delta: "+this.getDeltaMessageCount()+", search: "+this.getSearchMessageCount()+", detect: "+this.getDetectMessageCount()+")"+ "Rejection: "+this.getAverageMessageRejection();
-		String result = ""+this.getCumulatedAverageViewDivergence()+" "+this.getCumulatedOverallTopologyCoherence()+" "+this.getAverageMessageCount() + " " + getCumulatedAheadNeighborCount() + " " + getOverallAverageConnectionDuration() + " " + CommonState.getIntTime() + "\n" ;
-		
 		return result;
 	}
+	
+//	public String printStatistics2() {
+////		String detailedMessageInfo = this.getAverageMessageCount()+" (delta: "+this.getDeltaMessageCount()+", search: "+this.getSearchMessageCount()+", detect: "+this.getDetectMessageCount()+")"+ "Rejection: "+this.getAverageMessageRejection();
+//		String result = ""+this.getCumulatedAverageViewDivergence()+" "+this.getCumulatedOverallTopologyCoherence()+" "+this.getAverageMessageCount() + " " + getCumulatedAheadNeighborCount() + " " + getOverallAverageConnectionDuration() + " " + CommonState.getIntTime() + "\n" ;
+//		
+//		return result;
+//	}
 	
 	private String getAverageMessageCount () {
 //		long time = CommonState.getTime();
