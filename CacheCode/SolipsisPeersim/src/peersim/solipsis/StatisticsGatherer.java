@@ -80,7 +80,9 @@ public class StatisticsGatherer {
 		
 		this.stepCount++;
 		Globals.steps = this.stepCount;
+//		if (!this.hasBeenReinitialized && this.stepCount == 1000) {
 		if (!this.hasBeenReinitialized ) {
+
 			this.reinitializeCounts();
 		}
 		if (this.hasBeenReinitialized) {
