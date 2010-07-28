@@ -6,6 +6,7 @@ package peersim.solipsis;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 
 import peersim.core.CommonState;
 
@@ -281,21 +282,27 @@ public class CacheModule {
 		NeighborProxy best = null;
 		long bestTime = -1;
 		double currentDist = -1;
-		
+		int choice;
 		Iterator it;
 		it = this.cache.entrySet().iterator();
 				
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(request.getDestination(), current.getCoord());
-			if ( currentDist < request.getKnowledgeRay() ){
-				return current;
+			if ( currentDist < (request.getKnowledgeRay() - 1000) ){
+				if (best == null){
+					best = current;
+				}else{
+					choice = (int) (Math.random() * 4 + 1);			
+					if ( choice == 2){
+						best = current;
+					}
+				}
 			}
 //			if (this.protocol.helpfulToEnvelopeCacheHelpNeighbor(current,request) && current.getTime() > bestTime){
 //				if (current.getId() != id){
-//				best = current;
-//				bestTime = current.getTime();
-//
+//					best = current;
+//					bestTime = current.getTime();
 //				}else{
 //					System.out.println("C le meme ==========");
 //				}
@@ -347,6 +354,7 @@ public class CacheModule {
 		NeighborProxy other = null;
 		long bestTime = -1;
 		double currentDist,bestDist = -1;
+		int choice;
 		
 		Iterator it;
 		it = this.cache.entrySet().iterator();
@@ -354,18 +362,25 @@ public class CacheModule {
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(coord, current.getCoord());
-//			if (current.getQuality() !=  NeighborProxy.CACHED){
+			if (current.getQuality() !=  NeighborProxy.CACHED){
 				if ( currentDist < (knowledgeRay - 1000) ){
-//				if ( this.protocol.isInsideKnowledgeZone(current)){
-					return current;
+					if (best == null){
+						best = current;
+					}else{
+						choice = (int) (Math.random() * 4 + 1);			
+						if ( choice == 2){
+							best = current;
+						}
+					}
 				}
+				
 //				if (this.protocol.helpfulToEnvelopeCache(current) && current.getTime() > bestTime){
 //					best = current;
 //					bestTime = current.getTime();
-//					//System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
-//					//System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
+////					//System.out.println("$$$ help: " + this.protocol.helpfulToEnvelopeCache(current) + ", myId: " + this.protocol.getVirtualEntity().getId() + ", idcur: " + current.getId()+ ", time: " + CommonState.getTime());
+////					//System.out.println("$$$ help_ coords: me= " + destination[0] + ", " + destination[1] + " et cur= " + current.getCoord()[0] + ", " + current.getCoord()[1]);
 //				}
-//			}
+			}
 		}
 		return best;
 	}
@@ -392,7 +407,7 @@ public class CacheModule {
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
 			if (current.getQuality() !=  NeighborProxy.CACHED){
-				if ( currentDist < knowledgeRay ){
+				if ( currentDist < (knowledgeRay - 1000) ){
 					best.put(current.getId(), current);
 				}
 				if (best.size() > 4){
@@ -438,7 +453,8 @@ public class CacheModule {
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(request.getDestination(), current.getCoord());
-			if ( currentDist < request.getKnowledgeRay() ){
+			if ( currentDist < (request.getKnowledgeRay()  - 1000) ){
+
 				best.put(current.getId(), current);
 			}
 			if (best.size() > 4){

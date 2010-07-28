@@ -43,19 +43,6 @@ runtest:
 	gnuStats Stats_sergey 500_120 Résultats_CacheMess
 	play -q ../../Sounds/Homer_Dooh.wav
 
-runten:
-	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
-	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
-	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
-	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
-	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
-	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
-	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
-	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
-	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
-	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
-	play -q ../../Sounds/Homer_Dooh.wav
-
 play:
 	java -cp $(ALL) peersim/tracePlayer/TracePlayer defaultRecord.txt
 

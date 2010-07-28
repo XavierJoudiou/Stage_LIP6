@@ -1,0 +1,27 @@
+cache mult, retour des fonction de cache avec construction enveloppe si pas dans zone
+
+
+CACHE_SIZE 20
+CACHE_LIMIT 5000
+TIME_LIMIT 8000
+CACHE_DEBUG 0
+UPDATE_OK 1
+HELP_OK 1
+UPDATE_TIME 10000
+
+
+
+
+
+
+#mobility state machine transition probabilities
+HTH 8900
+HTT 100
+HTW 2000 
+WTH 20
+WTT 80
+WTW 6850
+CWD 3050
+TTH 100
+TTW 230
+TTT 9670
