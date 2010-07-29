@@ -1,0 +1,92 @@
+\newpage
+\section{Étude des différentes ameliorations possibles}
+\subsection{Mise en place d'un cache pour les zones peuplées}
+La mise en place d'un cache pour les zones peuplées permettrait d'améliorer la réactivité dans un état (\textbf{W}) qui n'est pas encore améliorée. L'avantage de cette solution, même si l'issue n'est pas certaine, est de s'intéresser à une partie que l'on n'a pas encore fait évoluée. 
+\par Le but de cette solution serait de mettre en place un cache qui garderait un certain nombre de nœuds qui vient de sortir de la liste des voisins du nœud. Ainsi comme les mouvements de l'avatar sont désordonnés, il est possible qu'il retourne vers des nœuds qu'il vient de quitter. Sur la figure~\ref{cacheW}, il est possible de se faire une idée de cette solution.
+
+	\begin{figure}[!h]
+        \centering
+        \includegraphics[scale=0.40]{./Ressources/Images/cacheW.png}
+        \caption{Exemple de gain possible pour le prefetching}
+        \label{cacheW}
+        \end{figure} 
+
+\par Sur la figure~\ref{cacheW}, un exemple de l'utilisation du cache est mis en avant. Nous pouvons voir trois phases durant lesquelles un nœud (rouge) va bouger et modifier ses voisins à chaque instant. Les nœuds, qui étaient voisins et qui ne le sont plus à l'instant suivant, sont placés dans le cache. Ainsi lorsque le nœud revient vers eux, ce dernier n'aura pas à refaire une recherche de voisins avec les deux nœuds verts, il aura juste à demander aux nœud verts si ils sont toujours au même endroit, etc.
+\par Cette solution pourrait économiser des messages de découverte des voisins dans le cas de changements de direction fréquents. Mais l'efficacité de cette méthode n'est pas sûre. 
+ 
+\subsection{Mécanismes de connaissance des routes entre les Hotspots}
+Dans cette solution, nous voudrions permettre aux avatars de suivre des routes, pour le contournement d'un obstacle par exemple. Il faudrait modifier le modèle pour ajouter des obstacles dans l'environnement. Deux solutions apparaissent rapidement pour créer ses routes. La première solution serait de définir des chemins pour contourner les obstacles, et de conserver ces chemins dans l'environnement. La deuxième solution consisterait à mettre en place un mécanisme d'apprentissage des routes par les avatars. Les avatars pourraient apprendre les routes au fur et à mesure des passages, et laisser des indications pour les avatars suivants. Cette solution permettrait de simuler un comportement réel, et ainsi d'essayer d'améliorer cette situation.
+\par Les modifications sur le modèle ne seront peut être pas très simples à mettre en place. Il faudrait aléatoirement, comme il a été fait pour les Hotspots, définir des zones où les avatars ne pourraient pas passer ou seraient ralentis. Sur la figure~\ref{trajobstacle}, nous pouvons voir des trajectoires permettant d'éviter l'obstacle. Il faut définir si ces trajectoires se font par apprentissage ou si elles sont données avec l'initialisation de la carte.
+
+	\begin{figure}[!h]
+        \centering
+        \includegraphics[scale=0.55]{./Ressources/Images/trajobstacle}
+        \caption{Exemple de trajectoire d'évitement d'un obstacle}
+        \label{trajobstacle}
+	\end{figure}
+
+\newpage
+\subsection{Amélioration du prefetch de Blue Banana}
+Une des solutions est d'essayer de continuer le travail déjà réalisé dans Blue Banana~\cite{191}. L'objectif serait de rapatrier plus finement les données. Pour le moment, nous regardons juste les nœuds qui sont dans notre champs de vision (un cône) et qui ne sont ni trop loin, ni trop près. Mais il serait intéressant d'avoir plus d'informations sur les nœuds, comme leur direction ou leur vitesse par exemple. 
+\par Actuellement un nœud, qui est dans l'état \textbf{T}(ravelling), va chercher des nœuds qui se trouvent sur la trajectoire probable de l'avatar, tant que son ensemble de voisins n'est pas plein. Ce mécanisme va donc rapatrier des données qui sont à bonne distance (pas trop près à cause des temps de communication). Un des risques est de rapatrier des nœuds qui sont inutiles si l'avatar, dont nous rapatrions les données, change de direction ou d'état. Le mécanisme existant ne va pas observer les différentes propriétés des nœuds (vitesse, direction, état, etc) et dans certains cas, il est possible qu'il rapatrie des nœuds qui viennent vers lui très rapidement et qui ne seront donc pas utiles.
+\par L'idée est donc en plus de la distance avec le nœud de tester les différentes propriétés. Une solution serait peut être d'essayer de déterminer de façon simpliste les futures positions des nœuds et de tenir compte du couple vitesse/direction, pour mieux rapatrier les données. De plus, il faudrait chercher parmi des nœuds qui peuvent être hors du cône, mais sans trop chercher sinon trop de messages seraient émis.
+\par  Nous pouvons voir un exemple de l'avantage de cet ajout (voir figure~\ref{prefetchav}), qui pourrait, par exemple, permettre l'ajout du nœud en rouge au lieu du vert.
+
+	\begin{figure}[!h]
+        \centering
+        \includegraphics[scale=0.45]{./Ressources/Images/prefetchav.png}
+        \caption{Exemple de gain possible pour le prefetching}
+        \label{prefetchav}
+        \end{figure}
+
+\newpage
+\subsection{Les mouvements de groupe}
+Cette partie est décrite de façon plus précise dans le rapport bibliographique qui lui est consacrée. Il nous a été possible d'observer, à travers différentes études~\cite{1124834,1124834,1031667}, que les joueurs se déplacent fréquemment en groupe. Ces déplacements se font la plupart du temps entre les joueurs d'un même guilde. Nous pouvons observer sur la figure~\ref{recapstat} qu'en grande majorité les joueurs font partie de groupe, c'est pour cela que cette solution peut être intéressante. 
+\par Pour mettre en place cette solution, il faudra refaire un modèle de mobilité qui met en place des déplacements de groupe. Ce travail pourrait prendre plus de temps que les autres solutions car il nécessite un bon nombre de changement dans l'existant.
+
+	\vspace{1cm}
+        \begin{figure}[!h]
+        \centering
+        \includegraphics[scale=0.65]{./Ressources/Images/recapstat.png}
+        \caption{Schéma récapitulatif des activités de groupe}
+        \label{recapstat}
+        \end{figure}
+
+\par L'utilisation des mouvements de groupe pourraient nous permettre de réorganiser le prefetching des données, et ne plus considérer les nœuds indépendamment mais comme formant un groupe. Ces groupes vont devoir avoir une organisation flexible et efficace. Les nœuds se trouvant en avant du groupe, selon la direction, pourrait être les seuls à rapatrier des données, ainsi nous économiserions des messages. Il faudrait ensuite transmettre les données vers les autres membres du groupe, plusieurs méthodes de diffusion peuvent être mises en place. La formation du groupe pourrait aussi permettre de mettre entre parenthèse la recherche de voisins (pour certains des nœuds en tout cas). 
+\par La figure~\ref{mouvgroup} montre un exemple de ce à quoi pourrait ressembler la solution. Les nœuds, en gris foncé, vont rapatrier les données qui peuvent être intéressantes. Les autres nœuds du groupe n'auront pas rapatrier les données, mais il faudra ensuite diffuser ces données vers le reste du groupe.
+
+	\vspace{1cm}
+        \begin{figure}[!h]
+        \centering
+        \includegraphics[scale=0.65]{./Ressources/Images/mouvgroup.png}
+        \caption{Une piste pour les déplacements en groupe}
+        \label{mouvgroup}
+        \end{figure}
+
+\newpage
+\subsection{Autres}
+Dans cette partie, nous allons faire le tour d'autres idées d'amélioration, mais sans rentrer dans les détails comme nous avons pu le faire pour les autres. Des nœuds pourraient partager des liens encore plus forts que ceux du voisinage. Si deux nœuds vont dans la même direction et qu'ils ne sont pas trop éloignés (pas obligatoirement parmi les voisins), alors un lien pourrait se créer pour échanger des données.
+
+\par Une autre amélioration pourrait être d'insérer des nœuds qui seraient fixe dans l'environnement, ils pourraient servir de "relais" dans certaines zones. Ces nœuds pourraient avoir plusieurs utilisations, nous pouvons imaginer qu'il pourrait servir de référent dans sa zone, ce mécanisme reviendrai à mixer un peu les solutions client/serveur et pair à pair. (FLOU)
+
+\par Possibilité de créer des liens entre des nœuds qui sont proches dans le réseau. Ainsi deux nœuds qui sont proches pourrait échanger des données rapidement et ces données pourrait servir au nœud ultérieurement ou il pourrait les faire partager à d'autres nœuds sur le réseau virtuel. 
+ 
+\par De la même façon que l'idée d'instaurer un cache, les nœuds pourrait se souvenir, en fonction de la zone géographique où ils se trouvent, d'anciens nœuds déjà rencontrés et ainsi tenter de communiquer avec eux prioritairement. (Trop Comme Cache)
+
+
+
+\subsection{Tableau récapitulatif des solutions}
+
+\vspace{1cm}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+Nom Solution & Tps Implem & Ajout princpal & Intérêt & Gains \\
+\hline
+Cache & Moyen & Hotspots & + & +? \\
+Routes & Long & Entre Hotspots & + (routes ajoutent réalisme) & +?\\
+Prefetch & Moyen & Existant & + Meilleur prefetch & ??\\
+Groupe & + Long & Entre Hotspots & + (groupe ajoutent réalisme) & +?\\
+\hline
+\end{tabular}
+\vspace{1cm}
+

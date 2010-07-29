@@ -59,6 +59,8 @@ public class Globals {
 	public static int affichage_options = 0;
 	public static int update_time = 1000;
 	public static int update_ok = 1;
+	public static int countEnvelop = 0;
+
 	
 	public static SecondLifeTraceDistribution slTrace;
 	public static boolean generated = true;

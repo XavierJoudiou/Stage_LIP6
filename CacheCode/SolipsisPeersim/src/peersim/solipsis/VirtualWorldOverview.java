@@ -69,6 +69,7 @@ public class VirtualWorldOverview implements Control {
             		evalCache = Globals.cacheEvaluator;
             		evalCache.printStatisticsCacheMess();
             		evalCache.printStatisticsActiviteMess();
+        			System.out.println(":: " + Globals.countEnvelop + " ::");
             		System.out.println("+++++++++++++++++++++++++++++++++++");
 		    		try {
 		    		

@@ -34,11 +34,12 @@ public class CacheModule {
 	/* mettre dans fichier de conf */
 	private int limit;
 	private SolipsisProtocol protocol;
+	private int limite_connaissance;
 
 	
 
 	public CacheModule(HashMap<Integer, NeighborProxy> cache, HashMap<Integer, CacheData> cacheInfo, int cacheSize,
-			int strategieCache,SolipsisProtocol protocol) {
+			int strategieCache,SolipsisProtocol protocol,int limite_connaissance) {
 		super();
 		this.protocol = protocol;
 
@@ -47,6 +48,7 @@ public class CacheModule {
 		this.strategieCache = strategieCache;
 		this.cache = new HashMap<Integer,NeighborProxy>();
 		this.cacheInfo = new HashMap<Integer, CacheData>();
+		this.limite_connaissance = limite_connaissance;
 	}
 	
 
@@ -164,19 +166,24 @@ public class CacheModule {
 	 *  ou non du nœud passé en argument dans le cache
 	 * 
 	 */
-	public boolean IsInCache(NeighborProxy boor){
+	public synchronized boolean IsInCache(NeighborProxy boor){
 		boolean res = false;
 		Iterator it;
 		NeighborProxy current;
 		it = this.cache.entrySet().iterator();
-		while(it.hasNext()){
-			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
-			if (current.getId() == boor.getId()){
-				res = true;
-				return true;
+		if ( boor != null){
+			while(it.hasNext()){
+				current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+				if (current != null){
+					if (current.getId() == boor.getId()){
+						res = true;
+						return true;
+					}
+				}
 			}
+			return res;
 		}
-		return res;
+		return false;
 	}
 	
 	/*
@@ -289,7 +296,7 @@ public class CacheModule {
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(request.getDestination(), current.getCoord());
-			if ( currentDist < (request.getKnowledgeRay() - 1000) ){
+			if ( currentDist < (request.getKnowledgeRay() - limite_connaissance) ){
 				if (best == null){
 					best = current;
 				}else{
@@ -407,7 +414,7 @@ public class CacheModule {
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
 			if (current.getQuality() !=  NeighborProxy.CACHED){
-				if ( currentDist < (knowledgeRay - 1000) ){
+				if ( currentDist < (knowledgeRay - limite_connaissance) ){
 					best.put(current.getId(), current);
 				}
 				if (best.size() > 4){
@@ -453,7 +460,7 @@ public class CacheModule {
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(request.getDestination(), current.getCoord());
-			if ( currentDist < (request.getKnowledgeRay()  - 1000) ){
+			if ( currentDist < (request.getKnowledgeRay()  - limite_connaissance) ){
 
 				best.put(current.getId(), current);
 			}

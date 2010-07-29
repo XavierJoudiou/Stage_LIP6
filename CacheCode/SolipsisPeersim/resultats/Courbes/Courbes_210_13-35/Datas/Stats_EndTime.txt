@@ -1,0 +1,8 @@
+Limite du cache: 4000, CacheSize: 25, Time_limite 4000, Durée: 120000, update ok ? 0, update time: 3000, Help Ok ? 1, Contact node ? 0, Stratégie: 1, Limite connaissance: 2000
+Hit:Mit:Miss:HitHelp:MissHelp:Time
+1042:0:315:60:326:119900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|523|523|0|8844903|1189562|13489931|119900
+
+=============================

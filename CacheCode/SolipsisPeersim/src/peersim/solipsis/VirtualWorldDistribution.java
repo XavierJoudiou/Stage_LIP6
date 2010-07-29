@@ -44,6 +44,7 @@ public class VirtualWorldDistribution implements VirtualWorldDistributionInterfa
 	private long [][] smallZoneCoords;
 	private boolean HQRendering;
 	private int applicativeLayerId;
+	
 
 	
 	VirtualWorldDistribution() {
@@ -200,7 +201,7 @@ public class VirtualWorldDistribution implements VirtualWorldDistributionInterfa
 		Iterator it = coords.entrySet().iterator();
 		VirtualEntity entity = null;
 		int size;
-		
+		Globals.countEnvelop = 0;
 		
 		if (Globals.generated || (!Globals.generated && Globals.stepCount < Globals.slTrace.getTrace().size())) {
 			while(it.hasNext()) {
@@ -219,6 +220,10 @@ public class VirtualWorldDistribution implements VirtualWorldDistributionInterfa
 				if (Globals.topologyIsReady) {
 					entity.proceedMovement();
 				}
+				if( entity.getProtocol().convexEnvelopePropertyTest() == true){
+					Globals.countEnvelop ++;
+				}
+				
 				//			System.out.println("propagating state info");
 				entity.propagateStateInformation();
 				//			System.out.println("keeping topo");

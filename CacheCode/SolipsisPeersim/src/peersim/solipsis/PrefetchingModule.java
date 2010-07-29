@@ -442,8 +442,10 @@ public class PrefetchingModule {
 						//			System.out.println("azim="+azimut+" dist= "+dist);
 						//			System.out.println("tan= "+tan);
 						if (prefetchProbability(tan)) {
-							tans.add(tan);
-							chosen.add(current.getId());
+//							if (current.getQuality() == 0){
+								tans.add(tan);
+								chosen.add(current.getId());
+//							}
 						}
 					}
 				}
