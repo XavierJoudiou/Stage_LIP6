@@ -66,12 +66,15 @@ public class CacheModule {
 		info = this.cacheInfo.entrySet().iterator();
 		CacheData cacheData;
 			
+//		System.out.println("aaaddddd: " + boor.getId() + ", time: " + CommonState.getTime());
+
 		/* On vérifie que le nœud n'est pas déjà dans le cache */
 		if (!IsInCache(boor)){
 			
 			/* Le cache est plein, suppression d'un élément*/
 			if (this.cache.size() >= this.cacheSize){
-				RmCache(SelectNode());
+//				RmCache(SelectNode());
+				RmCache(SelectNodeTime());
 			}
 						
 			IncPosAll();
@@ -106,6 +109,8 @@ public class CacheModule {
 		Iterator info;
 		CacheData currentInfo;
 		info = this.cacheInfo.entrySet().iterator();
+//		System.out.println("supprrrr: " + boor.getId() + ", time: " + CommonState.getTime());
+
 		if (IsInCache(boor)){
 			while(info.hasNext()){
 				currentInfo = (CacheData)((Map.Entry)info.next()).getValue();
@@ -159,6 +164,42 @@ public class CacheModule {
 				
 		return suppr;
 	}
+	
+	/*
+	 * Sélectionne le nœud à supprimer en fonction de la statégie 
+	 */
+	public NeighborProxy SelectNodeTime(){
+		NeighborProxy suppr = null;
+		CacheData supprInfo;
+		Iterator it,info;
+		NeighborProxy current;
+		CacheData currentInfo;
+		it = this.cache.entrySet().iterator();
+		
+		switch(strategieCache){
+		case FIFO:
+			suppr = (NeighborProxy)((Map.Entry)it.next()).getValue();
+				while(it.hasNext()){
+					current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+					if ( suppr.getTime() > current.getTime() ){
+						suppr = current;
+					}
+				}
+			break;
+		case FIFOMULT:
+			suppr = (NeighborProxy)((Map.Entry)it.next()).getValue();
+				while(it.hasNext()){
+					current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+					if ( suppr.getTime() > current.getTime() ){
+						suppr = current;
+					}
+				}
+			break;
+		}			
+				
+		return suppr;
+	}
+	
 	
 	/*
 	 * Fonction IsInCache:
@@ -423,18 +464,18 @@ public class CacheModule {
 			}
 		}
 		
-		while(it2.hasNext()){
-			current = (NeighborProxy)((Map.Entry)it2.next()).getValue();
-			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
-			if (current.getQuality() !=  NeighborProxy.CACHED){
-				if (best.size() > 4){
-					return best;
-				}
-				if (this.protocol.helpfulToEnvelopeCache(current)){
-					best.put(current.getId(), current);
-				}
-			}
-		}
+//		while(it2.hasNext()){
+//			current = (NeighborProxy)((Map.Entry)it2.next()).getValue();
+//			currentDist = VirtualWorld.simpleDistance(destination, current.getCoord());
+//			if (current.getQuality() !=  NeighborProxy.CACHED){
+//				if (best.size() > 4){
+//					return best;
+//				}
+//				if (this.protocol.helpfulToEnvelopeCache(current)){
+//					best.put(current.getId(), current);
+//				}
+//			}
+//		}
 		return best;
 	}
 	

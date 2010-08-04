@@ -1649,8 +1649,17 @@ public class SolipsisProtocol implements EDProtocol {
 			if ( cacheDebug == 1 || cacheDebug == 2 ){
 				System.out.println("--- Envelope NOT_OK, nodeId: " + neighbor.getId() );
 			}
-//			MajNeighborProxy(this.cache.getCache().get(neighbor.getId()), neighbor);
-			Globals.cacheEvaluator.incnbEnvelopNotOK();
+			if ( isInCache(neighbor)){
+				MajNeighborProxy(this.cache.getCache().get(neighbor.getId()), neighbor);
+				System.out.println("YESPAPA+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+			}else{
+				System.out.println("NOPAPA+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+				System.out.println("neigbor: " + neighbor.getId());
+//				this.cache.ShowCache();
+			}
+			Globals.cacheEvaluator.incCacheMitGLob();
+			return;
+			
 		}
 		boolean apres = convexEnvelopeProperty();
 //		System.out.println("!!!Envelop State after: " + apres);
@@ -1665,6 +1674,7 @@ public class SolipsisProtocol implements EDProtocol {
 	 */
 	private void MajNeighborProxy(NeighborProxy old, VirtualEntity nouv){
 		old.setCoord(nouv.getCoord());		
+		old.setTime(CommonState.getTime());
 	}
 	
 	/*

@@ -1,0 +1,2 @@
+plot "./RES.txt" using 5:1 title 'HIT' with lines, "./RES.txt" using 5:2 title 'MIT' with lines,"./RES.txt" using 5:3 title 'MISS' with lines
+

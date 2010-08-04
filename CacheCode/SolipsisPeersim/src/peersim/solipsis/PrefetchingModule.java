@@ -153,11 +153,25 @@ public class PrefetchingModule {
 				if (size > 0) {
 					this.protocol.send(msg, this.proxies.get(destinations.get(0)));				
 					for (int i = 1; i < size; i++) {
-						destination = destinations.get(i);
-						prefetchedProxy = this.proxies.get(destination).clone();
-						prefetchedProxy.setQuality(NeighborProxy.PREFETCHED);
-						propagateMsg = this.protocol.createFoundMsg(prefetchedProxy, prefetch.getSource().getId());
-						this.protocol.send(propagateMsg, prefetch.getSource());
+						long[] vector = null;
+						long[] desti = this.protocol.getVirtualEntity().getDestination();
+						long[] origin = this.protocol.getPosition();
+						
+						if (desti != null && origin != null) {
+							vector = VirtualWorld.substract(this.protocol.getVirtualEntity().getDestination(), this.protocol.getPosition());
+						}
+						
+						if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) ){
+//						if ( isGoodPrefetch(prefetch.getPrefetchVector(),vector) || (isMaybeGoodPrefetch(prefetch.getPrefetchVector(),vector) && (this.protocol.getVirtualEntity().getState() != MobilityStateMachine.HALTED))){
+//						if ( this.protocol.getVirtualEntity().getState() != MobilityStateMachine.TRAVELLING){
+							destination = destinations.get(i);
+							prefetchedProxy = this.proxies.get(destination).clone();
+							prefetchedProxy.setQuality(NeighborProxy.PREFETCHED);
+							propagateMsg = this.protocol.createFoundMsg(prefetchedProxy, prefetch.getSource().getId());
+							this.protocol.send(propagateMsg, prefetch.getSource());
+						}else{
+//							System.out.println("pastravelling °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°");
+						}
 					}	
 				}
 
@@ -188,6 +202,35 @@ public class PrefetchingModule {
 			}
 		}
 	}
+	
+	private boolean isGoodPrefetch(long[] prefetchA, long[] prefetchB){
+		if ( prefetchB != null && prefetchA != null){
+			long[] som = VirtualWorld.sumCoords(prefetchA, prefetchB);
+			double normePrefetch = Math.sqrt(prefetchA[0]*prefetchA[0] + prefetchA[1]*prefetchA[1]);
+			double normeSom = Math.sqrt(som[0]*som[0] + som[1]*som[1]);
+//			System.out.println("prefecth: " + normePrefetch + ", som: " + normeSom);
+			if ( normeSom > ( normePrefetch + (normePrefetch/4 ) ) ){
+//				System.out.println("GOOOOOOOODDDD_PREFETCH");
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isMaybeGoodPrefetch(long[] prefetchA, long[] prefetchB){
+		if ( prefetchB != null && prefetchA != null){
+			long[] som = VirtualWorld.sumCoords(prefetchA, prefetchB);
+			double normePrefetch = Math.sqrt(prefetchA[0]*prefetchA[0] + prefetchA[1]*prefetchA[1]);
+			double normeSom = Math.sqrt(som[0]*som[0] + som[1]*som[1]);
+//			System.out.println("prefecth: " + normePrefetch + ", som: " + normeSom);
+			if ( normeSom > normePrefetch ){
+//				System.out.println("GOOOOOOOODDDD_PREFETCH");
+				return true;
+			}
+		}
+		return false;
+	}
+	
 
 	private boolean isFarEnough(PrefetchRequest request) {
 		long speed = request.getSpeed();
@@ -442,10 +485,8 @@ public class PrefetchingModule {
 						//			System.out.println("azim="+azimut+" dist= "+dist);
 						//			System.out.println("tan= "+tan);
 						if (prefetchProbability(tan)) {
-//							if (current.getQuality() == 0){
 								tans.add(tan);
 								chosen.add(current.getId());
-//							}
 						}
 					}
 				}

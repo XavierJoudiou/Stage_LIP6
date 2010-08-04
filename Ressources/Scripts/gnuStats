@@ -22,7 +22,7 @@ echo set title \"View Divergence\" >>plotfile.dat
 echo set xlabel \"Temps de simulation\" >>plotfile.dat
 echo set ylabel \"Nombre ??\" >>plotfile.dat
 echo set grid >>plotfile.dat
-echo plot \"$1.txt\" using 6:1 title \'Solution courante\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_NoCachePrefetch.txt\" using 6:1 title \'No Cache\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_Nothing.txt\" using 6:1 title \'Base\' with lines linewidth 1 >>plotfile.dat 
+echo plot \"$1.txt\" using 6:1 title \'Solution en cours de test\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_NoCachePrefetch.txt\" using 6:1 title \'Sans Cache et avec Prefetch\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_Nothing.txt\" using 6:1 title \'Sans Cache et Sans Prefetch\' with lines linewidth 1 >>plotfile.dat 
 #echo pause -1 >>plotfile.dat
 echo set term png >>plotfile.dat 
 echo set out \"resultats\/Courbes\/Courbes_$time\/View_Divergence.png\" >>plotfile.dat 
@@ -40,7 +40,7 @@ echo set title \"Topology Coherence\" >>plotfile.dat
 echo set xlabel \"Temps de simulation\" >>plotfile.dat
 echo set ylabel \"Nombre de nœud proche mais pas voisin\" >>plotfile.dat
 echo set grid >>plotfile.dat
-echo plot \"$1.txt\" using 6:2 title \'Solution courante\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_NoCachePrefetch.txt\" using 6:2 title \'No Cache\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_Nothing.txt\" using 6:2 title \'Base\' with lines linewidth 1 >>plotfile.dat 
+echo plot \"$1.txt\" using 6:2 title \'Solution en cours de test\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_NoCachePrefetch.txt\" using 6:2 title \'Sans Cache et avec Prefetch\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_Nothing.txt\" using 6:2 title \'Sans Cache et Sans Prefetch\' with lines linewidth 1 >>plotfile.dat 
 #echo pause -1 >>plotfile.dat
 echo set term png >>plotfile.dat 
 echo set out \"resultats\/Courbes\/Courbes_$time\/Topology_Coherence.png\" >>plotfile.dat 
@@ -59,7 +59,7 @@ echo set title \"Nombre moyen de message \" >>plotfile.dat
 echo set xlabel \"Temps de simulation\" >>plotfile.dat
 echo set ylabel \"Nombre de message\" >>plotfile.dat
 echo set grid >>plotfile.dat
-echo plot \"$1.txt\" using 6:3 title \'Solution courante\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_NoCachePrefetch.txt\" using 6:3 title \'No Cache\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_Nothing.txt\" using 6:3 title \'Base\' with lines linewidth 1 >>plotfile.dat
+echo plot \"$1.txt\" using 6:3 title \'Solution en cours de test\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_NoCachePrefetch.txt\" using 6:3 title \'Sans Cache et avec Prefetch\' with lines linewidth 1,\"resultats\/Data\/$2\/Stats_sergey_Nothing.txt\" using 6:3 title \'Sans Cache et Sans Prefetch\' with lines linewidth 1 >>plotfile.dat
 #echo pause -1 >>plotfile.dat
 echo set term png >>plotfile.dat
 echo set out \"resultats\/Courbes\/Courbes_$time\/Nombre_Messages.png\" >>plotfile.dat
