@@ -169,9 +169,9 @@ public class PrefetchingModule {
 							prefetchedProxy.setQuality(NeighborProxy.PREFETCHED);
 							propagateMsg = this.protocol.createFoundMsg(prefetchedProxy, prefetch.getSource().getId());
 							this.protocol.send(propagateMsg, prefetch.getSource());
-						}else{
+//						}else{
 //							System.out.println("pastravelling °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°");
-						}
+//						}
 					}	
 				}
 
