@@ -101,12 +101,69 @@ public class StatisticsGatherer {
 		return result;
 	}
 	
-//	public String printStatistics2() {
-////		String detailedMessageInfo = this.getAverageMessageCount()+" (delta: "+this.getDeltaMessageCount()+", search: "+this.getSearchMessageCount()+", detect: "+this.getDetectMessageCount()+")"+ "Rejection: "+this.getAverageMessageRejection();
+	public CacheStatistiquesStruct printStatisticsStruct () {
 //		String result = ""+this.getCumulatedAverageViewDivergence()+" "+this.getCumulatedOverallTopologyCoherence()+" "+this.getAverageMessageCount() + " " + getCumulatedAheadNeighborCount() + " " + getOverallAverageConnectionDuration() + " " + CommonState.getIntTime() + "\n" ;
-//		
-//		return result;
-//	}
+		
+		double topo, view, ahead;
+		int msgcount;
+		double duration;
+		
+		this.stepCount++;
+		Globals.steps = this.stepCount;
+//		if (!this.hasBeenReinitialized && this.stepCount == 1000) {
+		
+		if (this.getCumulatedOverallTopologyCoherence().equals(null)){
+			topo = 0;
+		}else{
+			topo = Double.parseDouble(this.getCumulatedOverallTopologyCoherence());
+		}
+		
+		if (this.getCumulatedAverageViewDivergence().equals("Inifinity")){
+			view = 0;
+		}else{
+			view = Double.parseDouble(this.getCumulatedAverageViewDivergence());
+		}
+		
+		if (this.getOverallAverageConnectionDuration().equals("NaN")){
+			duration = 0;
+		}else{
+			duration = Double.parseDouble(this.getOverallAverageConnectionDuration());
+		}
+		
+		if (this.getAverageMessageCount().equals(null)){
+			msgcount = 0;
+		}else{
+			msgcount = Integer.parseInt(this.getAverageMessageCount());
+		}
+		
+		if (this.getCumulatedAheadNeighborCount().equals(null)){
+			ahead = 0;
+		}else{
+			ahead = Double.parseDouble(this.getCumulatedAheadNeighborCount());
+		}
+			
+		
+		CacheStatistiquesStruct result = new CacheStatistiquesStruct(topo,view,msgcount, duration, ahead);
+		
+		if (!this.hasBeenReinitialized ) {
+
+			this.reinitializeCounts();
+		}
+		if (this.hasBeenReinitialized) {
+			if (!Globals.quiet) {
+				System.out.println(result);
+			} else {
+				if (CommonState.getTime() > CommonState.
+						getEndTime() - 100) {
+					return result;
+				} 
+			}
+		}else {
+//			if (getAverageNeighborSetSize() > 25) System.out.println(getAverageNeighborSetSize());
+			System.err.print("- "+EDSimulator.heapSize());
+		}
+		return result;
+	}
 	
 	private String getAverageMessageCount () {
 //		long time = CommonState.getTime();

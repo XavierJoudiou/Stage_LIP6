@@ -18,6 +18,8 @@ public class VirtualWorldOverview implements Control {
 
 	private FileWriter fw,fw2,fw3,fw4,fw5;
 //	private FileWriter fw,fw2,fw3,fw4;
+	
+	private CacheStatistiquesStruct cacheStats;
 
 	
 	public VirtualWorldOverview(String prefix) throws IOException {
@@ -43,6 +45,8 @@ public class VirtualWorldOverview implements Control {
 	    fichier5 = new File("Stats_sergey.txt");
 	    fichier5.createNewFile();
 	    fw5 = new FileWriter("Stats_sergey.txt",true);
+	    
+	    cacheStats = new CacheStatistiquesStruct(0,0,0,0,0);
 	}
 	
     public boolean execute() {
@@ -80,6 +84,8 @@ public class VirtualWorldOverview implements Control {
 		    			fw2.write(res2);
 		    			res6 = eval.printStatistics();
 		    			fw5.write(res6);
+						cacheStats.moy(eval.printStatisticsStruct());
+
 
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -99,6 +105,8 @@ public class VirtualWorldOverview implements Control {
 						res3=evalCache.printStatisticsActiviteMessString();
 						fw4.write(res3);
 						res3=evalCache.printStatisticsCacheMessString();
+						fw4.write(res3);
+						res3=cacheStats.PrintStats();
 						fw4.write(res3);
 						fw4.close();
 						fw5.close();
