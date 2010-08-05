@@ -1,8 +1,0 @@
-Limite: 2000, CacheSize: 35, Time_limite 2000, Durée: 120000, Stratégie: 1
-Hit:Mit:Miss:HitHelp:MissHelp:Time
-329:49:831:165:830:119900
-
-CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
-171|1232|1232|1041804|8829623|1271777|14130438|119900
-
-=============================
