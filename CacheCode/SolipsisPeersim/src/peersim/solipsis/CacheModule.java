@@ -66,8 +66,6 @@ public class CacheModule {
 		info = this.cacheInfo.entrySet().iterator();
 		CacheData cacheData;
 			
-//		System.out.println("aaaddddd: " + boor.getId() + ", time: " + CommonState.getTime());
-
 		/* On vérifie que le nœud n'est pas déjà dans le cache */
 		if (!IsInCache(boor)){
 			
@@ -109,7 +107,6 @@ public class CacheModule {
 		Iterator info;
 		CacheData currentInfo;
 		info = this.cacheInfo.entrySet().iterator();
-//		System.out.println("supprrrr: " + boor.getId() + ", time: " + CommonState.getTime());
 
 		if (IsInCache(boor)){
 			while(info.hasNext()){
