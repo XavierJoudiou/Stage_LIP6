@@ -45,6 +45,8 @@ public class SolipsisProtocol implements EDProtocol {
 	private final static String UPDATE_TIME		= "update_time";
 	private final static String UPDATE_OK		= "update_ok";
 	private final static String CONTACT_NODE	= "contact_node";
+	private final static String PREFETCH_AMELIORE	= "prefetch_ameliore";
+
 	private final static String HELP_OK			= "help_ok";
 	
 
@@ -127,6 +129,7 @@ public class SolipsisProtocol implements EDProtocol {
 	private int help_ok;
 	private int cacheDebug;
 	int contact_node;
+	private int prefetch_ameliore;
 	private File fichier3;
 	private FileWriter fw3;
 	
@@ -171,6 +174,8 @@ public class SolipsisProtocol implements EDProtocol {
 			this.update_ok = Configuration.getInt(prefix+"."+UPDATE_OK);
 			Globals.update_ok = update_ok;
 			this.contact_node = Configuration.getInt(prefix+"."+CONTACT_NODE);
+			this.prefetch_ameliore = Configuration.getInt(prefix+"."+CONTACT_NODE);
+
 			this.help_ok = Configuration.getInt(prefix+"."+HELP_OK);
 			this.cacheDebug = Configuration.getInt(prefix+"."+CACHE_DEBUG);
 			this.strategieCache = Configuration.getInt(prefix+"."+CACHE_STRATEGIE);
@@ -194,6 +199,18 @@ public class SolipsisProtocol implements EDProtocol {
 	
 	
 	
+	public int getPrefetch_ameliore() {
+		return prefetch_ameliore;
+	}
+
+
+
+	public void setPrefetch_ameliore(int prefetchAmeliore) {
+		prefetch_ameliore = prefetchAmeliore;
+	}
+
+
+
 	public int getCacheDebug() {
 		return cacheDebug;
 	}

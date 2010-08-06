@@ -50,6 +50,11 @@ public class CacheStatistiquesStruct {
 		return res;
 	}
 	
+	public String PrintStatsFinal(){
+		String res = "" + this.viewCoherence + " " + this.topoCoherence + " " + this.msgCount + " " + this.aheadCounter + " " + this.connecDuration + "\n";
+		return res;
+	}
+	
 
 	@Override
 	public String toString() {

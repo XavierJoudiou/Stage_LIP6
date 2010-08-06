@@ -161,16 +161,26 @@ public class PrefetchingModule {
 							vector = VirtualWorld.substract(this.protocol.getVirtualEntity().getDestination(), this.protocol.getPosition());
 						}
 						
-						if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) ){
-//						if ( isGoodPrefetch(prefetch.getPrefetchVector(),vector) || (isMaybeGoodPrefetch(prefetch.getPrefetchVector(),vector) && (this.protocol.getVirtualEntity().getState() != MobilityStateMachine.HALTED))){
-//						if ( this.protocol.getVirtualEntity().getState() != MobilityStateMachine.TRAVELLING){
+						if (this.protocol.getPrefetch_ameliore() == 1){
+							System.out.println("PREFETCH_AMELIORE");
+							if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) ){
+//							if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) || ( isMaybeGoodPrefetch(prefetch.getPrefetchVector(),vector) && (this.protocol.getVirtualEntity().getState() != MobilityStateMachine.HALTED))){
+//							if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) || isMaybeGoodPrefetch(prefetch.getPrefetchVector(),vector)
+//									|| this.protocol.getVirtualEntity().getState() != MobilityStateMachine.TRAVELLING){
+								destination = destinations.get(i);
+								prefetchedProxy = this.proxies.get(destination).clone();
+								prefetchedProxy.setQuality(NeighborProxy.PREFETCHED);
+								propagateMsg = this.protocol.createFoundMsg(prefetchedProxy, prefetch.getSource().getId());
+								this.protocol.send(propagateMsg, prefetch.getSource());
+							}else{
+	//							System.out.println("pastravelling °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°");
+							}
+						}else{
 							destination = destinations.get(i);
 							prefetchedProxy = this.proxies.get(destination).clone();
 							prefetchedProxy.setQuality(NeighborProxy.PREFETCHED);
 							propagateMsg = this.protocol.createFoundMsg(prefetchedProxy, prefetch.getSource().getId());
 							this.protocol.send(propagateMsg, prefetch.getSource());
-						}else{
-//							System.out.println("pastravelling °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°");
 						}
 					}	
 				}

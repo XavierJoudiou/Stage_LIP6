@@ -5,26 +5,29 @@ public class CacheStatistiquesStruct {
 	private double topoCoherence;
 	private double viewCoherence;
 	private int msgCount;
-	private long connecDuration;
+	private double connecDuration;
 	private double aheadCounter;
+	private int step;
 	
 	
 	
 	public CacheStatistiquesStruct() {
 		super();
+		this.step = 0;
 	}
 
 
 
 
 	public CacheStatistiquesStruct(double topoCoherence, double viewCoherence,
-			int msgCount, long connecDuration, double aheadCounter) {
+			int msgCount, double connecDuration, double aheadCounter) {
 		super();
 		this.topoCoherence = topoCoherence;
 		this.viewCoherence = viewCoherence;
 		this.msgCount = msgCount;
 		this.connecDuration = connecDuration;
 		this.aheadCounter = aheadCounter;
+		this.step = 0;
 	}
 	
 	
@@ -33,15 +36,19 @@ public class CacheStatistiquesStruct {
 	public void moy( CacheStatistiquesStruct curs){
 		CacheStatistiquesStruct res = new CacheStatistiquesStruct();
 		
-		this.setAheadCounter( (this.getAheadCounter() + curs.getAheadCounter())/2 );
-		this.setConnecDuration((this.getConnecDuration() + curs.getConnecDuration())/2 );
-		this.setMsgCount( (this.getMsgCount() + curs.getMsgCount())/2 );
-		this.setTopoCoherence( (this.getTopoCoherence() + curs.getTopoCoherence())/2 );
-		this.setViewCoherence( (this.getViewCoherence() + curs.getViewCoherence())/2 );
+		this.setAheadCounter( (this.getAheadCounter() + curs.getAheadCounter()));
+		this.setConnecDuration((this.getConnecDuration() + curs.getConnecDuration()));
+		this.setMsgCount( (this.getMsgCount() + curs.getMsgCount()) );
+		this.setTopoCoherence( (this.getTopoCoherence() + curs.getTopoCoherence()));
+		this.setViewCoherence( (this.getViewCoherence() + curs.getViewCoherence()));
+		this.step ++;
 	}
 	
 	
-	
+	public String PrintStats(){
+		String res = "" + this.viewCoherence/step + " " + this.topoCoherence/step + " " + this.msgCount/step + " " + this.aheadCounter/step + " " + this.connecDuration/step + "\n";
+		return res;
+	}
 	
 
 	@Override
@@ -79,11 +86,11 @@ public class CacheStatistiquesStruct {
 		this.msgCount = msgCount;
 	}
 
-	public long getConnecDuration() {
+	public double getConnecDuration() {
 		return connecDuration;
 	}
 
-	public void setConnecDuration(long connecDuration) {
+	public void setConnecDuration(double connecDuration) {
 		this.connecDuration = connecDuration;
 	}
 

@@ -21,20 +21,24 @@ runnocache:
 
 rundebut:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
-	CalculsBases Nothing 500_120_v1
+
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
-	CalculsBases Nothing 500_120_v1
+
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
-	CalculsBases Nothing 500_120_v1
-	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
-	CalculsBases NoCachePrefetch 500_120_v1
-	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
-	CalculsBases NoCachePrefetch 500_120_v1
-	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
-	CalculsBases NoCachePrefetch 500_120_v1
+	
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
+
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
+
 	play -q ../../Sounds/Homer_Dooh.wav
 
 run:
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
 	play -q ../../Sounds/Homer_Dooh.wav
 
