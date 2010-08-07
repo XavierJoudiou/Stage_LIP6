@@ -176,6 +176,7 @@ public class PrefetchingModule {
 	//							System.out.println("pastravelling °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°");
 							}
 						}else{
+							System.out.println("PREFETCH_NORMAL");
 							destination = destinations.get(i);
 							prefetchedProxy = this.proxies.get(destination).clone();
 							prefetchedProxy.setQuality(NeighborProxy.PREFETCHED);
