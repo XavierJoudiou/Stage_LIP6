@@ -197,6 +197,42 @@ public class CacheModule {
 		return suppr;
 	}
 	
+	/*
+	 * Sélectionne le nœud à supprimer en fonction de la statégie 
+	 */
+	public NeighborProxy SelectNodeDist(){
+		NeighborProxy suppr = null;
+		CacheData supprInfo;
+		Iterator it,info;
+		NeighborProxy current;
+		CacheData currentInfo;
+		it = this.cache.entrySet().iterator();
+		
+		/////TODO 
+		switch(strategieCache){
+		case FIFO:
+			suppr = (NeighborProxy)((Map.Entry)it.next()).getValue();
+				while(it.hasNext()){
+					current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+					if ( suppr.getTime() > current.getTime() ){
+						suppr = current;
+					}
+				}
+			break;
+		case FIFOMULT:
+			suppr = (NeighborProxy)((Map.Entry)it.next()).getValue();
+				while(it.hasNext()){
+					current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+					if ( suppr.getTime() > current.getTime() ){
+						suppr = current;
+					}
+				}
+			break;
+		}			
+				
+		return suppr;
+	}
+	
 	
 	/*
 	 * Fonction IsInCache:

@@ -220,7 +220,7 @@ public class PrefetchingModule {
 			double normePrefetch = Math.sqrt(prefetchA[0]*prefetchA[0] + prefetchA[1]*prefetchA[1]);
 			double normeSom = Math.sqrt(som[0]*som[0] + som[1]*som[1]);
 //			System.out.println("prefecth: " + normePrefetch + ", som: " + normeSom);
-			if ( normeSom > ( normePrefetch + (normePrefetch/4 ) ) ){
+			if ( normeSom > ( normePrefetch + (normePrefetch/2 ) ) ){
 //				System.out.println("GOOOOOOOODDDD_PREFETCH");
 				return true;
 			}
