@@ -13,7 +13,7 @@ Le fonctionnement global du cache consiste à garder en mémoire un certains nom
         \caption{Exemples du fonctionnement global du cache}
         \label{cacheW}
         \end{figure} 
-\par Cette solution permet d'économiser des messages de découverte des voisins (SEARCH) dans le cas de changements de direction fréquents, il doit aussi nous permettre d'économiser des messages de connexions et déconnexion. Nous verrons dans la partie~\ref{resObesCache} les différents gains de la mise en place du cache, mais aussi les limites de celui-ci. Le cache est donc le prolongement de la liste des voisins pour nœud, mais contrairement à celui-ci , il n'est pas à jour, car un nœud est ajouté dans le cache avec les dernières informations que nous avions quand il était dans la liste des voisins. Nous avons donc mis en place un système de mis à jour du cache, pour avoir des informations le plus possible exact sur chaque nœud. Mais ce système va coûter cher en nombre de messages, et cela est encore plus vrai plus le cache est grand. Un mécanisme de datation des éléments du cache permet de savoir depuis quand date les informations de chacun. Ce mécanisme nous permet de contacté un nœud pour savoir s'il se trouve toujours à peu près au même endroit, et ainsi l'ajouter ou non à notre voisinage. Ces paramètres sont en options et nous verrons dans la partie~\ref{resObsCache} quelles sont les meilleures combinaisons d'options et si elles sont toutes utiles ou non.
+\par Cette solution permet d'économiser des messages de découverte des voisins (SEARCH) dans le cas de changements de direction fréquents, il doit aussi nous permettre d'économiser des messages de connexions et déconnexion. Nous verrons dans la partie~\ref{resObsCache} les différents gains de la mise en place du cache, mais aussi les limites de celui-ci. Le cache est donc le prolongement de la liste des voisins pour nœud, mais contrairement à celui-ci , il n'est pas à jour, car un nœud est ajouté dans le cache avec les dernières informations que nous avions quand il était dans la liste des voisins. Nous avons donc mis en place un système de mis à jour du cache, pour avoir des informations le plus possible exact sur chaque nœud. Mais ce système va coûter cher en nombre de messages, et cela est encore plus vrai plus le cache est grand. Un mécanisme de datation des éléments du cache permet de savoir depuis quand date les informations de chacun. Ce mécanisme nous permet de contacté un nœud pour savoir s'il se trouve toujours à peu près au même endroit, et ainsi l'ajouter ou non à notre voisinage. Ces paramètres sont en options et nous verrons dans la partie~\ref{resObsCache} quelles sont les meilleures combinaisons d'options et si elles sont toutes utiles ou non.
 
 \subsubsection{Les différentes versions du cache}
 
@@ -21,9 +21,18 @@ Deux versions, pour le fonctionnent du cache, ont été testé durant la phase d
 \par Deux implémentations ont aussi été testé pour la recherche dans le cache, l'une renvoie un résultat et l'autre renvoie plusieurs nœud à ajouter. Les tests \textbf{TODO}
 
 
-\subsubsection{L'algorithme de recherche dans le cache}
+\subsubsection{La modification du code existant pour insérer la recherche dans le cache}
 
-Nous allons expliquer comment nous recherchons les données dans le cache, et nous détaillerons les différentes pistes que nous avons testé dans un ordre chronologique. Tout d'abord nous avons par sélectionner les nœuds en terme de distance, et de récupérer les plus proche de notre nouvelle position. Cette solution était assez simple à mettre en place, mais nous pensions que les résultats seraient meilleurs si nous prenions en compte la capacité à un nœud à aider à refaire l'enveloppe connexe du nœud courant. Nous avons alors implémenté une solution qui rendait un résultat positif si un nœud dans le cache permettait de reconstruire l'enveloppe du nœud (voir schéma~\ref{schemaEnvelopCache}). Cette solution a même été agrémenté d'un test si le nœud faisait avancé positivement l'enveloppe connexe mais ne la reconstruisait pas immédiatement.
+ Avant de regarder les algorithmes de recherche dans le cache, nous allons vous expliquer comment ils sont appelé et quelles sont les modification introduites par rapport au code original. Lorsqu'un nœud rentre dans la fonction \textit{solipsisRecoverTopology} si le nœud est dans l'état \textbf{Wandering} alors on passe dans la fonction \textit{MaintainTopology}, sinon on effectue le traitement normal. Nous pouvons voir ci-dessous une partie du code de la fonction MaintainCache. Pour commencer, nous testons l'état de l'entité appelante, ensuite en fonction de la stratégie en fait un traitement particulier. Nous nous concentrerons sur la stratégie de base qui ajoute un seul nœud. La fonction de recherche nous renvoie donc un résultat. S'il n'est pas null et que sa date de mise à jour n'est pas trop ancienne, nous enlevons le nœud du cache, ajoutons le nœud à la liste des voisins et renvoyons 1 à la fonction appelante pour lui signifier que le traitement à été fait. Ensuite en fonction de la valeur de l'option \textit{contact\_node}, nous contactons ou non le nœud renvoyé par la fonction de recherche. Nous faisons ceci pour savoir s'il a beaucoup bougé depuis le dernier moment où nous l'avons vu. Nous retournons 0 pour signifier à la fonction appelante qu'aucun nœud n'a été ajouté et quelle peut faire le traitement de base.
+
+\lstset{numbers=left,basicstyle=\scriptsize, numberstyle=\tiny, stepnumber=5, numbersep=5pt}
+
+\lstinputlisting[title={Partie du code de la fonction MaintainCache},label={codeMaitainTopology}]{./Ressources/Documents/MaintainTopology.java}
+
+
+
+\subsubsection{Les algorithmes de recherche dans le cache}
+\par Nous allons expliquer comment nous recherchons les données dans le cache, et nous détaillerons les différentes pistes que nous avons testé dans un ordre chronologique. Tout d'abord nous avons sélectionner les nœuds en terme de distance, et de récupérer les plus proche de notre nouvelle position. Cette solution était assez simple à mettre en place, mais nous pensions que les résultats seraient meilleurs si nous prenions en compte la capacité à un nœud à aider à refaire l'enveloppe connexe du nœud courant. Nous avons alors implémenté une solution qui rendait un résultat positif si un nœud dans le cache permettait de reconstruire l'enveloppe du nœud (voir schéma~\ref{schemaEnvelopCache}). Cette solution a même été agrémenté d'un test si le nœud faisait avancé positivement l'enveloppe connexe mais ne la reconstruisait pas immédiatement.
 
 	\begin{figure}[!h]
         \centering
@@ -33,14 +42,31 @@ Nous allons expliquer comment nous recherchons les données dans le cache, et no
         \end{figure}
 \par Le problème de cette solution est qu'elle privilégiait l'enveloppe connexe à la propriété de \textit{Local Awareness}. Car nous pouvons nous retrouver dans la situation, comme dans la figure~\ref{schemaEnvelopCache}, où un nœud ne fait pas parti de la liste des voisins alors qu'il se trouve dans l'enveloppe connexe. Cette solution nous donnez donc des résultats, pour les propriétés de Solipsis, qui était moins bon que la version sans le cache.  
 
-\par Nous sommes alors revenu à une solution ressemblant à la première solution que nous avions mise en place. Chaque nœud comporte une zone de connaissance, nous avons donc décidé de nous servir de cette dernière pour réaliser les conditions dans la fonction de recherche.
+\par Nous sommes alors revenu à une solution ressemblant à la première solution que nous avions mise en place. Chaque nœud comporte une zone de connaissance, nous avons donc décidé de nous servir de cette dernière pour réaliser les conditions dans la fonction de recherche. La fonction de recherche regarde donc si un nœud du cache est dans la zone de connaissance du nœud courant, si plusieurs correspondent un système pour choisir aléatoirement est mis en place, comme dans la recherche de voisin original.
 
 
 \subsubsection{La mise en place de l'aide aux voisins grâce au cache}
 
+Le cache d'un nœud va donc lui servir pour connaitre son environnement plus rapidement, mais il pourrait aussi aider les voisins du nœud. Dans cette optique, l'aide aux voisins a été mise en place. Ceci permet au cache d'avoir une autre utilisation, ce qui pourrait compenser la mise à jour si l'on souhaitais l'activer. VOIR SI OK AVEC RESULTATS.
+\par Quand un nœud cherche des voisins, il envoie un message SEARCH (voir schéma~\ref{schemaHelpCache}). Il suffit donc d'insérer une recherche dans le cache au bon endroit dans la fonction de traitement de ce message. Le nœud recevant un message de type SEARCH, va donc regarder dans ses voisins si il trouve un nœud approprié, s'il ne trouve rien il va alors regarder dans le cache si un nœud correspond. La recherche se fait aussi avec la zone de connaissance que l'on a transmis dans le message.
+
+	\begin{figure}[!h]
+        \centering
+        \includegraphics[scale=0.4]{./Ressources/Images/cacheHelp.png}
+        \caption{Schéma montrant l'aide du cache pour le traitement d'un message SEARCH}
+        \label{schemaHelpCache}
+        \end{figure}
+
 
 \subsection{Résultats et observations sur le cache}
 \label{resObsCache}
+
+Nous allons présenter les différents résultats sur le cache. Nous comparerons chaque version une de base où l'on ne trouve ni cache ni prefetch, et avec une version avec le prefetch implémenté dans Blue Banana.
+Les principales métriques pour comparer les différents résultats sont la cohérence de la topologie et le nombre de message qui sont exprimées en fonction de la mobilité des avatars. Le calcul de la cohérence de la topologie consiste à mesurer, à chaque instant, le nombre de nœud qui sont dans la zone de connaissance d'un autre nœud mais qui ne fait pas parti des voisins de ce dernier.
+TODO
+
+
+
 
 \subsection{Conclusion et perspectives du cache} 
 
