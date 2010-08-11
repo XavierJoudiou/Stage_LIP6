@@ -867,7 +867,7 @@ public class SolipsisProtocol implements EDProtocol {
 	}
 	
 
-	private boolean isInHalfPlan(GeometricRegion line, NeighborProxy entity) {
+	public boolean isInHalfPlan(GeometricRegion line, NeighborProxy entity) {
 		return isInHalfPlan(line, this.subjectiveCoord(entity.getCoord()));
 	}
 	
@@ -908,12 +908,10 @@ public class SolipsisProtocol implements EDProtocol {
 		NeighborProxy sendTo;
 		int find = 0;;
 
-		if ( this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING ){
-			find = maintainCacheTopology();
-		}
+	
 		
 
-		if (find == 0){
+//		if (find == 0){
 			if (sector != null) {
 				if (sector[0] != null) {
 					sendTo = sector[0];
@@ -921,25 +919,34 @@ public class SolipsisProtocol implements EDProtocol {
 					long [] b = this.subjectiveCoord(sendTo.getId());
 					line  = new GeometricRegion(this.mainVirtualEntity.getCoord(), this.subjectiveCoord(sendTo.getId()));
 
-					
 					if (sector[1] != null && simpleAngleSign(this.subjectiveCoord(sector[0].getId()), this.mainVirtualEntity.getCoord(), this.subjectiveCoord(sector[1].getId())) < 0) {
 						line.setOri(VirtualWorld.LEFT);
 					} else {
 						line.setOri(VirtualWorld.RIGHT);
 					}
-					this.searchInProgress = true;
-					Node n = Network.get(this.getPeersimNodeId());
 					
-					if ( help_ok == 1 ){
-						CacheHelpRequest request = new CacheHelpRequest(line, this.convexEnvelope,this.mainVirtualEntity.getCoord(),this.knowledgeRay);
-						recoverMsg = new Message(Message.SEARCH_HELP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), sendTo.getId(), request);
-					}else{
-						recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), sendTo.getId(), line);
+					
+					if ( this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING ){
+						find = maintainCacheTopology(line);
 					}
-					this.send(recoverMsg, sendTo);
+					
+					if ( find == 0 ){
+					
+						
+						this.searchInProgress = true;
+						Node n = Network.get(this.getPeersimNodeId());
+						
+						if ( help_ok == 1 ){
+							CacheHelpRequest request = new CacheHelpRequest(line, this.convexEnvelope,this.mainVirtualEntity.getCoord(),this.knowledgeRay);
+							recoverMsg = new Message(Message.SEARCH_HELP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), sendTo.getId(), request);
+						}else{
+							recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), sendTo.getId(), line);
+						}
+						this.send(recoverMsg, sendTo);
+					}
 				}
 			}
-		}
+//		}
 	}
 
 
@@ -1067,16 +1074,9 @@ public class SolipsisProtocol implements EDProtocol {
 			case Message.SEARCH_HELP:
 				CacheHelpRequest request = (CacheHelpRequest) msg.getContent();
 				line = (GeometricRegion)request.getRegion();
-				if (cacheDebug == 1){
-					System.out.println("Destination: " + ((CacheHelpRequest)msg.getContent()).getDestination()[0] + ", "  + ((CacheHelpRequest)msg.getContent()).getDestination()[1]);
-				}
-				if ( help_ok == 1){
-					if (this.strategieCache == SolipsisProtocol.FIFO && this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
-						find = HelpNeighborCache(msg);
-					}
-				}
 				
-				if (find == 0){
+				
+				
 							
 					neighbor = searchForAppropriateNeighbor(line);
 					if (neighbor != null) {
@@ -1090,8 +1090,22 @@ public class SolipsisProtocol implements EDProtocol {
 						} else {
 							this.send(response, source);
 						}
+						Globals.cacheEvaluator.incnbSearchHelpHIT();
+
+					}else{
+						Globals.cacheEvaluator.incnbSearchHelpMISS();
 					}
-				}
+					//TODO TESTER
+					if (cacheDebug == 1){
+						System.out.println("Destination: " + ((CacheHelpRequest)msg.getContent()).getDestination()[0] + ", "  + ((CacheHelpRequest)msg.getContent()).getDestination()[1]);
+					}
+					if ( help_ok == 1){
+						if (this.strategieCache == SolipsisProtocol.FIFO && this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
+							find = HelpNeighborCache(msg);
+							
+						}
+					}
+			
 				
 				break;
 	
@@ -1266,7 +1280,7 @@ public class SolipsisProtocol implements EDProtocol {
 	 * 	nœud dans le cache, nous incrémentons les caches MISS
 	 * 
 	 */
-	public int maintainCacheTopology() {
+	public int maintainCacheTopology(GeometricRegion region) {
 		Node n;
 		NeighborProxy neighbor = null;
 		HashMap<Integer,NeighborProxy> responseMult = new HashMap<Integer, NeighborProxy>();
@@ -1302,8 +1316,8 @@ public class SolipsisProtocol implements EDProtocol {
 							default:
 								
 //								neighbor = cache.searchCacheNeighborLimit(destination,limite);
-								neighbor = cache.searchCacheNeighborEnvelopEv(destinationsubj,this.knowledgeRay);
-
+//								neighbor = cache.searchCacheNeighborKnoledgeRay(destinationsubj,this.knowledgeRay);
+								neighbor = cache.searchCacheNeighborRegion(destinationsubj,region);
 								break;
 								
 							}

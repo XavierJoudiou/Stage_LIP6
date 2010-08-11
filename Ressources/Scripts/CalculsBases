@@ -11,7 +11,7 @@ do
 if
 	[ -f $inode ]
 then
-	mv ./res22.txt ./resultats/Data/res22_$1_$2_$time.txt
+
 	mv ./Stats_sergey.txt ./resultats/Data/Stats_sergey_$1_$2_$time.txt
 	mv ./Stats_EndTime.txt ./resultats/Data/Stats_EndTime_$1_$2_$time.txt
 	mv ./Stats_CacheEnd.txt ./resultats/Data/Stats_CacheEnd_$1_$2_$time.txt

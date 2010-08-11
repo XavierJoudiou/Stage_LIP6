@@ -5,6 +5,7 @@ package peersim.solipsis;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
 
@@ -207,24 +208,31 @@ public class CacheModule {
 		NeighborProxy current;
 		CacheData currentInfo;
 		it = this.cache.entrySet().iterator();
+		long[] myCoord = this.protocol.getVirtualEntity().getCoord();
+		double curDist, supprDist;
 		
-		/////TODO 
 		switch(strategieCache){
 		case FIFO:
 			suppr = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			supprDist = VirtualWorld.simpleDistance(suppr.getCoord(),myCoord);
 				while(it.hasNext()){
 					current = (NeighborProxy)((Map.Entry)it.next()).getValue();
-					if ( suppr.getTime() > current.getTime() ){
+					curDist = VirtualWorld.simpleDistance(current.getCoord(),myCoord);
+					if ( curDist > supprDist ){
 						suppr = current;
+						supprDist = curDist;
 					}
 				}
 			break;
 		case FIFOMULT:
 			suppr = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			supprDist = VirtualWorld.simpleDistance(suppr.getCoord(),myCoord);
 				while(it.hasNext()){
 					current = (NeighborProxy)((Map.Entry)it.next()).getValue();
-					if ( suppr.getTime() > current.getTime() ){
+					curDist = VirtualWorld.simpleDistance(current.getCoord(),myCoord);
+					if ( curDist > supprDist ){
 						suppr = current;
+						supprDist = curDist;
 					}
 				}
 			break;
@@ -350,6 +358,43 @@ public class CacheModule {
 	}
 	
 	/*
+	 * Fonction searchCacheNeighborLimit:
+	 *  Recherche dans le cache le nœud le plus proche de
+	 *  la destination passé en argument et qui est inférieur 
+	 *  à la limite passé en argument
+	 * 
+	 */
+	public NeighborProxy searchCacheNeighborRegion(long[] destination,GeometricRegion region){
+		NeighborProxy current;
+		NeighborProxy best = null;
+		
+		double currentDist,bestDist = -1;
+		LinkedList<NeighborProxy> choices = new LinkedList<NeighborProxy>();
+		Random rand = new Random();
+		int size = this.getCache().size();
+		
+		Iterator it;
+		it = this.cache.entrySet().iterator();
+				
+		while(it.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			if (current.getQuality() == NeighborProxy.REGULAR){
+				if (this.protocol.isInHalfPlan(region,current)) {
+					choices.add(current);
+				}
+			}
+
+		}
+		
+		size = choices.size();
+		if (size > 0) {
+			best = choices.get(rand.nextInt(size));
+		}
+		return best;
+	}
+	
+	
+	/*
 	 * Fonction searchCacheHelpNeighbor:
 	 *  Recherche dans le cache si un nœud peut aider à 
 	 *  reconstruire l'enveloppe ou si il est dans sa zone 
@@ -424,18 +469,19 @@ public class CacheModule {
 	}
 	
 	/*
-	 * Fonction searchCacheNeighborEnvelopEv:
-	 *  recherche dans le cache si un nœud peut aider à 
-	 *  reconstruire l'enveloppe du nœud local ou si il 
-	 *  est dans sa zone de connaissance.
+	 * Fonction searchCacheNeighborKnoledgeRay:
+	 *  recherche dans le cache si un nœud est dans sa
+	 *  zone de connaissance et si il y en a plusieurs
+	 *  on prend un hasard parmi ceux qui n'aide pas à 
+	 *  reconstruire l'enveloppe
 	 */
-	public NeighborProxy searchCacheNeighborEnvelopEv(long[] coord, double knowledgeRay){
+	public NeighborProxy searchCacheNeighborKnoledgeRay(long[] coord, double knowledgeRay){
 		NeighborProxy current;
 		NeighborProxy best = null;
 		NeighborProxy other = null;
 		long bestTime = -1;
 		double currentDist,bestDist = -1;
-		int choice;
+		int choice = -1;
 		
 		Iterator it;
 		it = this.cache.entrySet().iterator();
@@ -444,13 +490,19 @@ public class CacheModule {
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			currentDist = VirtualWorld.simpleDistance(coord, current.getCoord());
 			if (current.getQuality() !=  NeighborProxy.CACHED){
-				if ( currentDist < (knowledgeRay - 1000) ){
+				if ( currentDist < (knowledgeRay - limite_connaissance) ){
 					if (best == null){
 						best = current;
 					}else{
-						choice = (int) (Math.random() * 4 + 1);			
-						if ( choice == 2){
+						if ( !this.protocol.helpfulToEnvelopeCache(current) && choice == -1 ){
 							best = current;
+						}else{
+							if ( !this.protocol.helpfulToEnvelopeCache(current)){
+								choice = (int) (Math.random() * 4 + 1);			
+								if ( choice == 2){
+									best = current;
+								}
+							}
 						}
 					}
 				}

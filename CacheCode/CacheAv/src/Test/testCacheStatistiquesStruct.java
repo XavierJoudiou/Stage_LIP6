@@ -13,5 +13,23 @@ public class testCacheStatistiquesStruct extends TestCase {
 		System.out.println(cur1.toString());
 		cur1.moy(new1);
 		System.out.println(cur1.toString());
+		System.out.println("+++++++++++++++");
+		
+		
+		
+		double angleA, angleB;
+		
+		angleA = Angle((double)0,(double)3);
+		angleB = Angle((double)-4,(double)0);
+		System.out.println("angleA: " + angleA + " angleB: " + angleB);
+	}
+	
+	private double Angle(double x,double y){
+		double angle;
+		angle = Math.toDegrees(java.lang.Math.atan2(y,x));
+		if ( angle < 0){
+			angle = angle + 360;
+		}
+		return angle;
 	}
 }

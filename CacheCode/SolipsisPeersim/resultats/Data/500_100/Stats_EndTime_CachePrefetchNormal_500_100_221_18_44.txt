@@ -1,0 +1,64 @@
+Limite du cache: 2000, CacheSize: 15, Time_limite 2000, Durée: 100000, update ok ? 0, update time: 4000, Help Ok ? 0, Contact node ? 0, Stratégie: 1, Limite connaissance: 1500
+Hit:Mit:Miss:HitHelp:MissHelp:Time
+138:0:1189:0:0:99900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|1447|0|0|7305731|961214|10956893|99900
+
+=============================
+Limite du cache: 2000, CacheSize: 15, Time_limite 2000, Durée: 100000, update ok ? 0, update time: 4000, Help Ok ? 0, Contact node ? 0, Stratégie: 1, Limite connaissance: 1500
+Hit:Mit:Miss:HitHelp:MissHelp:Time
+101:0:1213:0:0:99900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|1520|0|0|7299088|978670|10951930|99900
+
+=============================
+Limite du cache: 2000, CacheSize: 15, Time_limite 2000, Durée: 100000, update ok ? 0, update time: 4000, Help Ok ? 0, Contact node ? 0, Stratégie: 1, Limite connaissance: 1500
+Hit:Mit:Miss:HitHelp:MissHelp:Time
+137:0:1260:0:0:99900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|1608|0|0|7327991|969510|11019709|99900
+
+=============================
+Limite du cache: 2000, CacheSize: 15, Time_limite 2000, Durée: 100000, update ok ? 0, update time: 4000, Help Ok ? 0, Contact node ? 0, Stratégie: 1, Limite connaissance: 1500
+Hit:Mit:Miss:HitHelp:MissHelp:Time
+101:0:1162:0:0:99900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|1476|0|0|7328217|954629|11009031|99900
+
+=============================
+Limite du cache: 2000, CacheSize: 15, Time_limite 2000, Durée: 100000, update ok ? 0, update time: 4000, Help Ok ? 0, Contact node ? 0, Stratégie: 1, Limite connaissance: 1500
+Hit:Mit:Miss:HitHelp:MissHelp:Time
+127:0:1231:0:0:99900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|1556|0|0|7301814|954196|10943293|99900
+
+=============================
+Limite du cache: 2000, CacheSize: 15, Time_limite 2000, Durée: 100000, update ok ? 0, update time: 4000, Help Ok ? 0, Contact node ? 0, Stratégie: 1, Limite connaissance: 1500
+Hit:Mit:Miss:HitHelp:MissHelp:Time
+108:0:1371:0:0:99900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|1702|0|0|7286472|983718|10883186|99900
+
+=============================
+Limite du cache: 2000, CacheSize: 15, Time_limite 2000, Durée: 100000, update ok ? 0, update time: 4000, Help Ok ? 0, Contact node ? 0, Stratégie: 1, Limite connaissance: 1500
+Hit:Mit:Miss:HitHelp:MissHelp:Time
+122:0:1285:0:0:99900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|1572|0|0|7285066|975154|10852964|99900
+
+=============================
+Limite du cache: 2000, CacheSize: 15, Time_limite 2000, Durée: 100000, update ok ? 0, update time: 4000, Help Ok ? 0, Contact node ? 0, Stratégie: 1, Limite connaissance: 1500
+Hit:Mit:Miss:HitHelp:MissHelp:Time
+141:0:1188:0:0:99900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|1514|0|0|7318474|1001052|11058413|99900
+
+=============================

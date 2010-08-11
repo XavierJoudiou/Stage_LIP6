@@ -33,6 +33,10 @@ public class CacheStatistics {
 	private int nbCacheMissHelpGlob;
 	private int nbMessSearchHelp;
 	private int nbMessUpdateTot;
+	private int nbSearchHIT;
+	private int nbSearchMISS;
+	private int nbSearchHelpHIT;
+	private int nbSearchHelpMISS;
 
 	CacheStatistics() {
 		this.nbCaheMissGlob = 0;
@@ -52,12 +56,32 @@ public class CacheStatistics {
 		this.nbCacheMissHelpGlob = 0;
 		this.nbMessSearchHelp = 0;
 		this.nbMessUpdateTot = 0;
+		this.nbSearchHIT = 0;
+		this.nbSearchMISS = 0;
+		this.nbSearchHelpHIT = 0;
+		this.nbSearchHelpMISS = 0;
 	}
 	
 	
 	/* 
 	 * Fonctions Incrémentation 
 	 */
+	
+	public void incnbSearchHIT(){
+		this.nbSearchHIT ++;
+	}
+	
+	public void incnbSearchMISS(){
+		this.nbSearchMISS ++;
+	}
+	
+	public void incnbSearchHelpHIT(){
+		this.nbSearchHelpHIT ++;
+	}
+	
+	public void incnbSearchHelpMISS(){
+		this.nbSearchHelpMISS ++;
+	}
 	
 	public void incCacheMissGlob(){
 		this.nbCaheMissGlob ++;
@@ -145,8 +169,9 @@ public class CacheStatistics {
 	}
 	
 	public void printStatisticsCacheMess() {
-		System.out.println("Hit:Mit:Miss:HitHelp:MissHelp:Time");
-		System.out.println(this.nbCaheHitGlob + ":" + this.nbCacheMitClob + ":" + this.nbCaheMissGlob + ":" + this.nbCacheHitHelpGLob + ":" + this.nbCacheMissHelpGlob + ":"+ CommonState.getTime()+ ", ");
+		System.out.println("Hit:Mit:Miss:HitHelp:MissHelp:nbSearchHIT:nbSearchMiss:Time");
+		System.out.println(this.nbCaheHitGlob + ":" + this.nbCacheMitClob + ":" + this.nbCaheMissGlob + ":" + this.nbCacheHitHelpGLob + 
+				":" + this.nbCacheMissHelpGlob + ":" + this.nbSearchHIT + ":" + this.nbSearchMISS + ":"+ CommonState.getTime()+ ", ");
 		System.out.println("");
 
 	}
@@ -170,8 +195,8 @@ public class CacheStatistics {
 
 	public String printStatisticsCacheMessFinalString() {
 		String res;
-		res = "Hit:Mit:Miss:HitHelp:MissHelp:Time\n";
-		res += this.nbCaheHitGlob + ":" + this.nbCacheMitClob + ":" + this.nbCaheMissGlob + ":" + this.nbCacheHitHelpGLob + ":" + this.nbCacheMissHelpGlob + ":" + CommonState.getTime() + "\n"; 
+		res = "Hit:Mit:Miss:HitHelp:MissHelp:nbSearchHIT:nbSearchMiss:Time\n";
+		res += this.nbCaheHitGlob + ":" + this.nbCacheMitClob + ":" + this.nbCaheMissGlob + ":" + this.nbCacheHitHelpGLob + ":" + this.nbCacheMissHelpGlob + ":" + this.nbSearchHIT + ":" + this.nbSearchMISS + ":" + CommonState.getTime() + "\n"; 
 		res += "\n";
 		return res;
 	}

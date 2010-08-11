@@ -5,6 +5,7 @@ import peersim.core.CommonState;
 import peersim.solipsis.PrefetchRequest;
 import peersim.solipsis.SolipsisProtocol;
 
+import java.lang.Math;
 import java.util.*;
 
 public class PrefetchingModule {
@@ -162,7 +163,8 @@ public class PrefetchingModule {
 						}
 						
 						if (this.protocol.getPrefetch_ameliore() == 1){
-							System.out.println("PREFETCH_AMELIORE");
+//							System.out.println("PREFETCH_AMELIORE");
+							isGoodDirection(prefetch.getPrefetchVector(),vector);
 							if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) ){
 //							if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) || ( isMaybeGoodPrefetch(prefetch.getPrefetchVector(),vector) && (this.protocol.getVirtualEntity().getState() != MobilityStateMachine.HALTED))){
 //							if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) || isMaybeGoodPrefetch(prefetch.getPrefetchVector(),vector)
@@ -176,7 +178,7 @@ public class PrefetchingModule {
 	//							System.out.println("pastravelling °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°");
 							}
 						}else{
-							System.out.println("PREFETCH_NORMAL");
+//							System.out.println("PREFETCH_NORMAL");
 							destination = destinations.get(i);
 							prefetchedProxy = this.proxies.get(destination).clone();
 							prefetchedProxy.setQuality(NeighborProxy.PREFETCHED);
@@ -240,6 +242,26 @@ public class PrefetchingModule {
 			}
 		}
 		return false;
+	}
+	
+	private boolean isGoodDirection(long[] prefetchA, long[] prefetchB){
+		double angleA, angleB;
+		
+		angleA = Angle((double)prefetchA[1],(double)prefetchA[0]);
+		angleB = Angle((double)prefetchB[1],(double)prefetchB[0]);
+		System.out.println("angleA: " + angleA + " angleB: " + angleB);
+		
+		
+		return false;
+	}
+	
+	private double Angle(double x,double y){
+		double angle;
+		angle = Math.toDegrees(java.lang.Math.atan2(y,x));
+		if ( angle < 0){
+			angle = angle + 360;
+		}
+		return angle;
 	}
 	
 
