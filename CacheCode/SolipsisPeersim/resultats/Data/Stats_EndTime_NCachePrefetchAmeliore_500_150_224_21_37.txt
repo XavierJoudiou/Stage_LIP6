@@ -1,0 +1,64 @@
+Limite du cache: 4000, CacheSize: 25, Time_limite 3000, Durée: 150000, update ok ? 0, update time: 4000, Help Ok ? 0, Contact node ? 0, Stratégie: 0, Limite connaissance: 2000
+Hit:Mit:Miss:HitHelp:MissHelp:nbSearchHIT:nbSearchMiss:Time
+0:0:0:0:0:0:0:149900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|7196|0|0|10811656|7005|14052968|149900
+
+=============================
+Limite du cache: 4000, CacheSize: 25, Time_limite 3000, Durée: 150000, update ok ? 0, update time: 4000, Help Ok ? 0, Contact node ? 0, Stratégie: 0, Limite connaissance: 2000
+Hit:Mit:Miss:HitHelp:MissHelp:nbSearchHIT:nbSearchMiss:Time
+0:0:0:0:0:0:0:149900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|7035|0|0|10833767|6822|14128606|149900
+
+=============================
+Limite du cache: 4000, CacheSize: 25, Time_limite 3000, Durée: 150000, update ok ? 0, update time: 4000, Help Ok ? 0, Contact node ? 0, Stratégie: 0, Limite connaissance: 2000
+Hit:Mit:Miss:HitHelp:MissHelp:nbSearchHIT:nbSearchMiss:Time
+0:0:0:0:0:0:0:149900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|6989|0|0|10847762|6776|14283057|149900
+
+=============================
+Limite du cache: 4000, CacheSize: 25, Time_limite 3000, Durée: 150000, update ok ? 0, update time: 4000, Help Ok ? 0, Contact node ? 0, Stratégie: 0, Limite connaissance: 2000
+Hit:Mit:Miss:HitHelp:MissHelp:nbSearchHIT:nbSearchMiss:Time
+0:0:0:0:0:0:0:149900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|7309|0|0|10854031|7108|14238662|149900
+
+=============================
+Limite du cache: 4000, CacheSize: 25, Time_limite 3000, Durée: 150000, update ok ? 0, update time: 4000, Help Ok ? 0, Contact node ? 0, Stratégie: 0, Limite connaissance: 2000
+Hit:Mit:Miss:HitHelp:MissHelp:nbSearchHIT:nbSearchMiss:Time
+0:0:0:0:0:0:0:149900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|7060|0|0|10831814|6839|14156566|149900
+
+=============================
+Limite du cache: 4000, CacheSize: 25, Time_limite 3000, Durée: 150000, update ok ? 0, update time: 4000, Help Ok ? 0, Contact node ? 0, Stratégie: 0, Limite connaissance: 2000
+Hit:Mit:Miss:HitHelp:MissHelp:nbSearchHIT:nbSearchMiss:Time
+0:0:0:0:0:0:0:149900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|6522|0|0|10812469|6312|14069716|149900
+
+=============================
+Limite du cache: 4000, CacheSize: 25, Time_limite 3000, Durée: 150000, update ok ? 0, update time: 4000, Help Ok ? 0, Contact node ? 0, Stratégie: 0, Limite connaissance: 2000
+Hit:Mit:Miss:HitHelp:MissHelp:nbSearchHIT:nbSearchMiss:Time
+0:0:0:0:0:0:0:149900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|6959|0|0|10823434|6755|14127505|149900
+
+=============================
+Limite du cache: 4000, CacheSize: 25, Time_limite 3000, Durée: 150000, update ok ? 0, update time: 4000, Help Ok ? 0, Contact node ? 0, Stratégie: 0, Limite connaissance: 2000
+Hit:Mit:Miss:HitHelp:MissHelp:nbSearchHIT:nbSearchMiss:Time
+0:0:0:0:0:0:0:149900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+0|7222|0|0|10842705|7029|14155524|149900
+
+=============================

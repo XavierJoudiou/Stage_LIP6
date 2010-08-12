@@ -163,7 +163,7 @@ public class PrefetchingModule {
 						}
 						
 						if (this.protocol.getPrefetch_ameliore() == 1){
-//							System.out.println("PREFETCH_AMELIORE");
+							System.out.println("PREFETCH_AMELIORE");
 							isGoodDirection(prefetch.getPrefetchVector(),vector);
 							if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) ){
 //							if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) || ( isMaybeGoodPrefetch(prefetch.getPrefetchVector(),vector) && (this.protocol.getVirtualEntity().getState() != MobilityStateMachine.HALTED))){
