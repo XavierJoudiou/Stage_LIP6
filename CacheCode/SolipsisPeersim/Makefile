@@ -68,7 +68,7 @@ rundebut:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
-	CalculsBases CacheNoPrefetch 500_150
+	CalculsBases NoCachePrefetchAmeliore 500_150
 	play -q ../../Sounds/Homer_Dooh.wav
 
 run:
