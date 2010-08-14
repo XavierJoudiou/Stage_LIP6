@@ -255,6 +255,32 @@ public class PrefetchingModule {
 		return false;
 	}
 	
+	public boolean isNears(double a,double b,double dist){
+		double Aa = a + dist;
+		if (Aa > 360){
+			Aa = (a + dist) % 360;
+			if (Aa > b ){
+				return false;
+			}
+		}
+		if (Aa > b){
+			return false;
+		}
+		
+		Aa = a - dist;
+		if (Aa < 0){
+			Aa = (a + dist) % 360;
+			if (Aa < b){
+				return false;
+			}
+		}
+		if (Aa < b){
+			return false;
+		}
+		
+		return true;
+	}
+	
 	private double Angle(double x,double y){
 		double angle;
 		angle = Math.toDegrees(java.lang.Math.atan2(y,x));
