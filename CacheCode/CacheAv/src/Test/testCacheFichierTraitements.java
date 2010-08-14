@@ -21,9 +21,9 @@ public class testCacheFichierTraitements extends TestCase {
 //		CacheFichierTraitements traitement = new CacheFichierTraitements();
 //		traitement.TwoToOneLine(in);
 		
-		double current = 350;
-		double dist = 10;
-		boolean  result = isNears(current, 20, dist);
+		double current = 340;
+		double dist = 20;
+		boolean  result = isNears(current, 320, dist);
 		System.out.println("Result: " + result + ", current: " + current);
 
 	}
@@ -31,7 +31,7 @@ public class testCacheFichierTraitements extends TestCase {
 		double Aa = a + dist;
 		if (Aa >= 360){
 			Aa = (a + dist) % 360;
-			if (Aa > b ){
+			if (Aa < b ){
 				System.out.println("1.1: Aa: " + Aa + ", b: " + b);
 				return false;
 			}
