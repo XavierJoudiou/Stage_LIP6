@@ -930,7 +930,7 @@ public class SolipsisProtocol implements EDProtocol {
 						find = maintainCacheTopology(line);
 					}
 					
-					if ( find == 0 ){
+//					if ( find == 0 ){
 					
 						
 						this.searchInProgress = true;
@@ -943,7 +943,7 @@ public class SolipsisProtocol implements EDProtocol {
 							recoverMsg = new Message(Message.SEARCH, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), sendTo.getId(), line);
 						}
 						this.send(recoverMsg, sendTo);
-					}
+//					}
 				}
 			}
 //		}

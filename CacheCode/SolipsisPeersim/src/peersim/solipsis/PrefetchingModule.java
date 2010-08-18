@@ -164,8 +164,9 @@ public class PrefetchingModule {
 						
 						if (this.protocol.getPrefetch_ameliore() == 1){
 							System.out.println("PREFETCH_AMELIORE");
-							isGoodDirection(prefetch.getPrefetchVector(),vector);
-							if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) ){
+							
+							if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) || isGoodDirection(prefetch.getPrefetchVector(),vector) ||
+									isMaybeGoodPrefetch(prefetch.getPrefetchVector(),vector) ||this.protocol.getVirtualEntity().getState() != MobilityStateMachine.TRAVELLING ){
 //							if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) || ( isMaybeGoodPrefetch(prefetch.getPrefetchVector(),vector) && (this.protocol.getVirtualEntity().getState() != MobilityStateMachine.HALTED))){
 //							if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) || isMaybeGoodPrefetch(prefetch.getPrefetchVector(),vector)
 //									|| this.protocol.getVirtualEntity().getState() != MobilityStateMachine.TRAVELLING){
@@ -234,12 +235,17 @@ public class PrefetchingModule {
 		if ( prefetchB != null && prefetchA != null){
 			long[] som = VirtualWorld.sumCoords(prefetchA, prefetchB);
 			double normePrefetch = Math.sqrt(prefetchA[0]*prefetchA[0] + prefetchA[1]*prefetchA[1]);
+			double normeCurrent = Math.sqrt(prefetchB[0]*prefetchB[0] + prefetchB[1]*prefetchB[1]);
 			double normeSom = Math.sqrt(som[0]*som[0] + som[1]*som[1]);
 //			System.out.println("prefecth: " + normePrefetch + ", som: " + normeSom);
-			if ( normeSom > normePrefetch ){
-//				System.out.println("GOOOOOOOODDDD_PREFETCH");
+			if (isNear(Angle((double)prefetchA[1],(double)prefetchA[0]),Angle((double)prefetchB[1],(double)prefetchB[0]), 85) && normeCurrent < (normePrefetch)){
+					return true;
+			}
+			double angleA = (Angle((double)prefetchA[1],(double)prefetchA[0]) + 180) % 360;
+			if (isNear(angleA,Angle((double)prefetchB[1],(double)prefetchB[0]), 85) && normeCurrent < (normePrefetch/2)){
 				return true;
 			}
+			
 		}
 		return false;
 	}
@@ -252,30 +258,40 @@ public class PrefetchingModule {
 		System.out.println("angleA: " + angleA + " angleB: " + angleB);
 		
 		
-		return false;
+		return isNear(angleA,angleB,60);
 	}
 	
-	public boolean isNears(double a,double b,double dist){
+	public boolean isNear(double a,double b,double dist){
 		double Aa = a + dist;
-		if (Aa > 360){
-			Aa = (a + dist) % 360;
-			if (Aa > b ){
-				return false;
-			}
-		}
-		if (Aa > b){
-			return false;
-		}
+		double Ab = a - dist;
 		
-		Aa = a - dist;
-		if (Aa < 0){
-			Aa = (a + dist) % 360;
-			if (Aa < b){
+		if (Aa > 360){
+			Aa = Aa % 360;
+			if ((b >= Ab && b <= 360) ||(b <= Aa && b <= Ab) ){
+				System.out.println("+360 OK: Ab >= b <= Aa : Ab " + Ab + ", b= " + b +", Aa=" + Aa);
+			}else{
+				System.out.println("+360 KO: Ab >= b <= Aa : Ab " + Ab + ", b= " + b +", Aa=" + Aa);
 				return false;
 			}
-		}
-		if (Aa < b){
-			return false;
+			
+		}else{
+			if (Ab < 0){
+				Ab = Ab + 360;
+				if ( (b >= 0 && b <= Aa) || (b >= Ab && b >= Aa)){
+					System.out.println("-0 OK: Ab >= b <= Aa : Ab " + Ab + ", b= " + b +", Aa=" + Aa);
+				}else{
+					System.out.println("-0 OK: Ab >= b <= Aa : Ab " + Ab + ", b= " + b +", Aa=" + Aa);
+					return false;
+				}
+				
+			}else{
+				if ( b <= Aa && b >= Ab){
+					System.out.println("Normal OK: Ab >= b <= Aa : Ab " + Ab + ", b= " + b +", Aa=" + Aa);
+				}else{
+					System.out.println("Normal KO: Ab >= b <= Aa : Ab " + Ab + ", b= " + b +", Aa=" + Aa);
+					return false;
+				}
+			}
 		}
 		
 		return true;

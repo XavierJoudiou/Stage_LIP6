@@ -1,9 +1,9 @@
 public int maintainCacheTopology() {
   ...
-  if ( this.mainVirtualEntity.getStateMachine().getState() == MobilityStateMachine.WANDERING ) {
+  if ( this.mainVirtualEntity.getStateMachine().getState() == WANDERING ) {
     switch (this.strategieCache) {
     case SolipsisProtocol.FIFO:
-      neighbor = cache.searchCacheNeighborKnoledgeRay(destinationsubj,this.knowledgeRay);
+      neighbor = cache.searchCacheNeighborKnoledgeRay(...,this.knowledgeRay);
     if (neighbor != null){
       if ( neighbor.getTime() + time_limite > CommonState.getIntTime()){
         cache.RmCache(neighbor);
