@@ -47,8 +47,8 @@ Deux versions, pour le fonctionnent du cache, ont été testé durant la phase d
 
 \subsubsection{La mise en place de l'aide aux voisins grâce au cache}
 
-Le cache d'un nœud va donc lui servir pour connaitre son environnement plus rapidement, mais il pourrait aussi aider les voisins du nœud. Dans cette optique, l'aide aux voisins a été mise en place. Ceci permet au cache d'avoir une autre utilisation, ce qui pourrait compenser la mise à jour si l'on souhaitais l'activer. VOIR SI OK AVEC RESULTATS.
-\par Quand un nœud cherche des voisins, il envoie un message SEARCH (voir schéma~\ref{schemaHelpCache}). Il suffit donc d'insérer une recherche dans le cache au bon endroit dans la fonction de traitement de ce message. Le nœud recevant un message de type SEARCH, va donc regarder dans ses voisins si il trouve un nœud approprié, s'il ne trouve rien il va alors regarder dans le cache si un nœud correspond. La recherche se fait aussi avec la zone de connaissance que l'on a transmis dans le message.
+Le cache d'un nœud va donc lui servir pour essayer de connaitre son environnement plus rapidement, mais il pourrait aussi aider les voisins du nœud. Dans cette optique, l'aide aux voisins a été mise en place. Ceci permet au cache d'avoir une autre utilisation, ce qui pourrait compenser la mise à jour si l'on souhaitais l'activer. Tout dépendra de la fréquence de mise à jour que l'on met et de l'efficacité ou non du cache. VOIR SI OK AVEC RESULTATS.
+\par Lorsqu'un nœud cherche des voisins, il envoie un message SEARCH (voir schéma~\ref{schemaHelpCache}). Il suffit donc d'insérer une recherche dans le cache au bon endroit dans la fonction de traitement de ce message. Nous insérons donc, dans la fonction \textit{processSearchMsg}, une fonction de recherche dans le cache. Le nœud va tout d'abord regarder dans sa liste des voisins et si aucun ne correspond, nous regardons dans le cache si un nœud peut correspondre à la requête. La recherche dans le cache se fait, de façon similaire à une recherche dans le cache pour un nœud local, en utilisant la zone de connaissance que l'on aura préalablement transmis dans le message.
 
 	\begin{figure}[!h]
         \centering
