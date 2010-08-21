@@ -188,6 +188,15 @@ runtest:
 	play -q ../../Sounds/Homer_Dooh.wav
 
 one:
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCacheMult_2010.cfg #> trace
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCacheMult_2010.cfg #> trace
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCacheMult_2010.cfg #> trace
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCacheMult_2010.cfg #> trace
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCacheMult_2010.cfg #> trace
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCacheMult_2010.cfg #> trace
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCacheMult_2010.cfg #> trace
+	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCacheMult_2010.cfg #> trace
+	CalculsBases OnlyCacheMultNoPref 800_100_01
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
