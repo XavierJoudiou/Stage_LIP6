@@ -148,7 +148,7 @@ runtest:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Base_2010.cfg #> trace
-	CalculsBases Nothing 800_100_03
+	CalculsBases Nothing 800_100_04
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
@@ -157,7 +157,7 @@ runtest:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_Prefetch_2010.cfg #> trace
-	CalculsBases NoCachePrefetchNormal 800_100_03
+	CalculsBases NoCachePrefetchNormal 800_100_04
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCache_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCache_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCache_2010.cfg #> trace
@@ -166,7 +166,7 @@ runtest:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCache_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCache_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCache_2010.cfg #> trace
-	CalculsBases OnlyCacheNoPref 800_100_03
+	CalculsBases OnlyCacheNoPref 800_100_04
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCacheMult_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCacheMult_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCacheMult_2010.cfg #> trace
@@ -175,7 +175,7 @@ runtest:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCacheMult_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCacheMult_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_OnlyCacheMult_2010.cfg #> trace
-	CalculsBases OnlyCacheMultNoPref 800_100_03
+	CalculsBases OnlyCacheMultNoPref 800_100_04
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_AdvancedPrefetch_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_AdvancedPrefetch_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_AdvancedPrefetch_2010.cfg #> trace
@@ -184,7 +184,7 @@ runtest:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_AdvancedPrefetch_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_AdvancedPrefetch_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_AdvancedPrefetch_2010.cfg #> trace
-	CalculsBases NoCachePrefetchAmeliore 800_100_03
+	CalculsBases NoCachePrefetchAmeliore 800_100_04
 	play -q ../../Sounds/Homer_Dooh.wav
 
 one:
