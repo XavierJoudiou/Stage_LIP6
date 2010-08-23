@@ -1,11 +1,11 @@
 \newpage
 \section{Les autres améliorations possibles}
 
-Durant le stage, la recherche de solutions d'amélioration nous a permis de trouver d'autres pistes que nous n'avons pas eu le temps d'étudier. La première consiste à se servir des déplacements en groupe des avatars. Une présentation rapide de ces mouvements de groupes permettra de mieux comprendre la piste d'amélioration que nous présenterons. Nous verrons ensuite un mécanisme de connaissance des routes entre les Hotspots, car actuellement les avatars se déplacent de façon aléatoire entre les Hotspots. Dans les jeux vidéos, les joueurs utilisent souvent les mêmes routes pour se déplacer. Nous présenterons ce phénomène et notre piste d'amélioration.
+Une partie du stage a été de rechercher comment il serait possible de faire évoluer le travail réalisé dans Blue Banana. Nous allons donc présenter les différentes autres pistes que nous avons trouvé. La première solution consiste à se servir des déplacements en groupe des avatars. Une présentation rapide de ces mouvements de groupes permettra de mieux comprendre en quoi la piste d'amélioration peut être intéressante. Nous verrons ensuite un mécanisme de connaissance des routes entre les Hotspots, car actuellement les avatars se déplacent de façon aléatoire entre les Hotspots. Dans les jeux vidéos, les joueurs utilisent souvent les mêmes routes pour se déplacer. Cette piste permettrait de rendre les simulations et les solutions plus adaptées aux comportements des joueurs dans les MMOG.
 
 \subsection{Les déplacements en groupes}
 
-Dans cette partie, nous allons présentez les déplacements en groupe, des avatars dans les MMOG. Cette étude permet des voir les avantages et les inconvénients de cette piste dans l'optique d'une amélioration du travail Blue Banana~\cite{191}. Le jeux en groupe (guilde et communauté) est une part importante de l'expérience que le joueur recherche en jouant à des MMOG~\cite{1501834,1255052}. Sans rentrer dans des détails sur la vie sociale \textit{réelle} des joueurs, nous allons étudier les comportements sociaux des joueurs. Ceci nous permettra de définir si la définition d'un modèle de mobilité et des améliorations de la réactivité sont possibles. Des études ont déjà démontré que des mouvement groupés existaient dans World of Warcraft~\cite{15141312}. La coopération est un facteur essentiel pour avoir le plus de réussite  dans les différentes missions proposées par le jeu. Un groupe de joueur permet de retrouver des personnes différentes et complémentaires, ce qui rend le groupe plus fort. Certains comparent même le fonctionnent des guildes au fonctionnement d'une \textit{famille de la mafia}~\cite{Jakobsson03thesopranos}.
+Dans cette partie, nous allons présentez les déplacements en groupe des avatars dans les MMOG. Cette étude permet des voir les avantages et les inconvénients de cette piste dans l'optique d'une amélioration du travail Blue Banana~\cite{191}. Le jeux en groupe (guilde et communauté) est une part importante de l'expérience que le joueur recherche en jouant à des MMOG~\cite{1501834,1255052}. Sans rentrer dans des détails sur la vie sociale \textit{réelle} des joueurs, nous allons étudier les comportements sociaux des joueurs. Ceci nous permettra de définir si la définition d'un modèle de mobilité et des améliorations de la réactivité sont possibles. Des études ont déjà démontré que des mouvement groupés existaient dans World of Warcraft~\cite{15141312}. La coopération est un facteur essentiel pour avoir le plus de réussite  dans les différentes missions proposées par le jeu. Un groupe de joueur permet de retrouver des personnes différentes et complémentaires, ce qui rend le groupe plus fort. Certains comparent même le fonctionnent des guildes au fonctionnement d'une \textit{famille de la mafia}~\cite{Jakobsson03thesopranos}.
 
 
 %\newpage
@@ -37,7 +37,7 @@ Cette étude donne des résultats qui sont, en grande majorité, similaires à l
 	\begin{figure}[!h]
         \centering
         \includegraphics[scale=0.95]{./Ressources/Images/timespentgroup.png}
-        \caption{Temps moyen passé en groupe, par classe}
+        \caption{Temps moyen passé en groupe, par niveau}
         \label{timespentgroup}
         \end{figure}
 
@@ -72,7 +72,7 @@ Cette étude donne des résultats qui sont, en grande majorité, similaires à l
 
 %\section{The Sopranos Meets EverQuest}
 %La coopération est un facteur essentiel pour avoir le plus de succès dans les différentes missions proposées par le jeu. Un groupe permet de retrouver des personnes différentes et complémentaires, ce qui rend le groupe plus fort. Certains comparent même le fonctionnent des guildes au fonctionnement d'une "famille de la mafia"~\cite{Jakobsson03thesopranos}.
-\subsubsection{Conclusion}
+\subsubsection{Conclusion sur l'étude des mouvements}
 Nous avons pu remarquer que l'aspect communautaires des MMOG est un des points les plus importants pour les joueurs (voir figure~\ref{recapstat}). De plus, la majorité des études nous disent que la plupart des joueurs jouent en groupe pendant un temps non négligeable. Ces mouvements de groupe pourraient nous permettre de faire évoluer le module de prefetching, en formant des groupes où seulement certaines entités feraient du prefecting et les voisins des entités pourraient rester les mêmes.
 \par Cette solution engendrerait de refaire le système de mobilité pour simuler des mouvements de groupe. Il faut aussi savoir que ces études sur les mouvements de groupe sont réalisées sur certains jeux~\cite{wow,everquest}. Ces mouvements de groupe n'existent pas ou sont moins perceptibles dans d'autres jeux~\cite{sl}. Il faudrait aussi mettre un place un système d'équilibrage des requêtes lors de mouvements de groupe, sinon certains travailleront toujours pour les autres.
 
@@ -84,6 +84,19 @@ Nous avons pu remarquer que l'aspect communautaires des MMOG est un des points l
         \label{recapstat}
         \end{figure}
 
+\subsubsection{Solution d'utilisation des mouvements de groupes}
+\par L'utilisation des mouvements de groupe pourraient nous permettre de réorganiser le prefetching des données, et ne plus considérer les nœuds indépendamment mais comme formant un groupe. Ces groupes vont devoir avoir une organisation flexible et efficace. Les nœuds se trouvant en avant du groupe, selon la direction, pourrait être les seuls à rapatrier des données, ainsi nous économiserions des messages. Il faudrait ensuite transmettre les données vers les autres membres du groupe, plusieurs méthodes de diffusion peuvent être mises en place. La formation du groupe pourrait aussi permettre de mettre entre parenthèse la recherche de voisins (pour certains des nœuds en tout cas). 
+\par La figure~\ref{mouvgroup} montre un exemple de ce à quoi pourrait ressembler la solution. Les nœuds, en gris foncé, vont rapatrier les données qui peuvent être intéressantes. Les autres nœuds du groupe n'auront pas rapatrier les données, mais il faudra ensuite diffuser ces données vers le reste du groupe.
+
+	\vspace{1cm}
+        \begin{figure}[!h]
+        \centering
+        \includegraphics[scale=0.65]{./Ressources/Images/mouvgroup.png}
+        \caption{Une piste pour les déplacements en groupe}
+        \label{mouvgroup}
+        \end{figure}
+
+\newpage
  
 \subsection{Mécanismes de connaissance des routes entre les Hotspots}
 Dans cette solution, nous voudrions permettre aux avatars de suivre des routes, pour le contournement d'un obstacle par exemple. Il faudrait modifier le modèle pour ajouter des obstacles dans l'environnement. Deux solutions apparaissent rapidement pour créer ses routes. La première solution serait de définir des chemins pour contourner les obstacles, et de conserver ces chemins dans l'environnement. La deuxième solution consisterait à mettre en place un mécanisme d'apprentissage des routes par les avatars. Les avatars pourraient apprendre les routes au fur et à mesure des passages, et laisser des indications pour les avatars suivants. Cette solution permettrait de simuler un comportement réel, et ainsi d'essayer d'améliorer cette situation.
@@ -97,33 +110,7 @@ Dans cette solution, nous voudrions permettre aux avatars de suivre des routes, 
 	\end{figure}
 
 
-
-
-%\subsection{Les mouvements de groupe}
-%Cette partie est décrite de façon plus précise dans le rapport bibliographique qui lui est consacrée. Il nous a été possible d'observer, à travers différentes études~\cite{1124834,1124834,1031667}, que les joueurs se déplacent fréquemment en groupe. Ces déplacements se font la plupart du temps entre les joueurs d'un même guilde. Nous pouvons observer sur la figure~\ref{recapstat} qu'en grande majorité les joueurs font partie de groupe, c'est pour cela que cette solution peut être intéressante. 
-%\par Pour mettre en place cette solution, il faudra refaire un modèle de mobilité qui met en place des déplacements de groupe. Ce travail pourrait prendre plus de temps que les autres solutions car il nécessite un bon nombre de changement dans l'existant.
-
-	%\vspace{1cm}
-     %   \begin{figure}[!h]
-     %   \centering
-     %   \includegraphics[scale=0.65]{./Ressources/Images/recapstat.png}
-      %  \caption{Schéma récapitulatif des activités de groupe}
-      %  \label{recapstat}
-       % \end{figure}
-
-%\par L'utilisation des mouvements de groupe pourraient nous permettre de réorganiser le prefetching des données, et ne plus considérer les nœuds indépendamment mais comme formant un groupe. Ces groupes vont devoir avoir une organisation flexible et efficace. Les nœuds se trouvant en avant du groupe, selon la direction, pourrait être les seuls à rapatrier des données, ainsi nous économiserions des messages. Il faudrait ensuite transmettre les données vers les autres membres du groupe, plusieurs méthodes de diffusion peuvent être mises en place. La formation du groupe pourrait aussi permettre de mettre entre parenthèse la recherche de voisins (pour certains des nœuds en tout cas). 
-%\par La figure~\ref{mouvgroup} montre un exemple de ce à quoi pourrait ressembler la solution. Les nœuds, en gris foncé, vont rapatrier les données qui peuvent être intéressantes. Les autres nœuds du groupe n'auront pas rapatrier les données, mais il faudra ensuite diffuser ces données vers le reste du groupe.
-
-	%\vspace{1cm}
-      %  \begin{figure}[!h]
-      %  \centering
-      %  \includegraphics[scale=0.65]{./Ressources/Images/mouvgroup.png}
-     %   \caption{Une piste pour les déplacements en groupe}
-       % \label{mouvgroup}
-      %  \end{figure}
-
-%\newpage
-
+\newpage
 \subsection{Autres}
 Dans cette partie, nous allons faire le tour d'autres idées d'amélioration, mais sans rentrer dans les détails comme nous avons pu le faire pour les autres. Des nœuds pourraient partager des liens encore plus forts que ceux du voisinage. Si deux nœuds vont dans la même direction et qu'ils ne sont pas trop éloignés (pas obligatoirement parmi les voisins), alors un lien pourrait se créer pour échanger des données.
 

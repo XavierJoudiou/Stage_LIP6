@@ -1,0 +1,43 @@
+\subsection{Le modèle de mobilité}
+
+Un modèle de mobilité a été mis en place dans Blue Banana, nous allons le présenter rapidement car il sera utilisé pour les différents tests que nous avons réalisés pour les solutions mises en place. Pour cela, un degré de mobilité à un instant donné, a été introduit. Il s'agit du nombre d'avatars dans l'état \textbf{T} à cet instant sur le nombre total d'avatars. Le modèle de mobilité implémenté dans Blue Banana se base sur l'automate (cf partie~\ref{Automate}). Toutes les 100ms, PeerSim décidé si un avatar doit ou non changer d'état, il réalise ceci grâce au différentes probabilité présentées dans le tableau ci dessus. A chaque fois qu'un déplacement est décidé, une destination est choisie. L'avatar commence alors son déplacement, chaque mouvement est rectiligne mais non uniforme (car accélération). L'accélération est nulle lorsque la vitesse maximale est atteinte, cette vitesse maximale est choisie en fonction de la zone ou se trouve l'avatar.
+
+\begin{table}
+  \begin{center}
+    \begin{tabular}{|c|c|l|l|}
+      \hline
+      Transition & Probabilité & État courant & Description\\
+      \hline
+      HtoH & 0.85 & Repos & Rester à l'arrêt\\
+      HtoT & 0.0004 & Repos & Commencer à voyager\\
+      HtoW & 0.1496 & Repos & Commencer à explorer\\
+      WtoH & 0.01-x & Exploration & S'arrêter\\
+      WtoT & x & Exploration & Commencer à voyager\\
+      WtoW1 & 0.8 & Exploration & Continuer à explorer dans la même direction\\
+      WtoW2 & 0.19 & Exploration & Changer de direction d'exploration\\
+      TtoH & 0.0002 & Voyage & S'arrêter\\
+      TtoW & 0.0005 & Voyage & Commencer à explorer\\
+      TtoT & 0.9993 & Voyage & Continuer à voyager\\
+      \hline
+    \end{tabular}
+  \end{center}
+  \label{tab:automate}
+  \caption{\textit{\small Tableau descriptif de l'automate de
+      déplacement avec les probabilités associées à chaque
+      transition. Les probabilités sont évaluées toutes les 100ms. x
+      varie entre 0.0002 et 0.005 (cf. figure \ref{fig:mobility})}}
+\end{table}
+
+\par L'automate étant mis à jour toutes les 100ms, même un petit changement dans les probabilités, peut entrainer des gros changements. La transition WtoT a été choisie, dans Blue Banana, pour faire varier la mobilité. Cette transition permet de déclencher le passage d'un avatar d'un état d'exploration désordonné à un état de déplacement rapide. Sur la figure~\ref{fig:mobility}, nous pouvons voir les différentes affectées à la transition et les degré de mobilité correspondants. 
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[scale=0.55]{./Ressources/Images/mobility.png} \\
+    \caption{\textit{\small Influence du changement de probabilité sur
+        la transition WtoT de l'automate sur le degré de mobilité du
+        Métavers}}
+    \label{fig:mobility}
+  \end{center}
+\end{figure}
+
+
