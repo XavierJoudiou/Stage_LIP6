@@ -1,13 +1,13 @@
 \section{Amélioration du prefetch de Blue Banana}
 
-L'objectif  est de rapatrier plus finement les données que dans la solution introduite dans Blue Banana, et surtout d'essayer de ne pas rapatrier des données inutiles. Pour le moment, nous regardons juste les nœuds qui sont dans notre champs de vision (un cône) et qui ne sont ni trop loin, ni trop près. Mais il serait intéressant d'avoir plus d'informations sur les nœuds avant de les rapatrier, comme leur direction ou leur vitesse par exemple. Nous avons donc regarder quelques critères pourraient permettre de rapatrier les données de façon plus fine.
+L'objectif  est de rapatrier plus finement les données que dans la solution introduite dans Blue Banana, et surtout d'essayer de ne pas rapatrier des données inutiles. Pour le moment, nous regardons juste les nœuds qui sont dans notre champs de vision (un cône) et qui ne sont ni trop loin, ni trop près. Mais il serait intéressant d'avoir plus d'informations sur les nœuds avant de les rapatrier, comme leur direction ou leur vitesse par exemple. Nous avons donc regarder quelques critères qui pourraient permettre de rapatrier les données de façon plus fine.
 
 \subsection{Les changements introduits sur la version de Blue Banana}
 
 
-\par Actuellement un nœud, qui est dans l'état \textbf{T}(ravelling), va chercher des nœuds qui se trouvent sur la trajectoire probable de l'avatar, tant que son ensemble de voisins n'est pas plein. Ce mécanisme va donc rapatrier des données qui sont à bonne distance (pas trop près à cause des temps de communication). Un des risques difficilement évitable est de rapatrier des nœuds qui sont inutiles si l'avatar, dont nous rapatrions les données, change de direction ou d'état. Un autre problème est que l'on peut rapatrier des avatars qui sont dans le cônes mais qui s'en écartent ou des avatars qui arrivent à grand vitesse vers notre avatar (voir figure~\ref{prefetchav}). Le mécanisme existant n'observent pas les différentes propriétés des nœuds (vitesse, direction, état, etc). Des nœuds surement superflu vont dans être rapatrier, modifier le prefetch pourrait nous permettre de de faire ce traitement plus finement.
+\par Actuellement un nœud, qui est dans l'état \textbf{T}(ravelling), va chercher des nœuds qui se trouvent sur la trajectoire probable de l'avatar, tant que son ensemble de voisins n'est pas plein. Ce mécanisme va donc rapatrier des données qui sont à bonne distance (pas trop près à cause des temps de communication). Un des risques difficilement évitable est de rapatrier des nœuds qui sont inutiles si l'avatar, dont nous rapatrions les données, change de direction ou d'état. Un autre problème est que l'on peut rapatrier des avatars qui sont dans le cônes mais qui s'en écartent ou des avatars qui arrivent à grand vitesse vers notre avatar (voir figure~\ref{prefetchav}). Le mécanisme existant n'observent pas les différentes propriétés des nœuds (vitesse, direction, état, etc). Des nœuds sûrement superflus vont dans être rapatriés, modifier le prefetch pourrait nous permettre de faire ce traitement plus finement.
 
-\par  Nous pouvons voir un exemple des modifications, qu'entrainerait le nouveau prefetch, dans le schéma de la figure~\ref{prefetchav}. Les nœuds verts représentent les nœuds qui seront rapatriés, les nœuds rouges ceux qui sont dans la zone de rapatriement mais qui ne le seront pas. Sur la figure, nous pouvons voir que nous gardons les nœuds qui sont stables, qui bougent peu ou qui bougent dans le même sens que le nœud courant (nœud gris foncé). Les nœud qui sont rouges ont des directions inverses au nœud courant et des vitesse élevées, ils ne seront donc pas rapatrier.
+\par  Nous pouvons voir un exemple des modifications qu'entrainerait le nouveau prefetch, dans le schéma de la figure~\ref{prefetchav}. Les nœuds verts représentent les nœuds qui seront rapatriés, les nœuds rouges ceux qui sont dans la zone de rapatriement mais qui ne le seront pas. Sur la figure, nous pouvons voir que nous gardons les nœuds qui sont stables, qui bougent peu ou qui bougent dans le même sens que le nœud courant (nœud gris foncé). Les nœud qui sont rouges ont des directions inverses au nœud courant et des vitesse élevées, ils ne seront donc pas rapatriés.
 
 	\begin{figure}[!h]
         \centering
@@ -16,11 +16,11 @@ L'objectif  est de rapatrier plus finement les données que dans la solution int
         \label{prefetchav}
         \end{figure}
 
-\par Pour réaliser cette sélection, il faut donc, en plus de la distance avec le nœud, tester différentes autres propriétés. Dans les messages de prefetch actuels, se trouve le vecteur du nœud faisant la requête de prefetch. Nous pourrons, avec celui-ci, regarder la direction et la longueur de ce nœud. Nous pourrons ainsi comparer ces critères chez le nœud faisant la requête et le nœud qui a reçu le message. Nous avions commencé par filtrer les nœuds qui étaient dans l'état \textbf{T}(ravelling), en faisant la somme du vecteur de prefetch et de celui du nœud courant ainsi si la norme est plus grande que la norme du prefetch, nous sélectionnons ce nœud et nous faisons le traitement correspondant. Nous sélectionnons le nœud si la somme est plus grande car cela signifie que \textit{avance}. Cette solution laisse passer des problèmes que nous souhaitions éviter et va supprimer le rapatriement de nœud qui aurait pu être intéressant. Ainsi un nœud qui avance de façon très lente vers le nœud de prefetch ne serait pas pris car la norme serait plus petite. Ce cas peut être réglé par la mise en place d'un longueur de battement.
+\par Pour réaliser cette sélection, il faut donc, en plus de la distance avec le nœud, tester différentes autres propriétés. Dans les messages de prefetch actuels, se trouve le vecteur du nœud faisant la requête de prefetch. Nous pourrons, avec celui-ci, regarder la direction et la longueur de ce nœud. Nous pourrons ainsi comparer ces critères chez le nœud faisant la requête et le nœud qui a reçu le message. Nous avions commencé par filtrer les nœuds qui étaient dans l'état \textbf{T}(ravelling), en faisant la somme du vecteur de prefetch et de celui du nœud courant ainsi si la norme est plus grande que la norme du prefetch. Nous sélectionnons ce nœud et nous faisons le traitement correspondant si la somme était plus grande que la norme du vecteur de prefetch. Cette solution laisse passer des problèmes que nous souhaitions éviter et va supprimer le rapatriement de nœud qui aurait pu être intéressant. Ainsi un nœud qui avance de façon très lente vers le nœud de prefetch ne serait pas pris car la norme serait plus petite. Ce cas peut être réglé par la mise en place d'une longueur de battement.
 \newline
 $$\\\textit{Somme des longueurs~$\ge$~Norme du vecteur de prefetch +/- $\Delta$}$$
-\\Les problèmes d'un nœud qui arrive à grand vitesse vers le nœud de prefetch ou d(u nœud qui a une direction qui s'écarte de celui, restent toujours présent. Nous avons donc chercher à regarder en plus des normes, les directions des différents nœud et de les comparer.
-\par En utilisant les directions, une des idées a été de rapatrier de préférence les nœuds qui vont dans la même direction (vois figure~\ref{PrefetchSol}). Si les nœuds vont vers les cotés, par rapport au vecteur de prefetch, il faut que la longueur du vecteur soit alors pas trop grande pour qu'il soit rapatrier. De même pour le nœuds qui vont dans la direction opposés au vecteur de prefetch.
+\\Les problèmes d'un nœud qui arrive à grande vitesse vers le nœud de prefetch ou d'un nœud qui a une direction qui s'écarte du nœud de prefetch, restent toujours présent. Nous avons donc chercher à regarder en plus des normes, les directions des différents nœuds et de les comparer.
+\par En utilisant les directions, une des idées a été de rapatrier de préférence les nœuds qui vont dans la même direction (vois figure~\ref{PrefetchSol}). Si les nœuds vont vers les cotés, par rapport au vecteur de prefetch, il faut que la longueur du vecteur soit alors pas trop grande pour qu'il soit rapatrier. De même pour les nœuds qui vont dans la direction opposée au vecteur de prefetch.
 
 	\begin{figure}[!h]
         \centering
@@ -29,17 +29,17 @@ $$\\\textit{Somme des longueurs~$\ge$~Norme du vecteur de prefetch +/- $\Delta$}
         \label{PrefetchSol}
         \end{figure}
 
-\par Les ajouts ont été fait dans le module de mise en place du prefetch de Blue Banana. Des fonctions de comparaisons d'angle et de norme y ont été ajouté, et nous les avons insérer dans la fonction \textit{processPrefetchMsg} (voir code ci-dessous). Après avoir fait les traitements de base, comme vérifier que le nœud soit assez loin, nous testons pour savoir si le prefetch amélioré est activé. 
+\par Les ajouts ont été faits dans le module de mise en place du prefetch de Blue Banana. Des fonctions de comparaison d'angle et de norme y ont été ajoutées, et nous les avons insérées dans la fonction \textit{processPrefetchMsg} (voir code ci-dessous). Après avoir fait les traitements de base, comme vérifier que le nœud soit assez loin, nous testons pour savoir si le prefetch amélioré est activé. 
 \newline
 \\ Nous rapatrions alors les nœuds si:
         \begin{itemize}
         \renewcommand{\labelitemi}{$\bullet$}
                 \item L'angle du vecteur du nœud courant est proche de l'angle du vecteur de prefetch (environ 45° de chaque côté).
-		\item La somme des normes est supérieur à celle du vecteur de prefetch multilié par un et demi. 
+		\item La somme des normes est supérieure à celle du vecteur de prefetch multipliée par un et demi. 
                 \item Le nœud courant n'est pas dans l'état \textbf{T}(ravelling).
-		\item L'angle du vecteur du nœud courant n'est pas proche de l'angle du vecteur du nœud de prefetch mais la norme du nœud courant est inférieur à celle du nœud de prefecth. 
+		\item L'angle du vecteur du nœud courant n'est pas proche de l'angle du vecteur du nœud de prefetch mais la norme du nœud courant est inférieure à celle du nœud de prefecth. 
         \end{itemize}
-Si le prefetch amélioré n'est pas activé, nous exécutons le traitement initial proposé par Blue Banana. Avec notre amélioration, nous devons donc émettre moins message et améliorer la cohérence de la topologie si la sélection est bien faite. 
+Si le prefetch amélioré n'est pas activé, nous exécutons le traitement initial proposé par Blue Banana. Avec notre amélioration, nous devons donc émettre moins de message et améliorer la cohérence de la topologie si la sélection est bien faite. 
 
 \lstset{numbers=left,basicstyle=\scriptsize, numberstyle=\tiny, stepnumber=5, numbersep=5pt}
 
@@ -48,7 +48,7 @@ Si le prefetch amélioré n'est pas activé, nous exécutons le traitement initi
 
 \subsection{Les résultats et les observations sur le prefetch amélioré}
 
-Nous allons présenter les différents résultats obtenus avec le prefetch nouvelle version. Nous comparerons notre version à une de base où l'on ne trouve ni cache ni prefetch, et avec une version avec le prefetch implémenté dans Blue Banana. Les principales métriques pour comparer les différents résultats sont la cohérence de la topologie et le nombre de message qui sont exprimées en fonction de la mobilité des avatars.
+Nous allons présenter les différents résultats obtenus avec le prefetch nouvelle version. Nous comparerons notre version à une de base où l'on ne trouve ni cache ni prefetch, et avec une version avec le prefetch implémenté dans Blue Banana. Les principales métriques pour comparer les différents résultats sont la cohérence de la topologie et le nombre de message qui sont exprimés en fonction de la mobilité des avatars.
 
 
 

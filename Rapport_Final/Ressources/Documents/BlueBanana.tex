@@ -1,12 +1,12 @@
 \section{Prise en compte de la mobilité: Blue Banana}
 	\label{BlueBanana}
-	Il nous a été possible de voir, dans les chapitres précédents, des mécanismes qui permettent faire évoluer le système en réaction à des événements. Solipsis ne pourrait pas bien fonctionner dans un monde avec des traces correspondants à la réalité, Blue Banana va donc mettre en place un mécanisme d'anticipation des mouvements des avatars pour mieux s'adapter.
+	Il nous a été possible de voir, dans les chapitres précédents, des mécanismes qui permettent faire évoluer le système en réaction à des événements. Solipsis ne pourrait pas bien fonctionner dans un monde avec des traces correspondant à la réalité, Blue Banana va donc mettre en place un mécanisme d'anticipation des mouvements des avatars pour mieux s'adapter.
 	\par Blue Banana présente une solution aux différents problèmes que peut rencontrer une architecture pair à pair dans les MMOGs. La mobilité des avatars implique de nombreux échanges de données à travers le réseau pair à pair. Comme les overlays de l'état de l'art n'anticipent pas cette mobilité, les données nécessaires ne seront pas chargées à temps, ce qui conduit à des défaillances transitoires au niveau applicatif. Blue Banana a été réalisé pour résoudre ce problème, il modélise et prédit les mouvements des avatars ce qui permet à l'overlay de s'adapter par anticipation aux besoins du jeux.
 	\subsection{Solutions introduites}
 	Blue Banana est implémenté au dessus de Solipsis qu'il a été possible d'étudier dans le chapitre~\ref{solipsis}. Plusieurs observations ont été faites et différentes optimisations en sont ressorties. Il nous a été possible d'observer plusieurs types de zone (dense ou non, cf.~\ref{trace}) et que les mécanismes d'adaptation sont trop tardifs pour être mis en place dans la réalité (le chargement des données sera trop lent).
 	\subsubsection{Les états de l'avatar}
 	\label{Automate}
-	Une des premières innovations qui a été introduite est la distinction de plusieurs états d'un avatar. Comme il a été possible de voir dans le chapitre sur la collecte de trace, un avatar se comporte différemment en fonction des zones du monde. Trois états ont donc été introduit:
+	Une des premières innovations qui a été introduite est la distinction de plusieurs états d'un avatar. Comme il a été possible de voir dans le chapitre sur la collecte de trace, un avatar se comporte différemment en fonction des zones du monde. Trois états ont donc été introduits:
 	\begin{itemize}
 	\renewcommand{\labelitemi}{$\bullet$}
 		\item \textbf{H}(alted): l'avatar est immobile.
@@ -27,7 +27,7 @@
 
 
 	\subsubsection{Anticipation des mouvements}
-	Un autre mécanisme a été mis en place, il s'agit d'anticiper les mouvements d'un avatar, pour cela deux suppositions sont faites: seulement une prédiction courte est cohérente, et plus l'avatar se déplace rapidement, plus il y a de chance qu'il continue dans la même direction~\cite{191}. Comme nous pouvons voir sur la figure~\ref{Propa_Algo}, en fonction du vecteur de mouvement de l'avatar, le nœud B, si il est dans l'état \textbf{T}, va chercher des nœuds qui se trouvent sur la trajectoire probable de l'avatar, tant que son ensemble de voisins n'est pas plein. Le nœud B va envoyer un message aux voisins qui sont le plus près de lui par rapport au vecteur de mouvement. Un mécanisme pour évaluer si le nœud n'est pas trop près, et donc rapatrier des données ne servirait pas car le temps des communication serait supérieur au temps du déplacement de l'avatar. Un des risques est de rapatrier des nœuds qui seront inutiles si l'avatar va changer de direction ou d'état. L'amélioration de ce point fait parti des futures pistes pour améliorer l'algorithme d'anticipation des mouvements.\\
+	Un autre mécanisme a été mis en place, il s'agit d'anticiper les mouvements d'un avatar, pour cela deux suppositions sont faites: seulement une prédiction courte est cohérente, et plus l'avatar se déplace rapidement, plus il y a de chance qu'il continue dans la même direction~\cite{191}. Comme nous pouvons voir sur la figure~\ref{Propa_Algo}, en fonction du vecteur de mouvement de l'avatar, le nœud B, s'il est dans l'état \textbf{T}, va chercher des nœuds qui se trouvent sur la trajectoire probable de l'avatar, tant que son ensemble de voisins n'est pas plein. Le nœud B va envoyer un message aux voisins qui sont le plus près de lui par rapport au vecteur de mouvement. Un mécanisme pour évaluer si le nœud n'est pas trop près, et donc rapatrier des données ne servirait pas car le temps des communications serait supérieur au temps du déplacement de l'avatar. Un des risques est de rapatrier des nœuds qui seront inutiles si l'avatar va changer de direction ou d'état. L'amélioration de ce point fait parti des futures pistes pour améliorer l'algorithme d'anticipation des mouvements.\\
 	\vspace{5mm}
         \begin{figure}[!h]
         \centering
@@ -37,7 +37,7 @@
         \end{figure}
         \vspace{5mm}
 	\subsection{Expérimentations et Résultats}
-		Le travail a été testé sur le simulateur à évènement discret PeerSim ~\cite{peersim}, les expérimentations ont eu pour objectif de comparer Solipsis avec et sans Blue Banana.
+		Le travail a été testé sur le simulateur à évènements discrets PeerSim ~\cite{peersim}, les expérimentations ont eu pour objectif de comparer Solipsis avec et sans Blue Banana.
 		\subsubsection{Le simulateur PeerSim et la description des expérimentations}
 		\par PeerSim est un simulateur de réseau pair à pair, qui a deux modes de fonctionnement: par cycles ou par évènements. C'est une API riche et modulaire qui est codée en Java, c'est une composante du projet BISON de l'université de Bologne (Italie). Ce simulateur permet de simuler un large nombre de machines et de tester différentes configurations du réseau. Le simulateur va faire des simplifications sur les couches réseau et les contraintes physiques (latence, pannes, ...). Chaque nœud est considéré comme un module qui va échanger des messages avec les autres nœuds du système. La plupart des plateformes de simulation est basée sur le modèle à évènements discrets. Il est possible de distinguer deux entités: les nœuds et les messages. Le temps va seulement évoluer à chaque nouvel évènement sur un nœud.
 		%\subsubsection{Description des expérimentations}

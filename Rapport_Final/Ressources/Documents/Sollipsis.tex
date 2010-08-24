@@ -10,7 +10,7 @@
 	\begin{itemize}
 	\renewcommand{\labelitemi}{$\bullet$}
 		\item \textit{Local Awareness:}\\
-		Une entité doit être connecté avec tous ses plus proches voisins. Il est important de noter qu'une entité a la possibilité de connaître des entités en dehors de son environnement virtuel local. En revanche, cette propriété impose que l'entité situé à l'intérieur.	
+		Une entité doit être connectée avec tous ses plus proches voisins. Il est important de noter qu'une entité a la possibilité de connaître des entités en dehors de son environnement virtuel local. En revanche, cette propriété impose que l'entité située à l'intérieur fasse partie des voisins de l'entité.	
 		\item \textit{Global Connectivity:}\\
 		Une entité doit connaître toutes les entités se trouvant dans son "champs de vision". Elle doit pouvoir détecter l'arrivée ou le départ d'une entité de son "champs de vision". Cette propriété est basée sur la Géométrie Informatique, elle assure qu'une entité ne "tourne pas le dos" à une partie du monde. L'enveloppe convexe des entités est le plus petit polygone convexe formé par cet ensemble. Un mécanisme pour éviter qu'une partie du graphe soit isolée a aussi été mis en place.\\
 	\end{itemize}
@@ -27,7 +27,7 @@ Solipsis a aussi des mécanismes de collaboration pour maintenir les propriété
 	\begin{itemize}
 	\renewcommand{\labelitemi}{$\bullet$}
 		\item \textit{Spontaneous Collaboration for Local Awareness:}\\
-		 Pour vérifier la propriété \textit{Local Awareness}, il faut qu'une entité puisse connaître tous ses voisins à chaque instant. Pour faciliter cette connaissance du voisinage, et comme il y a un grand nombre de mouvements dans le monde virtuel, un système de collaboration entre les nœuds a été mis en place. Une entité pourra alors demander régulièrement à ses voisins si ils détectent une nouvelle entité mais cela implique un grand nombre de message inutile et une perte temporelle de consistence. Pour éviter ces problèmes, une entité \textit{a} va prévenir une entité \textit{b} si une entité \textit{c} est en train de se diriger vers la zone de l'entité \textit{b}.
+		 Pour vérifier la propriété \textit{Local Awareness}, il faut qu'une entité puisse connaître tous ses voisins à chaque instant. Pour faciliter cette connaissance du voisinage, et comme il y a un grand nombre de mouvements dans le monde virtuel, un système de collaboration entre les nœuds a été mis en place. Une entité pourra alors demander régulièrement à ses voisins s'ils détectent une nouvelle entité mais cela implique un grand nombre de messages inutiles et une perte temporelle de consistence. Pour éviter ces problèmes, une entité \textit{a} va prévenir une entité \textit{b} si une entité \textit{c} est en train de se diriger vers la zone de l'entité \textit{b}.
 		\item \textit{Recursive Query-Response for Global Connectivity:}\\
 		Il faut prévoir une mécanisme pour le maintien d'une entité dans l'enveloppe convexe. Quand une entité \textit{e} détecte deux entités consécutives, elle se lance immédiatement à la recherche d'une ou plusieurs entités dans le même secteur en envoyant des messages dans la zone. \\ 
 	\end{itemize}
