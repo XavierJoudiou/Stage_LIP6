@@ -1316,8 +1316,8 @@ public class SolipsisProtocol implements EDProtocol {
 							default:
 								
 //								neighbor = cache.searchCacheNeighborLimit(destination,limite);
-//								neighbor = cache.searchCacheNeighborKnoledgeRay(destinationsubj,this.knowledgeRay);
-								neighbor = cache.searchCacheNeighborRegion(destinationsubj,region);
+								neighbor = cache.searchCacheNeighborKnoledgeRay(destinationsubj,this.knowledgeRay);
+//								neighbor = cache.searchCacheNeighborRegion(destinationsubj,region);
 								break;
 								
 							}
@@ -1406,7 +1406,8 @@ public class SolipsisProtocol implements EDProtocol {
 			case SolipsisProtocol.FIFOMULT:
 		
 				int res = 0;
-				responseMult = cache.searchCacheNeighborEnvelopEvMult(destination,this.knowledgeRay);
+//				responseMult = cache.searchCacheNeighborEnvelopEvMult(destination,this.knowledgeRay);
+				responseMult = cache.searchCacheNeighborRegionMult(destinationsubj,region);
 				Iterator it;
 				it = responseMult.entrySet().iterator();
 				if ( responseMult.size() != 0 ){

@@ -1,0 +1,14 @@
+#Step 1: create file 
+reset
+set term x11 
+set title "Topology Coherence"
+set xlabel "Degre de Mobilite"
+set ylabel "Nombre de nœud proche mais pas voisin"
+set grid
+plot "resultats/Data/800_100/AllData_NoCachePrefetchAmeliore.txt" using 6:2 title 'No Cache Prefetch Ameliore' with lines linewidth 1,"resultats/Data/800_100/AllData_NoCachePrefetchNormal.txt" using 6:2 title 'No Cache Prefetch Normal' with lines linewidth 1,"resultats/Data/800_100/AllData_Nothing.txt" using 6:2 title 'No Cache No Prefetch' with lines linewidth 1 
+pause -1
+set term png 
+set out "./Topology_Coherence_Prefetchs.png" 
+rep
+set out 
+set term x11 

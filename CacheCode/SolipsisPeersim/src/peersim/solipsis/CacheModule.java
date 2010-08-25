@@ -564,6 +564,53 @@ public class CacheModule {
 		return best;
 	}
 	
+	
+	/*
+	 * Fonction searchCacheNeighborLimit:
+	 *  Recherche dans le cache le nœud le plus proche de
+	 *  la destination passé en argument et qui est inférieur 
+	 *  à la limite passé en argument
+	 * 
+	 */
+	public HashMap<Integer,NeighborProxy>  searchCacheNeighborRegionMult(long[] destination,GeometricRegion region){
+		NeighborProxy current;
+		HashMap<Integer,NeighborProxy> best = new HashMap<Integer, NeighborProxy>();
+
+		double currentDist,bestDist = -1;
+		LinkedList<NeighborProxy> choices = new LinkedList<NeighborProxy>();
+		Random rand = new Random();
+		int size = this.getCache().size();
+		
+		Iterator it;
+		it = this.cache.entrySet().iterator();
+				
+		while(it.hasNext()){
+			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
+			if (current.getQuality() == NeighborProxy.REGULAR){
+				if (this.protocol.isInHalfPlan(region,current)) {
+					choices.add(current);
+				}
+			}
+
+		}
+		
+		size = choices.size();
+		if (size > 0) {
+			if ( size > 4){
+				while (best.size() < 4){
+					best.put(choices.get(rand.nextInt(size)).getId(), choices.get(rand.nextInt(size)));
+				}
+			}else{
+				while (best.size() != size){
+					best.put(choices.get(rand.nextInt(size)).getId(), choices.get(rand.nextInt(size)));
+				}
+			}
+		}
+//		System.out.println("retourne " + best.size() + " nœuds !!!!!!!!");
+		return best;
+	}
+	
+	
 	/*
 	 * Fonction searchCacheHelpNeighborMult:
 	 *  Recherche dans le cache si un ou plusieurs nœud(s) peu(t/vent)

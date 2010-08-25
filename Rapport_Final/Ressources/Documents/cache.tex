@@ -17,8 +17,8 @@ Le fonctionnement global du cache consiste à garder en mémoire un certains nom
 
 \subsubsection{Les différentes versions du cache}
 
-Deux versions, pour le fonctionnent du cache, ont été testées durant la phase d'implémentation. Nous parlons ici de la gestion des données dans la cache et non de la recherche dans celui-ci qui ce fera juste après. Au départ le cache était gérer selon le principe \textit{First In First Out}, la gestion du cache ne tenait pas compte des mises à jours, qui peuvent avoir lieu lors d'une requête vers un nœud du cache mais que celle-ci échoue car le nœud a trop bougé et qu'il a alors été mis à jour dans le cache. Une gestion du cache en fonction de la localité a aussi été mise en place, ce qui permet de faire sortir du cache les nœuds les plus éloignés de la position actuelle du nœud.
-\par Deux implémentations ont aussi été testé pour la recherche dans le cache, l'une renvoie un résultat et l'autre renvoie plusieurs nœud à ajouter. Les tests \textbf{TODO}
+Deux versions, pour le fonctionnent du cache, ont été testées durant la phase de codage. Nous parlons ici de la gestion des données dans le cache et non de la recherche dans celui-ci qui se fera juste après. Au départ le cache était gérer selon le principe \textit{First In First Out}, la gestion du cache ne tenait pas compte des mises à jours.  Ces mises à jour peuvent avoir lieu lors d'une requête en échec vers un nœud du cache.Le nœud ayant trop bougé est alors mis à jour dans le cache. Une gestion du cache en fonction de la localité a aussi été mise en place, ce qui permet de faire sortir du cache les nœuds les plus éloignés de la position actuelle du nœud.
+\par Deux implémentations ont aussi été testées pour la recherche dans le cache, l'une renvoie un résultat et l'autre renvoie plusieurs nœud à ajouter. Les tests montrent que la deuxième implémentation donne de meilleurs résultats (voir chapitre~\ref{resObsCache}).
 
 
 \subsubsection{La modification du code existant pour insérer la recherche dans le cache}
@@ -42,12 +42,12 @@ Deux versions, pour le fonctionnent du cache, ont été testées durant la phase
         \end{figure}
 \par Le problème de cette solution est qu'elle privilégiait l'enveloppe connexe à la propriété de \textit{Local Awareness}. Car nous pouvons nous retrouver dans la situation, comme dans la figure~\ref{schemaEnvelopCache}, où un nœud ne fait pas parti de la liste des voisins alors qu'il se trouve dans l'enveloppe connexe. Cette solution nous donnait donc des résultats, pour les propriétés de Solipsis, qui étaient moins bon que la version sans le cache.  
 
-\par Nous sommes alors revenu à une solution ressemblant à la première solution que nous avions mise en place. Chaque nœud comporte une zone de connaissance, nous avons donc décidé de nous servir de cette dernière pour réaliser les conditions dans la fonction de recherche. La fonction de recherche regarde donc si un nœud du cache est dans la zone de connaissance du nœud courant, si plusieurs correspondent un système pour choisir aléatoirement est mis en place, comme dans la recherche de voisin original.
+\par Nous sommes alors revenu à une solution ressemblant à la première solution que nous avions mise en place. Chaque nœud comporte une zone de connaissance, nous avons donc décidé de nous servir de cette dernière pour réaliser les conditions dans la fonction de recherche. La fonction de recherche regarde donc si un nœud du cache est dans la zone de connaissance du nœud courant, si plusieurs correspondent un système pour choisir aléatoirement est mis en place, comme dans la recherche de voisin original. Une autre fonction qui recherche en fonction d'une région géométrique a aussi été mise en place, les résultats sont équivalents à la version avec la zone de connaissance.
 
 
 \subsubsection{La mise en place de l'aide aux voisins grâce au cache}
 
-Le cache d'un nœud va donc lui servir pour essayer de connaitre son environnement plus rapidement, mais il pourrait aussi aider les voisins du nœud. Dans cette optique, l'aide aux voisins a été mise en place. Ceci permet au cache d'avoir une autre utilisation, ce qui pourrait compenser la mise à jour si l'on souhaitait l'activer. Tout dépendra de la fréquence de mise à jour que l'on met et de l'efficacité ou non du cache. VOIR SI OK AVEC RESULTATS.
+Le cache d'un nœud va donc lui servir pour essayer de connaitre son environnement plus rapidement, mais il pourrait aussi aider les voisins du nœud. Dans cette optique, l'aide aux voisins a été mise en place. Ceci permet au cache d'avoir une autre utilisation, ce qui pourrait permettre d'économiser quelques autres messages. 
 \par Lorsqu'un nœud cherche des voisins, il envoie un message SEARCH (voir schéma~\ref{schemaHelpCache}). Il suffit donc d'insérer une recherche dans le cache au bon endroit dans la fonction de traitement de ce message. Nous insérons donc, dans la fonction \textit{processSearchMsg}, une fonction de recherche dans le cache. Le nœud va tout d'abord regarder dans sa liste des voisins et si aucun ne correspond, nous regardons dans le cache si un nœud peut correspondre à la requête. La recherche dans le cache se fait, de façon similaire à une recherche dans le cache pour un nœud local, en utilisant la zone de connaissance que l'on aura préalablement transmis dans le message.
 
 	\begin{figure}[!h]
@@ -62,12 +62,111 @@ Le cache d'un nœud va donc lui servir pour essayer de connaitre son environneme
 
 Nous allons présenter les différents résultats sur le cache. Nous comparerons chaque version avec une version de base où l'on ne trouve ni cache ni prefetch, et avec une version avec le prefetch implémenté dans Blue Banana.
 Les principales métriques pour comparer les différents résultats sont la cohérence de la topologie et le nombre de messages qui sont exprimés en fonction de la mobilité des avatars. Le calcul de la cohérence de la topologie consiste à mesurer, à chaque instant, le nombre de nœud qui sont dans la zone de connaissance d'un autre nœud mais qui ne fait pas parti des voisins de ce dernier.
-TODO
+
+\subsubsection{Résultats avec une première configuration du cache}
+\par Tout d'abord, nous allons regarder le nombre de cache Hit et Miss pour le cache normal. Il s'agit de voir le taux de réussite du cache et donc si ce mécanisme est souvent utlisé. Dans ces premiers résultats le cache est configuré de tel sorte qu'il n'utilise pas l'aide aux voisins, qu'il ne contacte pas un nœud du cache s'il est trop vieux. Cette configuration ne va récupérer que les nœuds du cache qui sont très proches et qui ont été ajoutés au cache récemment (voir tableau ci dessous). La taille du cache correspond au nombre de nœud qu'il peut contenir, la limite de distance correspond à la distance à partir de laquelle nous ne récupèrerons pas le nœud. La limite de temps est la différence maximum qu'il doit y avoir entre le temps courant et la date de rafraichissement du nœud dans le cache (généralement l'ajout de celui-ci dans le cache). 
+\begin{table}[!h]
+  \begin{center}
+    \begin{tabular}{|c|c|}
+      \hline
+      Paramètre & Valeur\\
+      \hline
+      Taille du cache & 25\\
+      Limite de distance &  1500\\
+      Limite de temps & 1500\\
+      Contact Nœud & Faux\\
+      Mise à jour du cache & Faux\\
+      Aide aux voisins & Vrai\\
+      \hline
+    \end{tabular}
+  \end{center}
+  \label{tab:config1}
+  \caption{Tableau montrant les valeurs utilisées pour la configuration n°1}
+\end{table}
 
 
+\par Nous pouvons voir que plus la mobilité augmente plus le nombre de cache Hit augmente et le nombre de cache Miss diminue (voir figure~\ref{courbesHitMiss:config1}). Cela est dû au fait que plus la mobilité augmente plus le cache aura des entrées récentes, car les nœuds vont changer de direction plus souvent et plus rapidement. Notre politique de cache ne prenant en compte que des nœuds récemment ajoutés au cache, les résultats en terme de cache Hit sont bien meilleurs. Nous pouvons aussi noter qu'il ya de moins en moins d'accès au cache car la somme des Hit et des Miss diminue, cela est du au fait que de plus en plus de nœuds sont dans un état \textbf{T}. 
+
+	\begin{figure}[!h]
+        \centering
+        \includegraphics[scale=0.5]{../CacheCode/SolipsisPeersim/resultats/Courbes/Courbes_Final_Rapport/Cache_Stats_Normal.png}
+        \caption{Schéma montrant les caches Hit et caches Miss pour le cache normal}
+        \label{courbesHitMiss:config1}
+        \end{figure}
+\newpage
+\par Ensuite nous pouvons observer le nombre de messages en fonction du degré de mobilité (voir figure~\ref{courbesNbMessCache:config1}. Les deux versions du cache vont nous permettre d'économiser des messages car lors d'un cache Hit nous ne faisons pas le traitement de base qui provoquait l'envoie d'un message. Le traitement du cache se fait sans coût en terme de message. Si l'on fait le traitement de base après le passage dans le cache, un gain en nombre de message sera tout de même réalisé. Ce gain résulte du fait que le nœud connaîtra mieux son environnement et la prochaine fois qu'il devra entrer dans la fonction \textit{MaintainCache} sera retardée. Ces observations sont les mêmes pour le cache à réponse simple et le cache à réponse multiple.  
+
+
+	\begin{figure}[!h]
+        \centering
+        \includegraphics[scale=0.5]{../CacheCode/SolipsisPeersim/resultats/Courbes/Courbes_Final_Rapport/Nombre_Messages_Caches.png}
+        \caption{Schéma montrant le nombre de messages}
+        \label{courbesNbMessCache:config1}
+        \end{figure}
+
+Nous allons maintenant observer la cohérence de la topologie avec les différentes versions du cache. PROBLEME AVEC CACHE SIMPLE. La version du cache fonctionnant avec une recherche renvoyant plusieurs nœuds donne des résultats meilleurs que la version de base (sans cache et sans prefetch). A FINIR
+
+	\begin{figure}[!h]
+        \centering
+        \includegraphics[scale=0.5]{../CacheCode/SolipsisPeersim/resultats/Courbes/Courbes_Final_Rapport/Topology_Coherence_Caches.png}
+        \caption{Schéma montrant la cohérence de la topologie}
+        \label{courbesTopoCohCache:config1}
+        \end{figure}
+
+\newpage
+\subsubsection{Résultats avec une seconde configuration du cache}
+
+\begin{table}[!h]
+  \begin{center}
+    \begin{tabular}{|c|c|}
+      \hline
+      Paramètre & Valeur\\
+      \hline
+      Taille du cache & 25\\
+      Limite de distance &  3500\\
+      Limite de temps & 3000\\
+      Contact Nœud & Vrai\\
+      Mise à jour du cache & Faux\\
+      Aide aux voisins & Vrai\\
+      \hline
+    \end{tabular}
+  \end{center}
+  \label{tab:config2}
+  \caption{Tableau montrant les valeurs utilisées pour la configuration n°3}
+\end{table}
+
+
+
+A FINIR ??
+
+
+\subsubsection{Résultats avec une troisième configuration du cache}
+
+\begin{table}[!h]
+  \begin{center}
+    \begin{tabular}{|c|c|}
+      \hline
+      Paramètre & Valeur\\
+      \hline
+      Taille du cache & 25\\
+      Limite de distance &  3500\\
+      Limite de temps & 3000\\
+      Contact Nœud & Vrai\\
+      Mise à jour du cache & Vrai\\
+      Aide aux voisins & Vrai\\
+      Fréquence de mise à jour & 5000\\
+      \hline
+    \end{tabular}
+  \end{center}
+  \label{tab:config3}
+  \caption{Tableau montrant les valeurs utilisées pour la configuration n°3}
+\end{table}
+
+
+A FINIR ??
 
 
 \subsection{Conclusion et perspectives du cache} 
 
-
+La mise en place du cache permet d'économiser des messages et cela est d'autant plus vrai que la mobilité est grande. Un des problèmes dans les résultats du cache est qu'une version simple fait perdre de la cohérence de topologie, et ce même si l'on effectue aussi le traitement de base. WHY ? RE TESTER et MODIFIER CODE?
 

@@ -1,0 +1,184 @@
+#!/bin/sh 
+
+time=`date '+%j_%H-%M'`
+
+
+#Création du répertoire pour mettre les courbes
+mkdir ./resultats/Courbes/Courbes_Final_$time
+mkdir ./resultats/Courbes/Courbes_Final_$time/Datas
+
+############################################### Courbres résultats de Solispis Règles, etc ##############################################
+
+######################Tests sur les prefetchs###################
+
+#Step 1: create file 
+echo reset > plotfile.dat
+echo set term x11 >>plotfile.dat 
+echo set title \"View Divergence\" >>plotfile.dat
+echo set xlabel \"Degre de Mobilite\" >>plotfile.dat
+echo set ylabel \"Nombre de nœuds\" >>plotfile.dat
+echo set grid >>plotfile.dat
+echo plot \"resultats\/Data\/800_100\/AllData_NoCachePrefetchAmeliore.txt\" using 6:1 title \'No Cache Prefetch Ameliore\' with lines linewidth 1,\"resultats\/Data\/800_100\/AllData_NoCachePrefetchNormal.txt\" using 6:1 title \'No Cache Prefetch Normal\' with lines linewidth 1,\"resultats\/Data\/800_100\/AllData_Nothing.txt\" using 6:1 title \'No Cache No Prefetch\' with lines linewidth 1 >>plotfile.dat 
+#echo pause -1 >>plotfile.dat
+echo set term png >>plotfile.dat 
+echo set out \"resultats\/Courbes\/Courbes_Final_$time\/View_Divergence_Prefetchs.png\" >>plotfile.dat 
+echo rep >>plotfile.dat
+echo set out >>plotfile.dat 
+echo set term x11 >>plotfile.dat 
+
+#Step 2: call gnuplot 
+gnuplot plotfile.dat
+
+#Step 1: create file 
+echo reset > plotfile.dat
+echo set term x11 >>plotfile.dat 
+echo set title \"Topology Coherence\" >>plotfile.dat
+echo set xlabel \"Degre de Mobilite\" >>plotfile.dat
+echo set ylabel \"Nombre de nœud proche mais pas voisin\" >>plotfile.dat
+echo set grid >>plotfile.dat
+echo plot \"resultats\/Data\/800_100\/AllData_NoCachePrefetchAmeliore.txt\" using 6:2 title \'No Cache Prefetch Ameliore\' with lines linewidth 1,\"resultats\/Data\/800_100\/AllData_NoCachePrefetchNormal.txt\" using 6:2 title \'No Cache Prefetch Normal\' with lines linewidth 1,\"resultats\/Data\/800_100\/AllData_Nothing.txt\" using 6:2 title \'No Cache No Prefetch\' with lines linewidth 1 >>plotfile.dat 
+#echo pause -1 >>plotfile.dat
+echo set term png >>plotfile.dat 
+echo set out \"resultats\/Courbes\/Courbes_Final_$time\/Topology_Coherence_Prefetchs.png\" >>plotfile.dat 
+echo rep >>plotfile.dat
+echo set out >>plotfile.dat 
+echo set term x11 >>plotfile.dat 
+
+#Step 2: call gnuplot 
+gnuplot plotfile.dat
+
+
+#Step 1: create file 
+echo reset > plotfile.dat
+echo set term x11 >>plotfile.dat
+echo set title \"Nombre moyen de messages \" >>plotfile.dat
+echo set xlabel \"Degre de Mobilite\" >>plotfile.dat
+echo set ylabel \"Nombre de messages\" >>plotfile.dat
+echo set grid >>plotfile.dat
+echo plot \"resultats\/Data\/800_100\/AllData_NoCachePrefetchAmeliore.txt\" using 6:3 title \'No Cache Prefetch Ameliore\' with lines linewidth 1,\"resultats\/Data\/800_100\/AllData_NoCachePrefetchNormal.txt\" using 6:3 title \'No Cache Prefetch Normal\' with lines linewidth 1,\"resultats\/Data\/800_100\/AllData_Nothing.txt\" using 6:3 title \'No Cache No Prefetch\' with lines linewidth 1 >>plotfile.dat
+#echo pause -1 >>plotfile.dat
+echo set term png >>plotfile.dat
+echo set out \"resultats\/Courbes\/Courbes_Final_$time\/Nombre_Messages_Prefetchs.png\" >>plotfile.dat
+echo rep >>plotfile.dat
+echo set out >>plotfile.dat
+echo set term x11 >>plotfile.dat
+
+#Step 2: call gnuplot 
+gnuplot plotfile.dat
+
+######################Tests sur les caches###################
+
+#Step 1: create file 
+echo reset > plotfile.dat
+echo set term x11 >>plotfile.dat 
+echo set title \"View Divergence\" >>plotfile.dat
+echo set xlabel \"Degre de Mobilite\" >>plotfile.dat
+echo set ylabel \"Nombre de nœuds\" >>plotfile.dat
+echo set grid >>plotfile.dat
+echo plot \"resultats\/Data\/800_100\/AllData_OnlyCacheNormal.txt\" using 6:1 title \'No Prefetch Cache Normal\' with lines linewidth 1,\"resultats\/Data\/800_100\/AllData_OnlyCacheMult.txt\" using 6:1 title \'No Prefetch Cache Multiple\' with lines linewidth 1,\"resultats\/Data\/800_100\/AllData_Nothing.txt\" using 6:1 title \'No Cache No Prefetch\' with lines linewidth 1 >>plotfile.dat 
+#echo pause -1 >>plotfile.dat
+echo set term png >>plotfile.dat 
+echo set out \"resultats\/Courbes\/Courbes_Final_$time\/View_Divergence_Caches.png\" >>plotfile.dat 
+echo rep >>plotfile.dat
+echo set out >>plotfile.dat 
+echo set term x11 >>plotfile.dat 
+
+#Step 2: call gnuplot 
+gnuplot plotfile.dat
+
+#Step 1: create file 
+echo reset > plotfile.dat
+echo set term x11 >>plotfile.dat 
+echo set title \"Topology Coherence\" >>plotfile.dat
+echo set xlabel \"Degre de Mobilite\" >>plotfile.dat
+echo set ylabel \"Nombre de nœud proche mais pas voisin\" >>plotfile.dat
+echo set grid >>plotfile.dat
+echo plot \"resultats\/Data\/800_100\/AllData_OnlyCacheNormal.txt\" using 6:2 title \'No Prefetch Cache Normal\' with lines linewidth 1,\"resultats\/Data\/800_100\/AllData_OnlyCacheMult.txt\" using 6:2 title \'No Prefetch Cache Multiple\' with lines linewidth 1,\"resultats\/Data\/800_100\/AllData_Nothing.txt\" using 6:2 title \'No Cache No Prefetch\' with lines linewidth 1 >>plotfile.dat 
+#echo pause -1 >>plotfile.dat
+echo set term png >>plotfile.dat 
+echo set out \"resultats\/Courbes\/Courbes_Final_$time\/Topology_Coherence_Caches.png\" >>plotfile.dat 
+echo rep >>plotfile.dat
+echo set out >>plotfile.dat 
+echo set term x11 >>plotfile.dat 
+
+#Step 2: call gnuplot 
+gnuplot plotfile.dat
+
+
+#Step 1: create file 
+echo reset > plotfile.dat
+echo set term x11 >>plotfile.dat
+echo set title \"Nombre moyen de messages \" >>plotfile.dat
+echo set xlabel \"Degre de Mobilite\" >>plotfile.dat
+echo set ylabel \"Nombre de messages\" >>plotfile.dat
+echo set grid >>plotfile.dat
+echo plot \"resultats\/Data\/800_100\/AllData_OnlyCacheNormal.txt\" using 6:3 title \'No Prefetch Cache Normal\' with lines linewidth 1,\"resultats\/Data\/800_100\/AllData_OnlyCacheMult.txt\" using 6:3 title \'No Prefetch Cache Multiple\' with lines linewidth 1,\"resultats\/Data\/800_100\/AllData_Nothing.txt\" using 6:3 title \'No Cache No Prefetch\' with lines linewidth 1 >>plotfile.dat
+#echo pause -1 >>plotfile.dat
+echo set term png >>plotfile.dat
+echo set out \"resultats\/Courbes\/Courbes_Final_$time\/Nombre_Messages_Caches.png\" >>plotfile.dat
+echo rep >>plotfile.dat
+echo set out >>plotfile.dat
+echo set term x11 >>plotfile.dat
+
+#Step 2: call gnuplot 
+gnuplot plotfile.dat
+
+
+############################################### Courbres résultats sur le cache  ##############################################
+
+#Step 1: create file 
+echo reset > plotfile.dat
+echo set term x11 >>plotfile.dat
+echo set title \"Statistiques sur le cache normal\" >>plotfile.dat
+echo set xlabel \"Degre de Mobilite\" >>plotfile.dat
+echo set ylabel \"Nombre de Hit\/Miss\" >>plotfile.dat
+echo set grid >>plotfile.dat
+echo plot \"resultats\/Data\/800_100\/AllData_CacheStats.txt\" using 7:1 title \'Hit\' with lines linewidth 2,\"resultats\/Data\/800_100\/AllData_CacheStats.txt\" using 7:3 title \'Miss\' with lines linewidth 2 >>plotfile.dat
+#echo pause -1 >>plotfile.dat
+echo set term png >>plotfile.dat
+echo set out \"resultats\/Courbes\/Courbes_Final_$time\/Cache_Stats_Normal.png\" >>plotfile.dat
+echo rep >>plotfile.dat
+echo set out >>plotfile.dat
+echo set term x11 >>plotfile.dat
+
+#Step 2: call gnuplot 
+gnuplot plotfile.dat
+
+
+#Step 1: create file 
+echo reset > plotfile.dat
+echo set term x11 >>plotfile.dat
+echo set title \"Données sur le cache avec réponse multiple\" >>plotfile.dat
+echo set xlabel \"Temps de simulation\" >>plotfile.dat
+echo set ylabel \"Nombre de Hit\/Mit\/Miss\" >>plotfile.dat
+echo set grid >>plotfile.dat
+echo plot \"resultats\/Data\/800_100\/AllData_CacheMultStats.txt\" using 7:1 title \'Hit\' with lines linewidth 2,\"resultats\/Data\/800_100\/AllData_CacheMultStats.txt\" using 7:3 title \'Miss\' with lines linewidth 2 >>plotfile.dat
+#echo pause -1 >>plotfile.dat
+echo set term png >>plotfile.dat
+echo set out \"resultats\/Courbes\/Courbes_Final_$time\/Cache_Stats_Mult.png\" >>plotfile.dat
+echo rep >>plotfile.dat
+echo set out >>plotfile.dat
+echo set term x11 >>plotfile.dat
+
+#Step 2: call gnuplot 
+gnuplot plotfile.dat
+
+
+
+
+
+
+#Traçage des courbes fini
+
+cp ./resultats/Data/800_100/AllData_CacheStats.txt ./resultats/Courbes/Courbes_Final_$time/Datas/
+cp ./resultats/Data/800_100/AllData_CacheMultStats.txt ./resultats/Courbes/Courbes_Final_$time/Datas/
+cp ./resultats/Data/800_100/AllData_NoCachePrefetchAmeliore.txt ./resultats/Courbes/Courbes_Final_$time/Datas/
+cp ./resultats/Data/800_100/AllData_NoCachePrefetchNormal.txt ./resultats/Courbes/Courbes_Final_$time/Datas/
+cp ./resultats/Data/800_100/AllData_Nothing.txt ./resultats/Courbes/Courbes_Final_$time/Datas/
+cp ./resultats/Data/800_100/AllData_OnlyCacheNormal.txt ./resultats/Courbes/Courbes_Final_$time/Datas/
+cp ./resultats/Data/800_100/AllData_OnlyCacheMult.txt ./resultats/Courbes/Courbes_Final_$time/Datas/
+
+
+
+
+rm -f plotfile.dat

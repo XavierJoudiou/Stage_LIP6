@@ -50,13 +50,28 @@ Si le prefetch amélioré n'est pas activé, nous exécutons le traitement initi
 
 Nous allons présenter les différents résultats obtenus avec le prefetch nouvelle version. Nous comparerons notre version à une de base où l'on ne trouve ni cache ni prefetch, et avec une version avec le prefetch implémenté dans Blue Banana. Les principales métriques pour comparer les différents résultats sont la cohérence de la topologie et le nombre de message qui sont exprimés en fonction de la mobilité des avatars.
 
+\par Le changement que nous avons implémenté, dans le prefetch, nous permet d'économiser des messages comme il est possible de voir sur la figure~\ref{courbeNbMessPrefetch}. Cela est dû au fait que nous examinons les nœuds avant de les rapatrier. En ne rapatriant pas tous les messages, nous économisons donc des messages de réponses au nœud qui a demandé le prefetch. De plus comme le rapatriement ce fait de façon plus fine, nous rapatrions moins de nœuds inutiles ce qui permet de faire moins de requêtes de recherche de voisins par la suite.
+	\begin{figure}[!h]
+        \centering
+        \includegraphics[scale=0.5]{../CacheCode/SolipsisPeersim/resultats/Courbes/Courbes_Final_Rapport/Nombre_Messages_Prefetchs.png}
+        \caption{Schéma montrant le nombre de messages}
+        \label{courbeNbMessPrefetch}
+        \end{figure}
 
+\par La solution que nous avons mis en place permet d'avoir une meilleure cohérence de la topologie. Certains nœuds, qui était pris et qui se révélaient pas être utiles, ne sont plus rapatrier. Le nombre de nœuds qui est dans la zone de connaissance d'une autre nœuds mais pas dans sa liste des voisins, augmentent logiquement avec le degré de mobilité. Ce nombre augmente car les mouvements sont en hausse et il y a donc de plus en plus de changements dans la liste des voisins à faire, et les différents délais des messages ou des mécanismes sont limitant pour conserver une bonne topologie. La modification du prefetch améliore aussi sensiblement la règle de l'enveloppe connexe de Solipsis.
+
+	\begin{figure}[!h]
+        \centering
+        \includegraphics[scale=0.5]{../CacheCode/SolipsisPeersim/resultats/Courbes/Courbes_Final_Rapport/Topology_Coherence_Prefetchs.png}
+	\caption{Schéma montrant la cohérence de la topologie}
+	\label{courbeTopoPrefetch}
+        \end{figure}
 
 
 
 \subsection{Conclusion et perspectives}
-Mieux regarder les directions, en fonction de la distance des nœuds avec le nœud qui souhaite rapatrier, pourrait peut être permettre de mieux choisir les nœuds.
-Une autre amélioration pourrait être de chercher parmi des nœuds qui peuvent être hors du cône, mais sans aller trop loin pour ne pas rajouter trop de nœuds à contacter sinon trop de messages seraient alors émis. Si ce mécanisme permet de d'augmenter l'efficacité du prefetch, il peut aussi être possible de regarder avec un angle plus grand de façon périodique.
+Le gain sur la cohérence de la topologie de notre solution, est minime mais étant donné qu'il économise en plus des messages, le résultat est donc positif. Le gain sur la topologie pourrait sûrement être meilleur si nous regardions encore d'autres paramètres. Mieux regarder les directions, en fonction de la distance des nœuds avec le nœud qui souhaite rapatrier, pourrait peut être permettre de mieux choisir les nœuds à rapatrier.
+Une autre amélioration pourrait être de chercher parmi des nœuds qui peuvent être hors du cône, mais dans un périmètre proche pour ne pas rajouter trop de nœuds à contacter sinon trop de messages seraient alors émis. Si ce mécanisme permet de d'augmenter l'efficacité du prefetch, il peut aussi être possible de regarder avec un angle plus grand de façon périodique.
 
 
 \newpage
