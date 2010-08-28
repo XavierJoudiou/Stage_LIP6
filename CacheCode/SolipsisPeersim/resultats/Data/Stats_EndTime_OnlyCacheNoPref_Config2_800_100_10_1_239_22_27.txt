@@ -1,0 +1,16 @@
+Limite du cache: 1500, CacheSize: 25, Time_limite 1500, Durée: 100000, update ok ? 1, update time: 4000, Help Ok ? 1, Contact node ? 1, Stratégie: 1, Limite connaissance: 2000
+Hit:Mit:Miss:HitHelp:MissHelp:nbSearchHIT:nbSearchMiss:Time
+829:156:6482:1076:7403:0:0:99900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+374|9185|9185|994846|11476083|9000|16163043|99900
+
+=============================
+Limite du cache: 1500, CacheSize: 25, Time_limite 1500, Durée: 100000, update ok ? 1, update time: 4000, Help Ok ? 1, Contact node ? 1, Stratégie: 1, Limite connaissance: 2000
+Hit:Mit:Miss:HitHelp:MissHelp:nbSearchHIT:nbSearchMiss:Time
+821:128:6298:973:7187:0:0:99900
+
+CacheReq|Search|CacheHelp|Update|Delta|Found|Total|Time
+307|8842|8842|982532|11488984|8673|16130746|99900
+
+=============================
