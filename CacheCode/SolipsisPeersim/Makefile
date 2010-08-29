@@ -83,7 +83,7 @@ rundebut:
 run:
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
 	java -cp $(ALL) peersim.Simulator config/params_CURRENT_2010.cfg #> trace
-	CalculsBases OnlyCacheNoPref_Config2 800_100_10_1
+	CalculsBases OnlyCacheMultNoPref_Config2 800_100_10_1
 	play -q ../../Sounds/Homer_Dooh.wav
 
 runo:

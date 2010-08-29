@@ -1683,10 +1683,14 @@ public class SolipsisProtocol implements EDProtocol {
 			}
 			if ( isInCache(neighbor)){
 				MajNeighborProxy(this.cache.getCache().get(neighbor.getId()), neighbor);
-				System.out.println("YESPAPA+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+				if ( cacheDebug == 1 || cacheDebug == 2 ){
+					System.out.println("YESPAPA+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+				}
 			}else{
-				System.out.println("NOPAPA+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-				System.out.println("neigbor: " + neighbor.getId());
+				if ( cacheDebug == 1 || cacheDebug == 2 ){
+					System.out.println("NOPAPA+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+					System.out.println("neigbor: " + neighbor.getId());
+				}
 //				this.cache.ShowCache();
 			}
 			Globals.cacheEvaluator.incCacheMitGLob();
