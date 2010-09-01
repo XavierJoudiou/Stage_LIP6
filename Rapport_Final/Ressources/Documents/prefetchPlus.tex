@@ -1,6 +1,6 @@
 \section{Amélioration du prefetch de Blue Banana}
 
-L'objectif  est de précharger plus finement les données que dans la solution introduite dans Blue Banana, et surtout d'essayer de ne pas précharger des données inutiles. Pour le moment, nous regardons juste les nœuds qui sont dans notre champs de vision (un cône) et qui ne sont ni trop loin, ni trop près. Mais il serait intéressant d'avoir plus d'informations sur les nœuds avant de les précharger, comme leur direction ou leur vitesse par exemple. Nous avons donc regardé quelques critères qui pourraient permettre de rapatrier les données de façon plus fine.
+L'objectif de cette solution est de précharger plus finement les données que dans la solution introduite dans Blue Banana, et surtout d'essayer de précharger le moins possible de données inutiles. Dans Blue Banana, seuls les nœuds qui sont dans notre champs de vision (un cône) et qui ne sont ni trop loin, ni trop près, étaient regardés. Mais il serait intéressant d'avoir plus d'informations sur les nœuds avant de les précharger, comme leur direction ou leur vitesse par exemple. Nous avons donc regardé quelques critères qui pourraient permettre de rapatrier les données de façon plus fine.
 
 \subsection{Les changements introduits sur la version de Blue Banana}
 
