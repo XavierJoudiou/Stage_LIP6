@@ -1,16 +1,16 @@
 \section{Un système P2P pour MMOG: Solipsis}
 	\label{solipsis}
-	Solipsis est le "socle" du travail Blue Banana~\cite{keller-solipsis}, il est donc nécessaire de présenter les points importants pour la compréhension du travail Blue Banana. Solipsis introduit des propriétés qu'il va être important de comprendre et qui serviront lors de l'analyse des résultats.
+	Solipsis est le ``socle'' du travail Blue Banana~\cite{keller-solipsis}, il est donc nécessaire de présenter les points importants pour la compréhension du travail Blue Banana. Solipsis introduit des propriétés qu'il va être important de comprendre et qui serviront lors de l'analyse des résultats des solutions implémentées durant le stage.
 	\subsection{Introduction sur Solipsis} 
 	\par Pour commencer, le fonctionnement global et les fonctionnalités importantes de Solipsis vont être présentés. Solipsis est fait pour accepter un nombre illimité d'utilisateurs et pour maintenir une cohérence suffisante pour un bon fonctionnement du système. Il peut être accessible par n'importe quel ordinateur, il peut fonctionner sur des ordinateurs peu puissants et avec des connections internet faibles (56Kbs) ou sans fil. Une fois les nœuds connectés, ils peuvent échanger des données telles que de la vidéo, du son, le mouvement d'avatar ou toutes choses affectant la représentation du monde virtuel. \\
 	\subsection{Propriétés de Solipsis}
-	Le monde de Solipsis est un tore à deux dimensions, chaque entité détermine sa position dans le monde et elle en est responsable. Chaque utilisateur collecte les informations lui permettant de reconstituer son environnement virtuel local. Les connections entre les nœuds sont bidirectionnelles. 
+	Le monde de Solipsis est un tore à deux dimensions, chaque entité détermine sa position dans le monde et elle est responsable de cette dernière. Chaque utilisateur collecte les informations lui permettant de reconstituer son environnement virtuel local. Les connections entre les nœuds sont bidirectionnelles. 
 		\subsubsection{Propriétés}
 	Solipsis doit permettre aux utilisateurs de se déplacer à travers le monde, il faut pour cela que les deux propriétés locales suivantes soient respectées.
 	\begin{itemize}
 	\renewcommand{\labelitemi}{$\bullet$}
 		\item \textit{Local Awareness:}\\
-		Une entité doit être connectée avec tous ses plus proches voisins. Il est important de noter qu'une entité a la possibilité de connaître des entités en dehors de son environnement virtuel local. En revanche, cette propriété impose que l'entité située à l'intérieur fasse partie des voisins de l'entité.	
+		Une entité doit être connectée avec tous ses plus proches voisins. Il est important de noter qu'une entité a la possibilité de connaître des entités en dehors de son environnement virtuel local. En revanche, cette propriété impose que une entité située à l'intérieur fasse partie des voisins de l'entité.	
 		\item \textit{Global Connectivity:}\\
 		Toute entité virtuel doit se trouver à l'intérieur de l'enveloppe convexe contenant l'ensemble de ses voisins logiques. L'enveloppe convexe des entités est le plus petit polygone convexe formé par cet ensemble. Un mécanisme pour éviter qu'une partie du graphe soit isolée a aussi été mis en place.\\
 
