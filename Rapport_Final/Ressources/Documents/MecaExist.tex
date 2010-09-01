@@ -1,7 +1,7 @@
 \section{Systèmes P2P exploitables par les MMOGs distribués}
 	Des systèmes pair à pair sont déjà exploitables par les MMOGs distribuées, un tour d'horizon de ceux-ci va permettre de mettre en avant ce qu'ils apportent. Les concepts d'aire d'intérêt, de découpage de la carte et d'overlay vont être passés en revue.
 	\subsection{Area Of Interest}
-	Dans plusieurs articles, la notion de \textit{Area Of Interest}~\cite{1403002,1267692,1015507} va apparaître ce qui montre l'utilité de ce concept. Nous pourrons retrouver ce principe sous le nom de \textit{Local Awareness} dans Sollipsis. L'idée principale de ce mécanisme est qu'une entité n'a pas besoin de connaître l'ensemble du monde virtuel à chaque instant. Alors nous allons mettre en place une zone dans laquelle l'entité sera tenue informée des différentes modifications qui seront faites sur les objets et les autres entités qui se trouvent dans la zone (voir schéma~\ref{AOI}). Si une entité modifie sa représentation virtuelle, seulement les entités qui sont dans sa zone seront directement informées.\\
+	Dans plusieurs articles, la notion de \textit{Area Of Interest}~\cite{1403002,1267692,1015507} va apparaître ce qui montre l'utilité de ce concept. Nous pourrons retrouver ce principe sous le nom de \textit{Local Awareness} dans Sollipsis. L'idée principale de ce mécanisme est qu'une entité n'a pas besoin de connaître l'ensemble du monde virtuel à chaque instant. Alors nous allons mettre en place une zone dans laquelle l'entité sera tenue informée des différentes modifications qui seront faites sur les objets et les autres entités qui se trouvent dans la zone (voir la figure~\ref{AOI}). Si une entité modifie sa représentation virtuelle, seulement les entités qui sont dans sa zone seront directement informées.\\
 
 	%\subsubsection{Mercury}
 	\par Dans Mercury~\cite{1015507}, le concept d'Area Of Interest va être utile avec le mécanisme de publish-subscribe qui est mis en place. Ce mécanisme de publish-subscribe permet l'abonnement et le désabonnement aux mises à jour d'un objet, et il permet donc d'envoyer un objet vers les nœuds qui sont abonnés.\\
@@ -49,14 +49,14 @@
         	\end{itemize}
         Cette solution offre différentes possibilités d'ajout de nœud, de détection de défaillance, de remplacement de lien, etc. \textit{group}-based applications influencent l'overlay sous-jacent en remplaçant les liens inter nodes par des liens entres les applications. L'algorithme maintient une bonne connectivité.
 		\subsubsection{Voronoi-based Overlay Network}
-		 	VON veut exploiter la localité des intérêts des utilisateurs pour maintenir la topologie pair à pair avec un faible \textit{overhead} (temps d'inactivité du système). VON utilise un principe d'AOI dynamique, il utilise le découpage de Voronoi et chaque nœud est représenté par un site dans le diagramme. Il introduit trois procédures principales :
+		 	VON veut exploiter la localité des intérêts des utilisateurs pour maintenir la topologie pair à pair avec un faible \textit{overhead} (temps d'inactivité du système). VON utilise un principe d'AOI (Area Of Interest) dynamique, il utilise le découpage de Voronoi et chaque nœud est représenté par un site dans le diagramme. Il introduit trois procédures principales :
 		\begin{itemize}
 	        \renewcommand{\labelitemi}{$\bullet$}
                 	\item \textit{Join Procedure:} Le nœud arrivant contacte le serveur pour avoir un ID unique, puis envoie une requête avec ses coordonnées à tous les nœuds existants. Création de la liste des voisins, mis à jour chez les voisins, etc.
                 	\item \textit{Move Procedure:} Lorsque un nœud bouge, ses coordonnées sont mises à jour chez ses voisins (gestion si nœud est à la limite de la région, si il y a des nouveaux voisins, etc).
                 	\item \textit{Leave Procedure:} Le nœud se déconnecte (qu'importe sa raison et la manière) et ses voisins vont se mettre à jour.
         	\end{itemize}
-        	VON permet de gérer un grand nombre d'utilisateurs et de garder un topologie consistante. Il y a beaucoup de messages introduits par l'AOI et si la vitesse des utilisateurs est trop importante, on a des problèmes pour notifier les nouveaux voisins.
+        	VON permet de gérer un grand nombre d'utilisateurs et de garder un topologie consistante. Il y a beaucoup de messages introduits par l'AOI et si la vitesse des utilisateurs est trop importante, il y a des problèmes pour notifier les nouveaux voisins.
 
 		
 
