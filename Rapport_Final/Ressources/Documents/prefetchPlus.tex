@@ -1,13 +1,13 @@
 \section{Amélioration du prefetch de Blue Banana}
 
-L'objectif de cette solution est de précharger plus finement les données que dans la solution introduite dans Blue Banana, et surtout d'essayer de précharger le moins possible de données inutiles. Dans Blue Banana, seuls les nœuds qui sont dans notre champs de vision (un cône) et qui ne sont ni trop loin, ni trop près, étaient regardés. Mais il serait intéressant d'avoir plus d'informations sur les nœuds avant de les précharger, comme leur direction ou leur vitesse par exemple. Nous avons donc regardé quelques critères qui pourraient permettre de rapatrier les données de façon plus fine.
+L'objectif de cette solution est de précharger plus finement les données que dans la solution introduite dans Blue Banana, et surtout d'essayer de précharger le moins possible de données inutiles. Dans Blue Banana, seuls les nœuds qui sont dans le champs de vision (un cône) du nœud courant et qui ne sont ni trop loin, ni trop près, étaient regardés. Mais il serait intéressant d'avoir plus d'informations sur les nœuds avant de les précharger, comme leur direction ou leur vitesse par exemple. Nous avons donc regardé quelques critères qui pourraient permettre de rapatrier les données de façon plus fine.
 
-\subsection{Les changements introduits sur la version de Blue Banana}
+\subsection{Changements introduits sur la version de Blue Banana}
 
 
 \par Actuellement un nœud, qui est dans l'état \textbf{T}(ravelling), va chercher des nœuds qui se trouvent sur la trajectoire probable de l'avatar, tant que son ensemble de voisins n'est pas plein. Ce mécanisme va donc précharger des données qui sont à bonne distance (pas trop près à cause des temps de communication). Un des risques est de précharger des nœuds qui sont inutiles si l'avatar, dont nous préchargions les données, change de direction ou d'état. Un autre problème est que l'on peut précharger des avatars qui sont dans le cône mais qui s'en écartent ou des avatars qui arrivent à grande vitesse vers notre avatar (voir figure~\ref{prefetchav}). Le mécanisme existant n'observe pas les différentes propriétés des nœuds (vitesse, direction, état, etc). Des nœuds probablement superflus vont être rapatriés: modifier le préchargement des données pourrait nous permettre de faire ce traitement plus finement.
 
-\par  Nous pouvons voir un exemple des modifications qu'entraineraient le nouveau préchargement, dans le schéma de la figure~\ref{prefetchav}. Les nœuds verts représentent les nœuds qui seront préchargés, les nœuds rouges ceux qui sont dans la zone de rapatriement mais qui ne le seront pas. Sur la figure, nous pouvons voir que nous gardons les nœuds qui sont stables, qui bougent peu ou qui bougent dans le même sens que le nœud courant (nœud gris foncé). Les nœud qui sont rouges ont des directions inverses au nœud courant et des vitesses élevées, ils ne seront donc pas préchargés.
+\par  Nous pouvons voir un exemple des modifications qu'entraineraient le nouveau préchar-gement, dans le schéma de la figure~\ref{prefetchav}. Les nœuds verts représentent les nœuds qui seront préchargés, les nœuds rouges ceux qui sont dans la zone de rapatriement mais qui ne le seront pas. Sur la figure, nous pouvons voir que nous gardons les nœuds qui sont stables, qui bougent peu ou qui bougent dans le même sens que le nœud courant (nœud gris foncé). Les nœud qui sont rouges ont des directions inverses au nœud courant et des vitesses élevées, ils ne seront donc pas préchargés.
 
 	\begin{figure}[!h]
         \centering
@@ -34,8 +34,8 @@ $$\\\textit{Somme des normes des vecteurs~$\ge$~Norme du vecteur de prefetch +/-
 \\ Nous rapatrions alors les nœuds si:
         \begin{itemize}
         \renewcommand{\labelitemi}{$\bullet$}
-                \item L'angle du vecteur du nœud courant est proche de l'angle du vecteur de préchargement (environ 45° de chaque côté).
-		\item La somme des normes des vecteurs est supérieure la norme du vecteur de préchargement multipliée par un et demi. 
+                \item L'angle du vecteur du nœud courant est proche de l'angle du vecteur de préchar-gement (environ 45° de chaque côté).
+		\item La somme des normes des vecteurs est supérieure la norme du vecteur de préchar-gement multipliée par un et demi. 
                 \item Le nœud courant n'est pas dans l'état \textbf{T}(ravelling).
 		\item L'angle du vecteur du nœud courant n'est pas proche de l'angle du vecteur du nœud de préchargement mais la norme du nœud courant est inférieure à celle du nœud de préchargement. 
         \end{itemize}
@@ -46,9 +46,9 @@ Si le préchargement amélioré n'est pas activé, nous exécutons le traitement
 \lstinputlisting[title={\underline{\textbf{Partie du code de la fonction processPrefetchMsg}}},label={codePrefetch}]{./Ressources/Documents/ProcessPrefetchMsg.java}
 
 
-\subsection{Les résultats et les observations sur le préchargement amélioré}
+\subsection{Résultats et observations sur le préchargement amélioré}
 
-Nous allons présenter les différents résultats obtenus avec le préchargement nouvelle version. Nous comparerons notre version à une de base où l'on ne trouve ni cache ni préchargement, et avec une version avec le préchargement implémenté dans Blue Banana. Les principales métriques pour comparer les différents résultats sont la cohérence de la topologie et le nombre de message qui sont exprimés en fonction de la mobilité des avatars.
+Nous allons présenter les différents résultats obtenus avec la nouvelle version du préchargement. Nous comparerons notre version à une de base où l'on ne trouve ni cache ni préchargement, et avec une version avec le préchargement implémenté dans Blue Banana. Les principales métriques pour comparer les différents résultats sont la cohérence de la topologie et le nombre de message qui sont exprimés en fonction de la mobilité des avatars.
 
 \par Le changement que nous avons implémenté, dans le préchargement, nous permet d'économiser des messages comme il est possible de voir sur la figure~\ref{courbeNbMessPrefetch}. Cela est dû au fait que nous examinons les nœuds avant de les précharger. En ne préchargeant pas tous les messages, nous économisons donc des messages de réponses au nœud qui a demandé le préchargement. De plus comme le préchargement se fait de façon plus fine, nous sélectionnons moins de nœuds inutiles ce qui permet de faire moins de requêtes de recherche de voisins par la suite.
 	\begin{figure}[!h]

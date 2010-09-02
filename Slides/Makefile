@@ -14,7 +14,7 @@ Slides_08092010.pdf : Slides_08092010.tex
 	
 
 clean: 
-	rm -f *.aux *.dvi *.log *~ *.blg *.bbl *.toc
+	rm -f *.aux *.dvi *.log *~ *.blg *.bbl *.toc *.nav *.out *.snm
 
 cleanpdf:
 	rm -f *.pdf *~
