@@ -81,6 +81,7 @@
 	\begin{itemize}
 		\item propose un monde virtuel entièrement décentralisé et scalable\\
 		\item met en place un overlay avec une forte malléabilité applicative\\
+		\item chaque entité collecte des information pour reconstituer son environnement local.\\
 	\end{itemize}
   \end{frame}
 
@@ -88,7 +89,7 @@
 	Solipsis introduit plusieurs propriétés:
 	\begin{itemize}
                 \item \textit{Local Awareness:}\\
-                Une entité doit être connectée avec tous ses plus proches voisins, elle peut connaître des entités en dehors de son environnement virtuel local. Toute entité située à l'intérieur doit faire parti des voisins de l'entité.
+                Une entité doit être connectée avec tous ses plus proches voisins, elle peut connaître des entités en dehors de son environnement virtuel local. Toute entité située à l'intérieur de l'environnement d'une entité doit faire parti des voisins de cette entité.
                 \item \textit{Global Connectivity:}\\
                 Toute entité virtuelle doit se trouver à l'intérieur de l'enveloppe convexe contenant l'ensemble de ses voisins logiques. \\
 	\end{itemize}
@@ -149,17 +150,20 @@
   \end{frame}
 
   \begin{frame}
-	Différentes métriques utilisées pour analyser les tests:
+	Différentes métriques utilisées pour analyser les résultats:
 	\begin{itemize}
 		\item Nombre de messages
 		\item Cohérence de la topologie
 		\item Cache Hit et Miss (pour le cache)
 	\end{itemize}
+	\vspace{5mm}
+	En fonction du degré de mobilité.
   \end{frame}
 
   \section{Le cache pour les zones denses}
   \begin{frame}
 	\center{Le cache des zones denses}
+	\vspace{1cm}
 	\begin{itemize}
 		\item Explications sur le cache des zones denses
 		\item Les résultats 
@@ -174,7 +178,7 @@
  		\item Chaque nœud de l'environnement a un cache.
 		\item Il est utilisé seulement par les nœuds en état \textbf{W}(andering).
 		\item Deux types de cache mis en place (retour simple et retour multiple).
-		\item Sélectionne un nœud en fonction de sa zone d'intérêt.
+		\item Sélectionne un nœud en fonction de sa zone de connaissance.
 	\end{itemize}
   \end{frame}
  
@@ -192,7 +196,7 @@
         \end{figure}}
   \end{frame}
 
-  \noindent\begin{frame}
+  \begin{frame}
   	\only{\begin{figure}
         \includegraphics[scale=0.08]{./Ressources/Images/etape3.png}\\
         \label{etape3}
@@ -200,7 +204,18 @@
 
 
   \end{frame}
+
+  \begin{frame}
+	Différents paramètres pour le cache:
+	\begin{itemize}
+		\item Mise à jour des données du cache
+		\item Contact un nœud du cache si il est la depuis longtemps
+		\item Aide les nœuds voisins lors de recherche de nœud	
+	\end{itemize}
+  \end{frame}
+
  
+  \subsection{Résultats pour le cache}
   \begin{frame}
 	\begin{columns}
          \begin{column}{5cm}
@@ -214,7 +229,6 @@
 
   \end{frame}
 
-  \subsection{Résultats pour le cache}
   \begin{frame}
   	Résultats des deux versions du cache en fonction d'une version sans le cache activé:
 	\begin{table}[!h]
@@ -325,6 +339,17 @@
   
   \section{Conclusion}
   \begin{frame}
+	Les différentes solutions ont permis d'améliorer la réactivité des réseaux pair à pair pour les MMOGs.\\
+	Meilleur cohérence de la topologie et moins de message que dans Blue Banana.
   \end{frame}
-  
+	
+
+  \begin{frame}
+	\begin{center}
+	Merci.\\
+	\vspace{1cm}	
+	Questions?
+	\end{center}
+  \end{frame}  
+
   \end{document}
