@@ -32,27 +32,34 @@
 
   \section{Introduction}
   \begin{frame}
-  	Présentation des points importants à la compréhension des solutions:\\
+  	Présentation des points importants à la compréhension du sujet:\\
 	\begin{itemize}
 		\item Architecture pair à pair Vs Client-Serveur\\
-		\item Définition d'un Overlay\\
+		\item Définition de l'overlay\\
 	\end{itemize}
   \end{frame}
 
   \begin{frame}
 	Architecture pair à pair Vs Client/Serveur\\
 	\begin{figure}
-	\includegraphics[scale=0.3]{./Ressources/Images/p2p-85145.png}\\
+	\includegraphics[scale=0.28]{./Ressources/Images/p2p-85145.png}\\
         \label{P2PvsClServ}
         \end{figure}
+	\begin{itemize}
+		\item Problème du passage à l'échelle de l'architecture Client/Serveur.\\
+		\item Solutions p2p existantes pas assez réactive pour assurer une latence suffisante.\\
+	\end{itemize}
   \end{frame}
   
   \begin{frame}
 	
-	\center{Définition d'un Overlay}
+	\center{Définition de l'overlay}
  	\begin{columns}
-          \begin{column}{5cm}
-          	Un Overlay est un réseau informatique formant un graphe où les liens sont déterminés avec un critère logique.\\
+          \begin{column}{6,5cm}
+	    	\begin{itemize}
+		\item Un overlay est un réseau informatique formant un graphe où les liens sont déterminés avec un critère logique.\\
+		\item Réseau physique~$\neq$~Réseau virtuel
+		\end{itemize}
 	  \end{column}
           \begin{column}{5cm}
         	\begin{figure}
@@ -66,7 +73,7 @@
 	
   \section{État de l'art}
   \begin{frame}
-	Présentation des différents mécanismes importants pour la compréhension des solutions introduites:\\
+	Présentation des  mécanismes importants à la compréhension des solutions introduites:\\
 	\begin{itemize}
 		\item Solipsis\\
 		\item Étude des traces des joueurs de MMOG\\
@@ -77,10 +84,14 @@
   \subsection{Solipsis}
 
   \begin{frame}
+	\begin{center}
+	\includegraphics[scale=0.35]{./Ressources/Images/solipsis.png}\\
+	\end{center}
+	\vspace{4mm}
 	Solipsis:\\
 	\begin{itemize}
-		\item propose un monde virtuel entièrement décentralisé et scalable\\
-		\item met en place un overlay avec une forte malléabilité applicative\\
+		\item propose un monde virtuel entièrement décentralisé et scalable.\\
+		\item met en place un overlay avec une forte malléabilité applicative.\\
 		\item chaque entité collecte des informations pour reconstituer son environnement local.\\
 	\end{itemize}
   \end{frame}
@@ -99,10 +110,13 @@
   \begin{frame}
 	Des études des traces des joueurs de MMOG, ont permis de détecter différents habitudes des joueurs:
 	\begin{itemize}
-		\item Zones denses 
+		\item Présence de zones denses 
 		\item Mouvements erratiques dans les zones denses
 		\item Mouvements rectilignes et rapides entre les zones denses
 	\end{itemize}
+	\begin{center}
+        \includegraphics[scale=0.35]{./Ressources/Images/trace.png}\\
+        \end{center}
   \end{frame}
 
   \subsection{BlueBanana}
@@ -120,7 +134,7 @@
 	\begin{columns}
 	  \begin{column}{5cm}
 		\begin{itemize}
-		  \item Si état \textbf{T}(ravelling), cherche des nœuds sur sa trajectoire.
+		  \item Si état \textbf{T}, il cherche des nœuds sur sa trajectoire.
 		  \item Evaluation du nœud, propagation de la requête.
 		  \item Réponse au nœud qui a demandé le préchargement.
 		\end{itemize}
@@ -132,7 +146,6 @@
         \end{figure}
 	\end{column}
 	\end{columns}
-
   \end{frame}
 
   \section{Les améliorations}
@@ -152,24 +165,24 @@
   \begin{frame}
 	Différentes métriques utilisées pour analyser les résultats:
 	\begin{itemize}
-		\item Nombre de messages
-		\item Cohérence de la topologie
+		\item Nombre de messages à un instant 
+		\item Cohérence de la topologie \\ \textit{\footnotesize{Nombre de nœuds dans la zone de connaissance mais pas dans l'ensemble des voisins}}
 		\item Cache Hit et Miss (pour le cache)
 	\end{itemize}
 	\vspace{5mm}
 	En fonction du degré de mobilité.
   \end{frame}
 
-  \section{Le cache pour les zones denses}
-  \begin{frame}
-	\center{Le cache des zones denses}
-	\vspace{1cm}
-	\begin{itemize}
-		\item Explications sur le cache des zones denses
-		\item Les résultats 
-		\item Conclusion sur le cache
-	\end{itemize}
-  \end{frame}
+  %\section{Le cache pour les zones denses}
+  %\begin{frame}
+	%\center{Le cache des zones denses}
+	%\vspace{1cm}
+	%\begin{itemize}
+		%\item Explications sur le cache des zones denses
+		%\item Les résultats 
+		%\item Conclusion sur le cache
+	%\end{itemize}
+  %\end{frame}
   
   \subsection{Explications du cache pour les zones denses}
   \begin{frame}
@@ -183,7 +196,7 @@
 
   \begin{frame}
 	Trois types de recherche dans le cache:
-	\vspace{7mm}
+	\vspace{3mm}
 	\tiny{
 	\begin{table}
   		\begin{center}
@@ -199,6 +212,10 @@
   		\end{center}
 	\end{table}
 	}
+	\begin{itemize}
+		\item La version 3 a été conservé pour les tests finaux.
+
+	\end{itemize}
   \end{frame}
  
   \begin{frame}
@@ -231,11 +248,15 @@
 		\item Contact un nœud du cache s'il est là depuis longtemps
 		\item Aide les nœuds voisins lors de recherche de nœud	
 	\end{itemize}
+	
   \end{frame}
 
  
   \subsection{Résultats pour le cache}
   \begin{frame}
+	\begin{center}
+	Nombre de messages et Cohérence de la topologie
+	\end{center}
 	\begin{columns}
          \begin{column}{5cm}
           \includegraphics[scale=0.25]{./Ressources/Images/Courbes_Final_Rapport/Nombre_Messages_Caches.png}\\
@@ -261,9 +282,12 @@
       		\hline
     		\end{tabular}
   		\end{center}
-  		\label{tab:config1}
 	\end{table}
-	
+	\begin{itemize}\footnotesize{
+		\item Moins de messages le cache s'utilise immédiatement sans message.
+		\item Gain sur la cohérence de la topologie si retour multiple.
+	}
+	\end{itemize}	
   \end{frame}
 	
   \subsection{Conclusion sur le cache des zones denses}
@@ -280,15 +304,15 @@
 
 
   \section{Le préchargement amélioré des données}
-  \begin{frame}
-	\center{Le préchargement amélioré des données}
-	\vspace{1cm}
-	\begin{itemize}
-		\item Explications sur le préchargement amélioré
-		\item Les résultats 
-		\item Conclusion sur le préchargement
-	\end{itemize}
-  \end{frame}
+  %\begin{frame}
+	%\center{Le préchargement amélioré des données}
+	%\vspace{1cm}
+	%\begin{itemize}
+		%\item Explications sur le préchargement amélioré
+		%\item Les résultats 
+		%\item Conclusion sur le préchargement
+	%\end{itemize}
+  %\end{frame}
 
   \subsection{Explications du préchargement amélioré}
   \begin{frame}
@@ -318,8 +342,11 @@
 
   \end{frame}
 	
-  \subsection{Résultats pour le préchargement amélioré}
+  \subsection{Résultats pour l'amélioration du préchargement des données}
   \begin{frame}
+	\begin{center}
+	Nombre de messages et Cohérence de la topologie
+	\end{center}
 	\begin{columns}
          \begin{column}{5cm}
           \includegraphics[scale=0.25]{./Ressources/Images/Courbes_Final_Rapport/Nombre_Messages_Prefetchs.png}\\
@@ -332,24 +359,30 @@
 	
   \begin{frame}
 	 Résultats des différents préchargements en comparaison à une version sans le préchargement activé:
+	\vspace{7mm}
         \begin{table}[!h]
                 \begin{center}
                 \begin{tabular}{|c|c|c|c|}
                 \hline
                 Solution & Cohérence topologie & Nombre de messages \\
                 \hline
-                Préchargement Normal & 15\% de gains &  8\% de msg en plus\\
-                Préchargement Multiple & 16\% de gains &  4\% de msg en plus\\
+                Retour Simple & 15\% de gains &  8\% de msg en plus\\
+                Retour Multiple & 16\% de gains &  4\% de msg en plus\\
                 \hline
                 \end{tabular}
                 \end{center}
                 \label{tab:config1}
         \end{table}
+	\begin{itemize}\footnotesize{
+		\item Gain en terme de messages car préchargement plus efficace, et donc moins de recherche de voisins.
+		\item Léger gain sur la cohérence de la topologie car élimination du préchargement de certains nœuds inutiles.
+		}
+	\end{itemize}
   \end{frame}
 
-  \subsection{Conclusion sur le préchargement amélioré}
+  \subsection{Conclusion sur l'amélioration du préchargement des données}
   \begin{frame}
-	Le préchargement amélioré permet:
+	Notre amélioration du préchargement permet:
 	\begin{itemize}
 		\item d'économiser des messages par rapport au préchargement normal.\\
 		\item d'améliorer légèrement la cohérence de la topologie.\\
@@ -361,8 +394,18 @@
   
   \section{Conclusion}
   \begin{frame}
-	Les différentes solutions ont permis d'améliorer la réactivité des réseaux pair à pair pour les MMOGs.\\
-	Meilleur cohérence de la topologie et moins de message que dans Blue Banana.
+	\begin{itemize}
+	\item Les solutions ont permis d'améliorer la réactivité des réseaux pair à pair pour les MMOGs.\\
+	\item Meilleur cohérence de la topologie et moins de message que dans Blue Banana.
+	\item Autres pistes d'amélioration trouvées:\\
+	\begin{itemize}
+	\footnotesize{
+	\item Meilleure utilisation des mécanismes du cache
+	\item Amélioration du préchagememnt
+	\item Mouvements de groupe\\
+	\item Route entre les zones denses.\\}
+	\end{itemize}
+	\end{itemize}
   \end{frame}
 	
 
