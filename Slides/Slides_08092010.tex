@@ -81,7 +81,7 @@
 	\begin{itemize}
 		\item propose un monde virtuel entièrement décentralisé et scalable\\
 		\item met en place un overlay avec une forte malléabilité applicative\\
-		\item chaque entité collecte des information pour reconstituer son environnement local.\\
+		\item chaque entité collecte des informations pour reconstituer son environnement local.\\
 	\end{itemize}
   \end{frame}
 
@@ -176,10 +176,29 @@
 	Comment fonctionne le cache?
 	\begin{itemize}
  		\item Chaque nœud de l'environnement a un cache.
-		\item Il est utilisé seulement par les nœuds en état \textbf{W}(andering).
+		\item Il est utilisé seulement par les nœuds en état \textbf{E}(xploring).
 		\item Deux types de cache mis en place (retour simple et retour multiple).
-		\item Sélectionne un nœud en fonction de sa zone de connaissance.
 	\end{itemize}
+  \end{frame}
+
+  \begin{frame}
+	Trois types de recherche dans le cache:
+	\vspace{7mm}
+	\tiny{
+	\begin{table}
+  		\begin{center}
+    		 \begin{tabular}{|c|c|c|c|}
+      		 \hline
+      		 N & Critère de sélection & Avantages & Inconvénients\\
+      		 \hline
+        	 1 & Comparaison distances & Simplicité & Distance~$\ne$~utile, aide pas enveloppe\\
+        	 2 & Aide enveloppe & + Enveloppe OK & - bon règles Solipsis\\
+        	 3 & Zone de connaissance & Simplicité & aide pas enveloppe\\
+      		 \hline
+    		 \end{tabular}
+  		\end{center}
+	\end{table}
+	}
   \end{frame}
  
   \begin{frame}
@@ -206,10 +225,10 @@
   \end{frame}
 
   \begin{frame}
-	Différents paramètres pour le cache:
+	Différents mécanismes pour le cache:
 	\begin{itemize}
 		\item Mise à jour des données du cache
-		\item Contact un nœud du cache si il est la depuis longtemps
+		\item Contact un nœud du cache s'il est là depuis longtemps
 		\item Aide les nœuds voisins lors de recherche de nœud	
 	\end{itemize}
   \end{frame}
@@ -263,6 +282,7 @@
   \section{Le préchargement amélioré des données}
   \begin{frame}
 	\center{Le préchargement amélioré des données}
+	\vspace{1cm}
 	\begin{itemize}
 		\item Explications sur le préchargement amélioré
 		\item Les résultats 
@@ -284,9 +304,11 @@
   \begin{frame}
 	\begin{columns}
          \begin{column}{5cm}
+	 Préchargement si:
           \begin{itemize}
-		\item ça fait ça
-		\item et puis ça
+		\item l'angle du nœud est proche du nœud courant
+		\item \textit{Somme des normes des vecteurs~$\ge$~Norme du vecteur de prefetch +/- $\Delta$}
+		\item l'angle du nœud n'est pas proche du nœud courant mais sa norme est inférieure à celle du nœud courant
 	  \end{itemize}
 	 \end{column}
          \begin{column}{6cm}
