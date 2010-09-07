@@ -47,7 +47,7 @@
         \end{figure}
 	\begin{itemize}
 		\item Problème du passage à l'échelle de l'architecture Client/Serveur.\\
-		\item Solutions p2p existantes pas assez réactive pour assurer une latence suffisante.\\
+		\item Solutions p2p existantes pas assez réactives pour assurer une latence suffisante.\\
 	\end{itemize}
   \end{frame}
   
@@ -73,7 +73,7 @@
 	
   \section{État de l'art}
   \begin{frame}
-	Présentation des  mécanismes importants à la compréhension des solutions introduites:\\
+	Présentation des  mécanismes importants à la compréhension des solutions proposées:\\
 	\begin{itemize}
 		\item Solipsis\\
 		\item Étude des traces des joueurs de MMOG\\
@@ -92,23 +92,38 @@
 	\begin{itemize}
 		\item propose un monde virtuel entièrement décentralisé et scalable.\\
 		\item met en place un overlay avec une forte malléabilité applicative.\\
-		\item chaque entité collecte des informations pour reconstituer son environnement local.\\
+		\tiny{
+			\begin{itemize}
+				\item Un réseau est malléable si sa topologie est dynamiquement déterminé par l'application reposant sur ce réseau.\\
+				\item La topologie s'adapte à l'application, si deux avatars se rapprochent dans le monde virtuel, les nœuds dans le réseau logique doivent devenir progressivement voisins. \\
+			\end{itemize}
+		}
 	\end{itemize}
   \end{frame}
 
   \begin{frame}
 	Solipsis introduit plusieurs propriétés:
-	\begin{itemize}
-                \item \textit{Local Awareness:}\\
-                Une entité doit être connectée avec tous ses plus proches voisins, elle peut connaître des entités en dehors de son environnement virtuel local. Toute entité située à l'intérieur de l'environnement d'une entité doit faire parti des voisins de cette entité.
-                \item \textit{Global Connectivity:}\\
-                Toute entité virtuelle doit se trouver à l'intérieur de l'enveloppe convexe contenant l'ensemble de ses voisins logiques. \\
-	\end{itemize}
+	 \begin{columns}
+          \begin{column}{6cm}
+	   \begin{itemize}
+                \item \textit{Connaissance locale:}\\\tiny{
+                Une entité doit être connectée avec tous ses plus proches voisins, elle peut connaître des entités en dehors de son environnement virtuel local. Toute entité située à l'intérieur de l'environnement d'une entité doit faire parti des voisins de cette entité.}
+                \item \normalsize{\textit{Connectivité globale:}}\\\tiny{
+                Toute entité virtuelle doit se trouver à l'intérieur de l'enveloppe convexe contenant l'ensemble de ses voisins logiques. \\}
+	   \end{itemize}
+	\end{column}
+        \begin{column}{4cm}
+        \begin{figure}
+        \includegraphics[scale=0.3]{./Ressources/Images/envelop_convex3.png}\\
+        \label{Propa_Algo}
+        \end{figure}
+        \end{column}
+        \end{columns}
   \end{frame}
 
   \subsection{Les traces}
   \begin{frame}
-	Des études des traces des joueurs de MMOG, ont permis de détecter différents habitudes des joueurs:
+	Des études des traces des joueurs de MMOG, ont permis de faire plusieurs observations sur l'environnement virtuel:
 	\begin{itemize}
 		\item Présence de zones denses 
 		\item Mouvements erratiques dans les zones denses
@@ -167,7 +182,6 @@
 	\begin{itemize}
 		\item Nombre de messages à un instant 
 		\item Cohérence de la topologie \\ \textit{\footnotesize{Nombre de nœuds dans la zone de connaissance mais pas dans l'ensemble des voisins}}
-		\item Cache Hit et Miss (pour le cache)
 	\end{itemize}
 	\vspace{5mm}
 	En fonction du degré de mobilité.
@@ -175,10 +189,10 @@
 
   \section{Le cache pour les zones denses}
   \begin{frame}
-	\center{Le cache des zones denses}
+	\center{Le cache pour les zones denses}
 	\vspace{1cm}
 	\begin{itemize}
-		\item Explications sur le cache des zones denses
+		\item Explications du cache pour les zones denses
 		\item Les résultats 
 		\item Conclusion sur le cache
 	\end{itemize}
@@ -248,46 +262,85 @@
 		\item Contact un nœud du cache s'il est là depuis longtemps
 		\item Aide les nœuds voisins lors de recherche de nœud	
 	\end{itemize}
-	
+	\footnotesize{
+	\begin{table}[!h]
+  	\begin{center}
+    	\begin{tabular}{|c|c|}
+        \hline
+      	 Paramètre & Valeur\\
+      	\hline
+     	 Taille du cache & 25\\
+     	 Limite de distance &  1500\\
+     	 Limite de temps & 1500\\
+     	 Contact Nœud & Faux\\
+     	 Mise à jour du cache & Faux\\
+     	 Aide aux voisins & Vrai\\
+      	\hline
+    	\end{tabular}
+  	\end{center}
+	\end{table}
+	}
   \end{frame}
 
  
   \subsection{Résultats pour le cache}
   \begin{frame}
 	\begin{center}
-	Nombre de messages et Cohérence de la topologie
+	Nombre de messages 
 	\end{center}
 	\begin{columns}
          \begin{column}{5cm}
           \includegraphics[scale=0.25]{./Ressources/Images/Courbes_Final_Rapport/Nombre_Messages_Caches.png}\\
          \end{column}
          \begin{column}{5cm}
-          \includegraphics[scale=0.25]{./Ressources/Images/Courbes_Final_Rapport/Topology_Coherence_Caches.png}\\
+	\footnotesize{ \begin{table}[!h]
+                \begin{center}
+                \begin{tabular}{|c|c|}
+                \hline
+                Solution & Nombre de messages \\
+                \hline
+                Cache simple &  5\% de msg en moins\\
+                Cache multiple &  5\% de msg en moins\\
+                \hline
+                \end{tabular}
+                \end{center}
+        \end{table}}
          \end{column}
         \end{columns}
-
-
+        \begin{itemize}\footnotesize{
+                \item Moins de messages le cache s'utilise immédiatement sans message.
+        }
+        \end{itemize}
   \end{frame}
 
   \begin{frame}
-  	Résultats des deux versions du cache en fonction d'une version sans le cache activé:
-	\begin{table}[!h]
-  		\begin{center}
-    		\begin{tabular}{|c|c|c|c|}
-      		\hline
-      		Solution & Cohérence topologie & Nombre de messages \\
-      		\hline
-      		Cache simple & Équivalente &  5\% de msg en moins\\
-      		Cache multiple & 3\% de gains &  5\% de msg en moins\\
-      		\hline
-    		\end{tabular}
-  		\end{center}
-	\end{table}
-	\begin{itemize}\footnotesize{
-		\item Moins de messages le cache s'utilise immédiatement sans message.
-		\item Gain sur la cohérence de la topologie si retour multiple.
-	}
-	\end{itemize}	
+        \begin{center}
+        Cohérence de la topologie
+        \end{center}
+        \begin{columns}
+         \begin{column}{5cm}
+          \includegraphics[scale=0.25]{./Ressources/Images/Courbes_Final_Rapport/Topology_Coherence_Caches.png}\\
+         \end{column}
+         \begin{column}{5cm}
+	\footnotesize{
+         \begin{table}[!h]
+                \begin{center}
+                \begin{tabular}{|c|c|}
+                \hline
+                Solution & Cohérence topologie \\
+                \hline
+                Cache simple & Équivalente \\
+                Cache multiple & 3\% de gains \\
+                \hline
+                \end{tabular}
+                \end{center}
+        \end{table}}
+         \end{column}
+        \end{columns}
+        \begin{itemize}\footnotesize{
+                \item Gain sur la cohérence de la topologie si retour multiple.
+        }
+        \end{itemize}
   \end{frame}
 	
   \subsection{Conclusion sur le cache des zones denses}
@@ -316,6 +369,8 @@
 
   \subsection{Explications du préchargement amélioré}
   \begin{frame}
+	\begin{columns}
+        \begin{column}{7cm}
 	\textbf{Situation:} Le préchargement de Blue Banana prend tous les nœuds, à bonne distance, dans le cône.\\
 	\vspace{5mm}
 	\textbf{Problème:} Des nœuds inutiles sont préchargés.\\
@@ -323,6 +378,11 @@
 	\textbf{Solution:} Choisir plus finement les nœuds qui vont être sélectionnés.\\
 	\vspace{5mm}
 	\textbf{Comment:} Regarder la direction des nœuds et leur vitesse.\\
+         \end{column}
+         \begin{column}{3cm}
+          \includegraphics[scale=0.1]{./Ressources/Images/prefetchNormal.png}\\
+         \end{column}
+        \end{columns}
   \end{frame}
 
   \begin{frame}
@@ -332,7 +392,7 @@
           \begin{itemize}
 		\item l'angle du nœud est proche du nœud courant
 		\item \textit{Somme des normes des vecteurs~$\ge$~Norme du vecteur de prefetch +/- $\Delta$}
-		\item l'angle du nœud n'est pas proche du nœud courant mais sa norme est inférieure à celle du nœud courant
+		\item l'angle du nœud est inverse par mais sa norme est inférieure à celle du nœud courant
 	  \end{itemize}
 	 \end{column}
          \begin{column}{6cm}
@@ -345,36 +405,57 @@
   \subsection{Résultats pour l'amélioration du préchargement des données}
   \begin{frame}
 	\begin{center}
-	Nombre de messages et Cohérence de la topologie
+	Nombre de messages 
 	\end{center}
 	\begin{columns}
          \begin{column}{5cm}
           \includegraphics[scale=0.25]{./Ressources/Images/Courbes_Final_Rapport/Nombre_Messages_Prefetchs.png}\\
          \end{column}
          \begin{column}{5cm}
-          \includegraphics[scale=0.25]{./Ressources/Images/Courbes_Final_Rapport/Topology_Coherence_Prefetchs.png}\\
-         \end{column}
-        \end{columns}
-  \end{frame}
-	
-  \begin{frame}
-	 Résultats des différents préchargements en comparaison à une version sans le préchargement activé:
-	\vspace{7mm}
-        \begin{table}[!h]
+		\begin{table}[!h]
                 \begin{center}
-                \begin{tabular}{|c|c|c|c|}
+                \begin{tabular}{|c|c|}
                 \hline
-                Solution & Cohérence topologie & Nombre de messages \\
+                Solution & Nombre de messages \\
                 \hline
-                Normal & 15\% de gains &  8\% de msg en plus\\
-                Amélioré & 16\% de gains &  4\% de msg en plus\\
+                Normal &  8\% de msg en plus\\
+                Amélioré &  4\% de msg en plus\\
                 \hline
                 \end{tabular}
                 \end{center}
-                \label{tab:config1}
         \end{table}
+         \end{column}
+        \end{columns}
 	\begin{itemize}\footnotesize{
 		\item Gain en terme de messages car préchargement plus efficace, et donc moins de recherche de voisins.
+		}
+	\end{itemize}
+  \end{frame}
+	
+  \begin{frame}
+        \begin{center}
+        Cohérence de la topologie
+        \end{center}
+        \begin{columns}
+         \begin{column}{5cm}
+          \includegraphics[scale=0.25]{./Ressources/Images/Courbes_Final_Rapport/Topology_Coherence_Prefetchs.png}\\
+         \end{column}
+         \begin{column}{5cm}
+		\begin{table}[!h]
+                \begin{center}
+                \begin{tabular}{|c|c|}
+                \hline
+                Solution & Cohérence topologie \\
+                \hline
+                Normal & 15\% de gains \\
+                Amélioré & 16\% de gains \\
+                \hline
+                \end{tabular}
+                \end{center}
+        \end{table}
+         \end{column}
+        \end{columns}
+	\begin{itemize}\footnotesize{
 		\item Léger gain sur la cohérence de la topologie car élimination du préchargement de certains nœuds inutiles.
 		}
 	\end{itemize}
