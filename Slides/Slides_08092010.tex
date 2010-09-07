@@ -11,6 +11,9 @@
 %\usepackage{handoutWithNotes}
 %\pgfpagesuselayout{1 on 1 with notes landscape}[a4paper,border shrink=5mm]
 
+\addtobeamertemplate{footline}{\insertframenumber/\inserttotalframenumber}
+%\useoutertheme{infolines}
+
 		
 \usepackage{Slides_08092010}
 
@@ -58,7 +61,7 @@
           \begin{column}{6,5cm}
 	    	\begin{itemize}
 		\item Un overlay est un réseau informatique formant un graphe où les liens sont déterminés avec un critère logique.\\
-		%\item Réseau physique~$\neq$~Réseau virtuel
+		\item Réseau physique~$\neq$~Réseau virtuel
 		\end{itemize}
 	  \end{column}
           \begin{column}{5cm}
@@ -70,6 +73,27 @@
         \end{columns}
 	
   \end{frame}
+
+  \begin{frame}\addtocounter{framenumber}{-1}
+
+        \center{Définition de l'overlay}
+        \begin{columns}
+          \begin{column}{6,5cm}
+                \begin{itemize}
+                \item Un overlay est un réseau informatique formant un graphe où les liens sont déterminés avec un critère logique.\\
+                \item Réseau physique~$\neq$~Réseau virtuel
+                \end{itemize}
+          \end{column}
+          \begin{column}{5cm}
+                \begin{figure}
+                  \includegraphics[scale=0.1]{./Ressources/Images/overlay1.png}\\
+                  \label{Propa_Algo}
+                \end{figure}
+          \end{column}
+        \end{columns}
+
+  \end{frame}
+
 	
   \section{État de l'art}
   \begin{frame}
@@ -111,7 +135,7 @@
         \end{columns}
   \end{frame}
 
-  \begin{frame}
+  \begin{frame}\addtocounter{framenumber}{-1}
         %\begin{center}
         %\includegraphics[scale=0.2]{./Ressources/Images/solipsis.png}\\
         %\end{center}
@@ -267,28 +291,29 @@
 	\end{table}
 	}
 	\begin{itemize}
-		\item La version 3 a été conservé pour les tests finaux.
+		\item La version 3 a été conservée pour les tests finaux.
+		\item Une version 4 avec zone de connaissance et aide à l'enveloppe convexe?
 
 	\end{itemize}
 	\center{\includegraphics[scale=0.13]{./Ressources/Images/cacheReconstructEnvelop2.png}\\}
 
   \end{frame}
  
-  \begin{frame}
+  \begin{frame}\addtocounter{framenumber}{-1}
   	\only{\begin{figure}
         \includegraphics[scale=0.08]{./Ressources/Images/etape1.png}\\
         \label{etape1}
         \end{figure}}
   \end{frame}
 	
-  \begin{frame}	
+  \begin{frame}\addtocounter{framenumber}{-1}	
   	\only{\begin{figure}
         \includegraphics[scale=0.08]{./Ressources/Images/etape2.png}\\
         \label{etape2}
         \end{figure}}
   \end{frame}
 
-  \begin{frame}
+  \begin{frame}\addtocounter{framenumber}{-1}
   	\only{\begin{figure}
         \includegraphics[scale=0.08]{./Ressources/Images/etape3.png}\\
         \label{etape3}
@@ -298,11 +323,14 @@
   \end{frame}
 
   \begin{frame}
-	Différents mécanismes pour le cache:
 	\begin{itemize}
+	\item Les données du cache sont mobiles, donc pas à jour.
+	\item Différents mécanismes pour le cache:
+		\begin{itemize}
 		\item Mise à jour des données du cache
 		\item Contact un nœud du cache s'il est là depuis longtemps
 		\item Aide les nœuds voisins lors de recherche de nœud	
+		\end{itemize}
 	\end{itemize}
 	\footnotesize{
 	\begin{table}[!h]
@@ -398,22 +426,22 @@
 
 
 
-  \section{L'amélioration du préchargement des données}
+  \section{L'amélioration du préchargement}
   \begin{frame}
-	\center{L'amélioration du préchargement des données}
+	\center{L'amélioration du préchargement}
 	\vspace{1cm}
 	\begin{itemize}
-		\item Explications sur le préchargement amélioré
+		\item Explications sur l'amélioration du préchargement
 		\item Les résultats 
-		\item Conclusion sur le préchargement
+		\item Conclusion 
 	\end{itemize}
   \end{frame}
 
-  \subsection{Explications sur l'amélioration du préchargement des données}
+  \subsection{Explications sur l'amélioration du préchargement}
   \begin{frame}
 	\begin{columns}
         \begin{column}{7cm}
-	\textbf{Situation:} Le préchargement de Blue Banana prend tous les nœuds, à bonne distance, dans le cône.\\
+	\textbf{Situation:} Le préchargement de Blue Banana prend tous les nœuds, à bonne distance, dans le cône. Amélioration de la cohérence de la topologie avec un léger surplus de messages.\\
 	\vspace{5mm}
 	\textbf{Problème:} Des nœuds inutiles sont préchargés.\\
 	\vspace{5mm}
@@ -430,11 +458,11 @@
   \begin{frame}
 	\begin{columns}
          \begin{column}{5cm}
-	 Préchargement si:
+	 Préchargement amélioré:
           \begin{itemize}
-		\item l'angle du nœud est proche du nœud courant
-		\item \textit{Somme des normes des vecteurs~$\ge$~Norme du vecteur de prefetch +/- $\Delta$}
-		\item l'angle du nœud est inverse par mais sa norme est inférieure à celle du nœud courant
+		\item précharger les nœuds qui vont dans le même sens
+		\item éviter de précharger des nœuds qui viennent vers le nœud courant avec une vitesse élevée
+		\item éviter de précharger des nœuds qui s'écartent du cône
 	  \end{itemize}
 	 \end{column}
          \begin{column}{6cm}
@@ -444,7 +472,7 @@
 
   \end{frame}
 	
-  \subsection{Résultats pour l'amélioration du préchargement des données}
+  \subsection{Résultats pour l'amélioration du préchargement}
   \begin{frame}
 	\begin{center}
 	Nombre de messages 
@@ -503,7 +531,7 @@
 	\end{itemize}
   \end{frame}
 
-  \subsection{Conclusion sur l'amélioration du préchargement des données}
+  \subsection{Conclusion sur l'amélioration du préchargement}
   \begin{frame}
 	Notre amélioration du préchargement permet:
 	\begin{itemize}
@@ -519,12 +547,12 @@
   \begin{frame}
 	\begin{itemize}
 	\item Les solutions ont permis d'améliorer la réactivité des réseaux pair à pair pour les MMOGs.\\
-	\item Meilleur cohérence de la topologie et moins de message que dans Blue Banana.
+	\item Meilleure cohérence de la topologie et moins de message que dans Blue Banana.
 	\item Perspectives :\\
 	\begin{itemize}
 	\footnotesize{
 	\item Meilleure utilisation des mécanismes du cache
-	\item Amélioration du préchagememnt
+	\item Amélioration du préchagement
 	\item Mouvements de groupe\\
 	\item Route entre les zones denses.\\}
 	\end{itemize}
