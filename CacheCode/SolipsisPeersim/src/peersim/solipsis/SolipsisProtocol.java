@@ -36,7 +36,8 @@ public class SolipsisProtocol implements EDProtocol {
 	private final static String TYPE            = "type";
 	private final static String SMNB            = "small_world";
 
-	/* pour le cache */
+    /* ********************************************** */
+	/* Pour le cache */
 	private final static String CACHE_SIZE		= "cacheSize";
 	private final static String CACHE_STRATEGIE = "cachestrategie";
 	private final static String CACHE_LIMIT		= "limite";
@@ -49,13 +50,14 @@ public class SolipsisProtocol implements EDProtocol {
 
 	private final static String HELP_OK			= "help_ok";
 	
-
 	private final static String CACHE_DEBUG		= "cacheDebug";
 	private final static int OFF	=  0;
 	private final static int FIFO	=  1;
 	private final static int LRU	=  2;
 	private final static int FIFOMULT	=  3;
 
+	/* ************************************************ */
+	
 	public final static int BASIC      = 0;
 	public final static int ENHANCED   = 1;
 	public final static int SMALLWORLD = 2;
@@ -117,6 +119,8 @@ public class SolipsisProtocol implements EDProtocol {
 	private SmallWorld smallWorldModule;
 	private int routeAlgorithm;
 	
+	
+	/* *********************** */
 	/* Variables pour le cache */
 	private CacheModule cache;
 	private int cacheSize;
@@ -132,6 +136,7 @@ public class SolipsisProtocol implements EDProtocol {
 	private int prefetch_ameliore;
 	private File fichier3;
 	private FileWriter fw3;
+	/* *********************** */
 	
 	
 	public SolipsisProtocol(String prefix) throws IOException {
@@ -163,38 +168,38 @@ public class SolipsisProtocol implements EDProtocol {
 		if (this.type == SolipsisProtocol.SMALLWORLD) {
 			this.smallWorldModule = new SmallWorld(this.mainVirtualEntity,Globals.smallWorldLinkNb);
 		}
-//		if (this.type == SolipsisProtocol.FIFO || this.type == SolipsisProtocol.LRU){ 
-			this.cacheSize = Configuration.getInt(prefix+"."+CACHE_SIZE);
-			this.limite = Configuration.getInt(prefix+"."+CACHE_LIMIT);
-			this.time_limite = Configuration.getInt(prefix+"."+TIME_LIMIT);
-			this.limite_connaissance = Configuration.getInt(prefix+"."+LIMIT_CONNAISSANCE);
+		/* ******************* */
+		/* Ajout pour le cache */
+		this.cacheSize = Configuration.getInt(prefix+"."+CACHE_SIZE);
+		this.limite = Configuration.getInt(prefix+"."+CACHE_LIMIT);
+		this.time_limite = Configuration.getInt(prefix+"."+TIME_LIMIT);
+		this.limite_connaissance = Configuration.getInt(prefix+"."+LIMIT_CONNAISSANCE);
 
-			this.update_time = Configuration.getInt(prefix+"."+UPDATE_TIME);
-			Globals.update_time = this.update_time;
-			this.update_ok = Configuration.getInt(prefix+"."+UPDATE_OK);
-			Globals.update_ok = update_ok;
-			this.contact_node = Configuration.getInt(prefix+"."+CONTACT_NODE);
-			this.prefetch_ameliore = Configuration.getInt(prefix+"."+CONTACT_NODE);
+		this.update_time = Configuration.getInt(prefix+"."+UPDATE_TIME);
+		Globals.update_time = this.update_time;
+		this.update_ok = Configuration.getInt(prefix+"."+UPDATE_OK);
+		Globals.update_ok = update_ok;
+		this.contact_node = Configuration.getInt(prefix+"."+CONTACT_NODE);
+		this.prefetch_ameliore = Configuration.getInt(prefix+"."+CONTACT_NODE);
 
-			this.help_ok = Configuration.getInt(prefix+"."+HELP_OK);
-			this.cacheDebug = Configuration.getInt(prefix+"."+CACHE_DEBUG);
-			this.strategieCache = Configuration.getInt(prefix+"."+CACHE_STRATEGIE);
-			this.cache = new CacheModule(null, null, this.cacheSize, this.strategieCache,this,this.limite_connaissance);
-			
-			if ( Globals.affichage_options == 0){
-				Globals.affichage_options ++;
-				fichier3 = new File("Stats_EndTime.txt");
-				fichier3.createNewFile();
-				fw3 = new FileWriter("Stats_EndTime.txt",true);
-				String options = "Limite du cache: " + this.limite + ", CacheSize: " + this.cacheSize + ", Time_limite " + time_limite + 
-				", Durée: " + CommonState.getEndTime() + ", update ok ? " + this.update_ok + ", update time: " +
-				this.update_time + ", Help Ok ? " + this.help_ok + ", Contact node ? " + this.contact_node + ", Stratégie: " 
-				+ this.strategieCache + ", Limite connaissance: " + this.limite_connaissance + "\n";
-				fw3.write(options);
-				fw3.close();
-			}
-//		}
-		
+		this.help_ok = Configuration.getInt(prefix+"."+HELP_OK);
+		this.cacheDebug = Configuration.getInt(prefix+"."+CACHE_DEBUG);
+		this.strategieCache = Configuration.getInt(prefix+"."+CACHE_STRATEGIE);
+		this.cache = new CacheModule(null, null, this.cacheSize, this.strategieCache,this,this.limite_connaissance);
+
+		if ( Globals.affichage_options == 0){
+			Globals.affichage_options ++;
+			fichier3 = new File("Stats_EndTime.txt");
+			fichier3.createNewFile();
+			fw3 = new FileWriter("Stats_EndTime.txt",true);
+			String options = "Limite du cache: " + this.limite + ", CacheSize: " + this.cacheSize + ", Time_limite " + time_limite + 
+			", Durée: " + CommonState.getEndTime() + ", update ok ? " + this.update_ok + ", update time: " +
+			this.update_time + ", Help Ok ? " + this.help_ok + ", Contact node ? " + this.contact_node + ", Stratégie: " 
+			+ this.strategieCache + ", Limite connaissance: " + this.limite_connaissance + "\n";
+			fw3.write(options);
+			fw3.close();
+		}
+		/* ******************* */
 	}
 	
 	
@@ -911,7 +916,6 @@ public class SolipsisProtocol implements EDProtocol {
 	
 		
 
-//		if (find == 0){
 			if (sector != null) {
 				if (sector[0] != null) {
 					sendTo = sector[0];
@@ -930,8 +934,10 @@ public class SolipsisProtocol implements EDProtocol {
 						find = maintainCacheTopology(line);
 					}
 					
+					/* ***************** */
+					/* Si on veut faire le traitement normal ou non */
 //					if ( find == 0 ){
-					
+				
 						
 						this.searchInProgress = true;
 						Node n = Network.get(this.getPeersimNodeId());
@@ -946,7 +952,6 @@ public class SolipsisProtocol implements EDProtocol {
 //					}
 				}
 			}
-//		}
 	}
 
 
@@ -1048,9 +1053,9 @@ public class SolipsisProtocol implements EDProtocol {
 	}
 	
 	
-	/*****************************************************/
-	/***** Fonctions pour le traitement des messages *****/
-	/****************************************************=/
+	/* *************************************************** */
+	/* **** Fonctions pour le traitement des messages **** */
+	/* *************************************************** */
 	
 	
 	/*
@@ -1074,10 +1079,7 @@ public class SolipsisProtocol implements EDProtocol {
 			case Message.SEARCH_HELP:
 				CacheHelpRequest request = (CacheHelpRequest) msg.getContent();
 				line = (GeometricRegion)request.getRegion();
-				
-				
-				
-							
+										
 					neighbor = searchForAppropriateNeighbor(line);
 					if (neighbor != null) {
 						response = createFoundMsg(neighbor, msg.getSource());
@@ -1095,18 +1097,15 @@ public class SolipsisProtocol implements EDProtocol {
 					}else{
 						Globals.cacheEvaluator.incnbSearchHelpMISS();
 					}
-					//TODO TESTER
 					if (cacheDebug == 1){
 						System.out.println("Destination: " + ((CacheHelpRequest)msg.getContent()).getDestination()[0] + ", "  + ((CacheHelpRequest)msg.getContent()).getDestination()[1]);
 					}
 					if ( help_ok == 1){
 						if (this.strategieCache == SolipsisProtocol.FIFO && this.mainVirtualEntity.getState() == MobilityStateMachine.WANDERING){
 							find = HelpNeighborCache(msg);
-							
 						}
 					}
-			
-				
+							
 				break;
 	
 			case Message.SEARCH:
@@ -1155,11 +1154,8 @@ public class SolipsisProtocol implements EDProtocol {
 		VirtualEntity source1 = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity();
 		HashMap<Integer,NeighborProxy> responseMult = new HashMap<Integer, NeighborProxy>();
 
-			
 			switch (this.strategieCache) {
 			case SolipsisProtocol.FIFO:
-				
-						
 						
 						if (request != null){
 							switch(limite){
@@ -1186,13 +1182,10 @@ public class SolipsisProtocol implements EDProtocol {
 								}
 								Message response = new Message(Message.CACHE_HELP_REP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), msg.getSource(), neighbor);
 								if(source == null){
-									System.out.println("sourceestnull");
 									source = this.cache.getCache().get(msg.getSource());
 								}
 								if(source == null){
-									System.out.println("========================= ++++++++++++++++ sourceestnullagain");
-//									this.send(response,source1);
-									this.send(response,msg.getOriginAddress());
+										this.send(response,msg.getOriginAddress());
 
 								}else{
 									this.send(response,source);
@@ -1206,14 +1199,14 @@ public class SolipsisProtocol implements EDProtocol {
 								Globals.cacheEvaluator.incCacheMissHelpGlob();
 								return 0;
 							}
-							
-							}else{
-								if (cacheDebug == 1){
-									System.out.println("HELP MISSSSSSSSSSSSS");
-								}
-								Globals.cacheEvaluator.incCacheMissHelpGlob();
-								return 0;
+
+						}else{
+							if (cacheDebug == 1){
+								System.out.println("HELP MISSSSSSSSSSSSS");
 							}
+							Globals.cacheEvaluator.incCacheMissHelpGlob();
+							return 0;
+						}
 			case SolipsisProtocol.FIFOMULT:
 				int res = 0;
 				if (request != null){
@@ -1241,11 +1234,9 @@ public class SolipsisProtocol implements EDProtocol {
 								}
 								Message response = new Message(Message.CACHE_HELP_REP, this.getPeersimNodeId(), this.mainVirtualEntity.getId(), msg.getSource(), neighbor);
 								if(source == null){
-									System.out.println("sourceestnull");
 									source = this.cache.getCache().get(msg.getSource());
 								}
 								if(source == null){
-									System.out.println("sourceestnullagain");
 									this.send(response,msg.getOriginAddress());
 								}else{
 									this.send(response,source);
@@ -1288,7 +1279,6 @@ public class SolipsisProtocol implements EDProtocol {
 		Globals.cacheEvaluator.incnbCachePassClob();
 		
 		if ( this.mainVirtualEntity.getStateMachine().getState() == MobilityStateMachine.WANDERING ) {
-//			System.err.println(("STRATEGIE: " + this.strategieCache));
 			n = Network.get(this.getPeersimNodeId());
 			long[] destination = ((SolipsisProtocol)n.getProtocol(this.protocolId)).getVirtualEntity().getCoord();
 			long [] destinationsubj = this.subjectiveCoord(destination);
@@ -1296,8 +1286,6 @@ public class SolipsisProtocol implements EDProtocol {
 			switch (this.strategieCache) {
 			case SolipsisProtocol.FIFO:
 
-			
-						
 						/* 
 						 * Recherche dans le cache 
 						 * Limite en fonction de la distance avec les voisins si -1
@@ -1308,16 +1296,16 @@ public class SolipsisProtocol implements EDProtocol {
 							
 							switch(limite){
 							case -1: 
+								/* Cas où l'on fixait pas de limite fixée */
 								neighbor = cache.searchCacheNeighborLimitNeighbor(destinationsubj, this.cache.getCache());
 								break;
-							
-							
-								
+														
 							default:
 								
-//								neighbor = cache.searchCacheNeighborLimit(destination,limite);
+								/* Différentes Stratégie de recherche */
+								//neighbor = cache.searchCacheNeighborLimit(destination,limite);
 								neighbor = cache.searchCacheNeighborKnoledgeRay(destinationsubj,this.knowledgeRay);
-//								neighbor = cache.searchCacheNeighborRegion(destinationsubj,region);
+								//neighbor = cache.searchCacheNeighborRegion(destinationsubj,region);
 								break;
 								
 							}
@@ -1330,18 +1318,14 @@ public class SolipsisProtocol implements EDProtocol {
 						 * que l'on a dans le cache
 						 *  
 						 */
-						
-					
-						
+											
 						if (neighbor != null){
 							if (cacheDebug == 1){
 								System.out.println("----------------------------------------");
 								System.out.println("--- On a trouvé un nœud dans le cache: " + neighbor.getId() + " ---");
 								System.out.println("----------------------------------------");
 							}
-						
-							
-							
+													
 							if ( neighbor.getTime() + time_limite > CommonState.getIntTime()){
 								
 								boolean aide = this.helpfulToEnvelopeCache(neighbor);
@@ -1406,7 +1390,6 @@ public class SolipsisProtocol implements EDProtocol {
 			case SolipsisProtocol.FIFOMULT:
 		
 				int res = 0;
-//				responseMult = cache.searchCacheNeighborEnvelopEvMult(destination,this.knowledgeRay);
 				responseMult = cache.searchCacheNeighborRegionMult(destinationsubj,region);
 				Iterator it;
 				it = responseMult.entrySet().iterator();
@@ -1436,7 +1419,6 @@ public class SolipsisProtocol implements EDProtocol {
 								}
 								res = 1;
 								
-								
 							}else{
 								if (contact_node == 1){
 
@@ -1463,18 +1445,13 @@ public class SolipsisProtocol implements EDProtocol {
 						}				
 					}
 					return res;
-
 				}else{
 					Globals.cacheEvaluator.incCacheMissGlob();
 					return 0;
 				}
-
-				
 			default:
 				return 0;
 			}
-			
-			
 		}
 		return 0;
 	}
@@ -1494,15 +1471,12 @@ public class SolipsisProtocol implements EDProtocol {
 	private void processCacheUpd(Message msg){
 		
 		NeighborProxy source = ((NeighborProxy)((CacheRequest)msg.getContent()).getSource());
-
 		
 		if (compareNeighborProxy((CacheRequest)msg.getContent(), this.mainVirtualEntity )){
-			
 			if ( cacheDebug == 1 || cacheDebug == 2 ){
 				System.out.println("... Comparaison OK: Old " + ((CacheRequest)msg.getContent()).getOldData().getCoord()[0] + "," + ((CacheRequest)msg.getContent()).getOldData().getCoord()[1] +
 						", Real " + this.mainVirtualEntity.getCoord()[0] + "," + this.mainVirtualEntity.getCoord()[1] + " ...");	
 			}
-			
 
 			/* Faire la Mis A Jour du Noeud */
 			NeighborProxy responseProx = ((CacheRequest)msg.getContent()).getOldData();
@@ -1530,7 +1504,6 @@ public class SolipsisProtocol implements EDProtocol {
 					System.out.println("<--ERREUR " + cache_rep.getTypeString() + ", " + msg.getOriginAddress() + ", " +  this.mainVirtualEntity.getId() + ", " + msg.getSource() + " ERREUR-->");
 				}
 			}
-			
 		}else{
 			if ( cacheDebug == 1 || cacheDebug == 2 ){
 				System.out.println("''' Comparaison FOLD: Old " + ((CacheRequest)msg.getContent()).getOldData().getCoord() +
@@ -1538,11 +1511,14 @@ public class SolipsisProtocol implements EDProtocol {
 			}
 			Globals.cacheEvaluator.incCacheMitGLob();
 			/*Envoyer un message pour pas faire un hit de cache ?*/
-
 		}
-		
 	}
 	
+	/*
+	 * Fonction IsInCache:
+	 * regarde si le nœud est dans le cache
+	 * 
+	 */
 	private boolean isInCache(NeighborProxy neighbor){
 
 		NeighborProxy current;
@@ -1552,7 +1528,6 @@ public class SolipsisProtocol implements EDProtocol {
 		while(it.hasNext()){
 			current = (NeighborProxy)((Map.Entry)it.next()).getValue();
 			if (neighbor.getId() == current.getId()){
-//				System.out.println("DANS LE CACHE -----------");
 				return true;
 			}
 		}
@@ -1574,6 +1549,12 @@ public class SolipsisProtocol implements EDProtocol {
 		return false;
 	}
 	
+	
+	/*
+	 * Fonction processCacheHelpResponse:
+	 * Traite la réponse à une réponse de cache help
+	 * 
+	 */
 	private void processCacheHelpResponse(Message msg){
 
 		NeighborProxy neighbor = (NeighborProxy)msg.getContent();
@@ -1617,6 +1598,7 @@ public class SolipsisProtocol implements EDProtocol {
 		}
 	}
 	
+	
 	/*
 	 * Fonction processCacheUpdResponse:
 	 * 	On traite la réponse en supprimant le nœud du cache et en l'ajoutant 
@@ -1624,7 +1606,6 @@ public class SolipsisProtocol implements EDProtocol {
 	 * 	passe la quality du nœud à REGULAR et on vérifie l'enveloppe.
 	 * 
 	 */
-	
 	private void processCacheUpdResponse(Message msg){
 
 		CacheRequest neig = (CacheRequest) msg.getContent();
@@ -1654,6 +1635,7 @@ public class SolipsisProtocol implements EDProtocol {
 				System.out.println("taille  cache: " + cache.getCache().size());
 				System.out.println("taille voisin: " + proxies.size());
 			}		
+			
 			cache.RmCache(neighbor);
 			
 			if (cacheDebug == 1){
@@ -1669,39 +1651,32 @@ public class SolipsisProtocol implements EDProtocol {
 				cache.ShowCache();
 			}
 			
-			/* Changement de la Qulity du nœud que l'on repasse à REGULAR */
+			/* Changement de la Quality du nœud que l'on repasse à REGULAR */
 			neighbor.setQuality(NeighborProxy.REGULAR);
 			neighbor.setTime(CommonState.getIntTime());
 			
 			if (cacheDebug == 1){
 				System.out.println("--- Modification de la quality du nœud: " + neighbor.getQuality());
 			}
-		
 		}else{
 			if ( cacheDebug == 1 || cacheDebug == 2 ){
 				System.out.println("--- Envelope NOT_OK, nodeId: " + neighbor.getId() );
 			}
 			if ( isInCache(neighbor)){
 				MajNeighborProxy(this.cache.getCache().get(neighbor.getId()), neighbor);
-				if ( cacheDebug == 1 || cacheDebug == 2 ){
-					System.out.println("YESPAPA+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-				}
 			}else{
 				if ( cacheDebug == 1 || cacheDebug == 2 ){
-					System.out.println("NOPAPA+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 					System.out.println("neigbor: " + neighbor.getId());
 				}
-//				this.cache.ShowCache();
 			}
 			Globals.cacheEvaluator.incCacheMitGLob();
 			return;
-			
 		}
 		boolean apres = convexEnvelopeProperty();
-//		System.out.println("!!!Envelop State after: " + apres);
 		Globals.cacheEvaluator.incCacheHitGLob();
 		
 	}
+	
 	
 	/*
 	 * Fonction MajNeighborProxy:
@@ -1713,6 +1688,7 @@ public class SolipsisProtocol implements EDProtocol {
 		old.setTime(CommonState.getTime());
 	}
 	
+	
 	/*
 	 * Fonction MajNeighborProxy:
 	 * 	met à jour les coordonnées du nœud "old"
@@ -1723,6 +1699,12 @@ public class SolipsisProtocol implements EDProtocol {
 	}
 	
 	
+	/*
+	 * Fonction compareNeighborProxy:
+	 * Compare les coordonnées du cache et les coordonnées actuelles du nœud,
+	 * va regarder en fonction de la limite mise dans la configuration
+	 * 
+	 */
 	private boolean compareNeighborProxy(CacheRequest old,VirtualEntity act){
 		boolean resultat;
 		resultat = false;
@@ -1951,6 +1933,7 @@ public class SolipsisProtocol implements EDProtocol {
 			this.disconnectTimestamps.put(peerToForget, msg.getTimestamp());
 	}
 	
+	
 	/*
 	 * Fonction RemoveProxy:
 	 * 	On ajoute l'élement que l'on supprime des voisins 
@@ -1966,6 +1949,7 @@ public class SolipsisProtocol implements EDProtocol {
 		this.updateTimestamps.remove(neighbor);
 		this.predictionVector.remove(neighbor);
 	}
+	
 	
 	/* 
 	 * Fonction de suppression mais sans passer par le cache 

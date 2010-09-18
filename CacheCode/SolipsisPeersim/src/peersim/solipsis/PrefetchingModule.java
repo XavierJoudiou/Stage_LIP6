@@ -162,24 +162,22 @@ public class PrefetchingModule {
 							vector = VirtualWorld.substract(this.protocol.getVirtualEntity().getDestination(), this.protocol.getPosition());
 						}
 						
+						/* Test si prefetch améliore ou non */
 						if (this.protocol.getPrefetch_ameliore() == 1){
 							System.out.println("PREFETCH_AMELIORE");
 							
 							if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) || isGoodDirection(prefetch.getPrefetchVector(),vector) ||
 									isMaybeGoodPrefetch(prefetch.getPrefetchVector(),vector) ||this.protocol.getVirtualEntity().getState() != MobilityStateMachine.TRAVELLING ){
-//							if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) || ( isMaybeGoodPrefetch(prefetch.getPrefetchVector(),vector) && (this.protocol.getVirtualEntity().getState() != MobilityStateMachine.HALTED))){
-//							if (isGoodPrefetch(prefetch.getPrefetchVector(),vector) || isMaybeGoodPrefetch(prefetch.getPrefetchVector(),vector)
-//									|| this.protocol.getVirtualEntity().getState() != MobilityStateMachine.TRAVELLING){
+
 								destination = destinations.get(i);
 								prefetchedProxy = this.proxies.get(destination).clone();
 								prefetchedProxy.setQuality(NeighborProxy.PREFETCHED);
 								propagateMsg = this.protocol.createFoundMsg(prefetchedProxy, prefetch.getSource().getId());
 								this.protocol.send(propagateMsg, prefetch.getSource());
 							}else{
-	//							System.out.println("pastravelling °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°");
+								//System.out.println("pastravelling °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°");
 							}
 						}else{
-//							System.out.println("PREFETCH_NORMAL");
 							destination = destinations.get(i);
 							prefetchedProxy = this.proxies.get(destination).clone();
 							prefetchedProxy.setQuality(NeighborProxy.PREFETCHED);
@@ -217,14 +215,16 @@ public class PrefetchingModule {
 		}
 	}
 	
+	/* *********************************** */
+	/* Fonction pour amélioration prefetch */
+	
 	private boolean isGoodPrefetch(long[] prefetchA, long[] prefetchB){
 		if ( prefetchB != null && prefetchA != null){
 			long[] som = VirtualWorld.sumCoords(prefetchA, prefetchB);
 			double normePrefetch = Math.sqrt(prefetchA[0]*prefetchA[0] + prefetchA[1]*prefetchA[1]);
 			double normeSom = Math.sqrt(som[0]*som[0] + som[1]*som[1]);
-//			System.out.println("prefecth: " + normePrefetch + ", som: " + normeSom);
+			//System.out.println("prefecth: " + normePrefetch + ", som: " + normeSom);
 			if ( normeSom > ( normePrefetch + (normePrefetch/2 ) ) ){
-//				System.out.println("GOOOOOOOODDDD_PREFETCH");
 				return true;
 			}
 		}
@@ -237,7 +237,7 @@ public class PrefetchingModule {
 			double normePrefetch = Math.sqrt(prefetchA[0]*prefetchA[0] + prefetchA[1]*prefetchA[1]);
 			double normeCurrent = Math.sqrt(prefetchB[0]*prefetchB[0] + prefetchB[1]*prefetchB[1]);
 			double normeSom = Math.sqrt(som[0]*som[0] + som[1]*som[1]);
-//			System.out.println("prefecth: " + normePrefetch + ", som: " + normeSom);
+			//System.out.println("prefecth: " + normePrefetch + ", som: " + normeSom);
 			if (isNear(Angle((double)prefetchA[1],(double)prefetchA[0]),Angle((double)prefetchB[1],(double)prefetchB[0]), 85) && normeCurrent < (normePrefetch)){
 					return true;
 			}
@@ -245,7 +245,6 @@ public class PrefetchingModule {
 			if (isNear(angleA,Angle((double)prefetchB[1],(double)prefetchB[0]), 85) && normeCurrent < (normePrefetch/2)){
 				return true;
 			}
-			
 		}
 		return false;
 	}
@@ -306,6 +305,8 @@ public class PrefetchingModule {
 		return angle;
 	}
 	
+	/* *********************************** */
+
 
 	private boolean isFarEnough(PrefetchRequest request) {
 		long speed = request.getSpeed();

@@ -31,8 +31,6 @@ public class CacheStatistiquesStruct {
 	}
 	
 	
-	
-	
 	public void moy( CacheStatistiquesStruct curs){
 		CacheStatistiquesStruct res = new CacheStatistiquesStruct();
 		

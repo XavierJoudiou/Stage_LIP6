@@ -54,13 +54,7 @@ public class CacheFichierTraitements {
 			return resultatStruct;
 		}
 		if (compteurLine == 2 && temp.length == nbElem && nbElem == 5) {
-		
-//			resultatStruct.setViewCoherence( (Double.parseDouble(inter[0]) + Double.parseDouble(inter[0 + nbElem])) /2 );
-//			resultatStruct.setTopoCoherence( (Double.parseDouble(inter[1]) + Double.parseDouble(inter[1 + nbElem])) /2 );
-//			resultatStruct.setMsgCount( (Integer.parseInt(inter[2]) + Integer.parseInt(inter[2 + nbElem])) /2 );
-//			resultatStruct.setAheadCounter( (Double.parseDouble(inter[3]) + Double.parseDouble(inter[3 + nbElem])) /2 );
-//			resultatStruct.setConnecDuration( (Double.parseDouble(inter[4]) + Double.parseDouble(inter[4 + nbElem])) /2 );
-					
+							
 			resultatStruct.setViewCoherence( (Double.parseDouble(inter[0]) + Double.parseDouble(inter[0 + nbElem])) );
 			resultatStruct.setTopoCoherence( (Double.parseDouble(inter[1]) + Double.parseDouble(inter[1 + nbElem])) );
 			resultatStruct.setMsgCount( (Integer.parseInt(inter[2]) + Integer.parseInt(inter[2 + nbElem])) );

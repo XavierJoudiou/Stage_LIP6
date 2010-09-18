@@ -87,7 +87,7 @@ public class CacheModule {
 	}
 	
 	/*
-	 * Supprime le voisin "boor" 
+	 * INcrémente les position
 	 */
 	public void IncPosAll(){
 		Iterator info;
