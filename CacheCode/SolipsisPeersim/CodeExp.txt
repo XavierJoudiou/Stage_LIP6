@@ -1,0 +1,52 @@
+Liste non exhaustive des classes importantes:
+
+
+- Cache Data:
+Classe qui sert à stocker les position des nœuds dans le cache et d'autres 
+informations, peut être supprimé car stratégie du cache ne doit plus s'en
+servir.
+
+
+-CacheFichierTraitements:
+Classe qui fait du traitement sur les fichiers pour les résultats, va 
+concaténer deux ligne de résultat en une.
+
+-CacheHelpRequest:
+Classe pour les messages de requête d'aide aux voisins, le message va contenir
+les informations nécessaires comme l'enveloppe, la destination, le rayon de 
+connaissance et la région.
+
+-Cache Module: 
+Classe Principale pour le fonctionnement du cache. Constructeur, ajout d'un 
+élément, suppression d'un élément, différentes fonctions pour la sélection 
+d'un nœud (position, time et distance). Fonctions d'affichage du cache, et
+différentes fonctions de recherche dans le cache (retour simple et retour
+multiple).
+
+-Cache Request:
+Classe qui sert pour les messages de requête du cache.
+
+-CacheStatistics:
+Classe pour les statistiques du cache, déclaration des variables et fonctions
+d'incrémentation et d'affichage.
+
+-CacheStatistiquesStruct:
+Classe pour les résultats, structure avec les valeurs de type viewcoherence,
+etc. Fonction de moyenne et d'affichage.
+
+
+**** Modification dans la classe: Prefetching Module *******
+Ajout du cas si préchargement amélioré activé, et fonctions pour le préch-
+argement amélioré.
+
+
+**** Modification dans la classe: SolipsisProtocol *******
+Ajout de variable, affectations dans le constructeur, création d'un fichier 
+pour les statistiques dans le constructeur. Ajout des fonctions de traitement
+des messages nécessaires pour le cache, modification fonctions 
+"solipsisRecoverTopology", "maintainCacheTopology", ajout d'autres fonctions 
+pour le cache.
+
+
+**** Modification dans la fonction VirtualWorldOverview *
+Ajout direct des statistiques dans des fichiers.
