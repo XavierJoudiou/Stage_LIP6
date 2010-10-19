@@ -1,0 +1,140 @@
+Fiche connaissance pour le language C.
+--------------------------------------
+
+
+-------------------------
+*************************
+Compilation GCC[1]: 
+*************************
+-------------------------
+
+
+
+Les étapes de la compilation
+Gcc effectue quatre étapes pour produire l'éxecutable:
+	- passage au pré-processeur  (preprocessing)
+	- compilation en language assembleur (compiling)
+	- conversion du langage assembleur en code machine (assembling)
+	- édition des liens (linking)
+
+________________________________________________________________________________________________________________
+ex:														
+gcc bonjour.c
+
+	 preprocessing		   compiling		   assembling		    linking
+	    ------->		    ------->		    ------->		    ------->
+bonjour.c		bonjour.i		bonjour.s		bonjour.o		a.out
+________________________________________________________________________________________________________________
+
+Etape1: Passage au pré-processeur
+
+---> gcc -E bonjour.c > bonjour.i
+l'option -E permet d'interrompre la compilation après la première phase.
+Le pré-processeur réalise  plusieurs opérations de substitution sur le code C:
+	- suppression des commentaires (// et /* */) 
+	- inclusion des fichiers .h dans le fichier .c (#include)
+	- traitement des directives de compilation qui commencent par un caractère #. Ces directives sont 
+	  define, elif, else, endif, error, if, ifdef, ifndef, include, line, pragma, undef.
+Le pré-processeur contrôle la syntaxe du programme, affiche et se stoppe si Erreur. L'option Wall permet d'afficher 
+les avertissements.
+
+Etape2: Compilation en langage assembleur
+
+---> gcc -S bonjour.i
+Le code du langage C est transformé en code Assembleur. L'option -S permet d'obtenir la transformation en 
+langage assembleur. Fichier résultat .s qui est écrit en asssembleur.
+
+Etape3: transformation de l'assembleur en code machine
+
+---> gcc -c bonjour.s
+Le code assembleur est transformé en code machine binaire. L'option -c permet d'obtenir le fichier objet .o .Ce 
+fichier binaire ne peut pas être directement édité et lu par un humain. On peut le rendre lisible en utilisant 
+la commande od -x bonjour.o.
+
+Etape4: Edition des liens
+
+---> gcc bonjour.o
+Le fichier produit par l'étape3 est incomplet, il ne contient pas les codes des printf (par exemple), car dans une
+bibliothèque. L'édition des liens va réunir le fichier objet et les fonctions contenues dans les bibliothèques, 
+pour produire le programme complet.
+
+Un éxecutable est spécifique à un système.
+
+
+-------------------
+Les Options de GCC[2]:
+-------------------
+
+-E: appelle le préprocesseur, n'effectue pas la compilation.
+
+-S: Appelle le préprocesseur et effectue la compilation, mais l'assemblage et édition des liens.
+
+-c: pas édition des liens.
+
+-o nom: fide le nom du fichier objet généré lors de la compilation d'un fichier source.
+
+-g: génère des informations symboliques de débogage.
+
+-fexceptions: active la gestion des excpetions C++.
+
+-fpic: génère du code relogeable. Cette option est nécessaire pour la compilation des fichiers 
+       utilisées dans une DLL ou un fichier chargeable dynamiquement.
+
+-On: indique le niveau d'optimisation (n peut prendre les valeurs entre 0 et 3
+
+-mcpu=cpu: indique le type de processeur pour lequel le code doit être optimisé. Le code fonctionnera 
+           sur tous les processeurs de la famille de ce processeur.
+
+-march=cpu: indique le type de processeur pour lequel le code doit être généré. Le code généré sera 
+	    spécifique à ce processeur, et ne fonctionnera peut être pas sur un autre processeur de
+	    la même famille. Cette option active automatiquement -mcpu.
+
+-pipe: utilise des pipes systèmes au lieu des fichiers temporaires pour les communications entre le 
+       préprocesseur, le compilateur et l'assembleur.
+
+-w: supprime tous les warnings.
+
+-W: Active les warnings supplémentaires.
+
+-Wall: Active tous les warnings possibles.
+
+-mwindows: crée un exécutable GUI Windows.
+
+-mdll: crée une DLL Windows.
+
+-fvtable-thunks: utilise le mécanisme des tables de fonctions virtuelles. Cette option est
+	         nécessaire pour utiliser les interfaces COM sous Windows.
+
+-I repertoire: ajoute le repertoire à la liste des répertoires. Il est ajouté en tête de la liste.
+
+-ansi: demande la compilation du code ANSI.
+
+-g: génère les informations symboliques de déboguage
+
+-pedantic: affiche les warnings requis par la norme ANSI du langage.
+
+-L chemin: ajoute un repertoire à la liste des répertoires utlisiées pour la recherche des 
+	   bibliothèques.
+
+-l biblio: ajoute un bibliothèque dans la liste des fichiers à utiliser pour l'édition des 
+	   liens.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+________________________________________________________________________________________________________________
+Bibliographie:
+[1] : http://www.cmi.univ-mrs.fr/~contensi/coursC/index.php?section=env&page=comp
+[2] : http://c.developpez.com/cours/mode-emploi-gcc/c580.php#AEN584
+
